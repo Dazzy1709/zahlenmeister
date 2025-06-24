@@ -1,0 +1,671 @@
+import connectDB from '../config/db.js';
+import express from 'express';
+import session from 'express-session';
+import MongoStore from 'connect-mongo';
+import mongoose from 'mongoose';
+import multer from 'multer';
+import helmet from 'helmet';
+import compression from 'compression';
+import cors from 'cors';
+import { fileURLToPath } from 'url';
+import path from 'path';
+import bcrypt from 'bcrypt';
+import collection from '../config/user.js';
+import { createServer } from 'node:http';
+import { Server } from 'socket.io';
+import Message from '../config/messages.js';
+import Levels from '../public/js/level.js';
+import { questionGenerators } from '../public/shared/js/variables.js';
+import { houseData } from '../public/shared/js/variables.js';
+import { introDialogue } from '../public/shared/js/variables.js';
+import { houseDialogue } from '../public/shared/js/variables.js';
+import { houseCompletionDialogues } from '../public/shared/js/variables.js';
+import dotenv from 'dotenv';
+dotenv.config();
+
+
+
+
+
+const getDefaultUserProgress = () => ({
+  completedHouses: [],
+  unlockedHouses: [1, 2], 
+  houseProgress: {}
+});
+
+const app = express();
+connectDB();
+
+if (process.env.NODE_ENV === 'development') {
+  app.use((req, res, next) => {
+    console.log(`${req.method} ${req.url}`);
+    next();
+  });
+}
+
+// Session config adjustment for development
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'fallback-secret',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: process.env.NODE_ENV === 'production', // Only HTTPS in production
+    httpOnly: true,
+    sameSite: process.env.NODE_ENV === 'production' ? 'lax' : 'strict',
+    maxAge: 24 * 60 * 60 * 1000
+  },
+  store: MongoStore.create({
+    client: mongoose.connection.getClient(),
+    ttl: 24 * 60 * 60
+  })
+}));
+
+
+const server = createServer(app);
+const io = new Server(server, {
+  connectionStateRecovery: {}
+});
+
+
+
+app.use(express.json());
+app.use(express.urlencoded({extended: false}))
+
+app.set("view engine", "ejs");
+app.use(express.static("public"));
+
+// Then add these after your other middleware setup
+app.use(helmet());
+app.use(compression());
+app.use(cors({
+  origin: process.env.NODE_ENV === 'development' 
+    ? 'http://localhost:3000' 
+    : 'your-production-domain.com',
+  credentials: true
+}));
+
+
+
+// Configure Multer for file uploads
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, path.join(__dirname, '../public/uploads/profile-pictures'));
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, req.session.user.id + '-' + uniqueSuffix + path.extname(file.originalname));
+  }
+});
+
+app.use('/uploads', express.static(path.join(__dirname, '../public/uploads')));
+
+const upload = multer({ 
+  storage: storage,
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
+  fileFilter: (req, file, cb) => {
+    const filetypes = /jpeg|jpg|png|gif/;
+    const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+    const mimetype = filetypes.test(file.mimetype);
+    
+    if (extname && mimetype) {
+      return cb(null, true);
+    } else {
+      cb('Error: Images only! (JPEG, JPG, PNG, GIF)');
+    }
+  }
+}).single('profilePicture');
+
+
+app.get ("/", (req, res) => {
+  res.render("welcome", {
+    introDialogue
+  });
+});
+
+app.get("/home", async (req, res) => {
+  const user = req.session.user;
+  let userProgress = getDefaultUserProgress();
+  
+  if (user) {
+    try {
+      const dbUser = await collection.findById(user.id);
+      if (dbUser?.progress) {
+        // Convert Map to plain object for EJS
+        userProgress = {
+          ...dbUser.progress.toObject(),
+          houseProgress: dbUser.progress.houseProgress instanceof Map 
+            ? Object.fromEntries(dbUser.progress.houseProgress)
+            : dbUser.progress.houseProgress
+        };
+      }
+    } catch (e) {
+      console.error('Error fetching user progress:', e);
+    }
+  }
+
+  console.log(userProgress.completedHouses)
+
+  res.render('home', {
+    houseId: 1,
+    level: 1,
+    user: user || null,
+    userProgress, 
+    houses: houseData.map(house => ({
+      ...house,
+      isLocked: !userProgress.unlockedHouses.includes(house.number),
+      isCompleted: userProgress.completedHouses.includes(house.number)
+    })),
+    isGuest: !user
+  });
+});
+app.get ("/login", (req, res) => {
+  res.render("login");
+});
+app.get ("/signup", (req, res) => {
+  res.render("signup");
+});
+app.get('/rechnen/:houseId/:level',async (req, res) => {
+  const { houseId, level } = req.params;
+  const levelNum = parseInt(level);
+  const houseIdNum = parseInt(houseId);
+  const sessionUser = req.session.user;
+
+  // Validate level range (1-levelLimit)
+  const house = houseData.find(h => h.number === houseIdNum);
+  if (!house || levelNum < 1 || levelNum > house.levelLimit) {
+      return res.redirect('/home');
+  }
+  let userProgress;
+
+  // Update user progress if logged in
+  if (sessionUser) {
+    try {
+      await collection.findOneAndUpdate(
+        { _id: sessionUser.id },
+        { 
+          $set: { 
+            [`progress.houseProgress.${houseIdNum}`]: levelNum 
+          } 
+        },
+        { new: true }
+      );
+    } catch (e) {
+      console.error('Error updating progress:', e);
+    }
+  }
+
+  if (sessionUser) {
+    // Logged-in user: fetch from DB
+    try {
+      const dbUser = await collection.findById(sessionUser.id);
+      if (!dbUser) {
+        // If somehow DB user not found, fallback to guest
+        userProgress = getDefaultUserProgress();
+      } else {
+        userProgress = {
+          completedHouses: dbUser.completedHouses || [],
+          unlockedHouses: dbUser.unlockedHouses || [1, 2, 3, 4],
+          houseProgress: dbUser.houseProgress || {}
+        };
+      }
+    } catch (e) {
+      console.error('DB error:', e);
+      userProgress = getDefaultUserProgress(); // fallback on error
+    }
+  } else {
+    // Guest user: default progress, no DB
+    userProgress = getDefaultUserProgress();
+  }
+
+  // Validate level range (1-15)
+  if (levelNum < 1 || levelNum > 15) {
+    return res.redirect('/home');
+  }
+
+  if (!house) {
+    return res.status(404).render('home', {
+      message: `Haus mit ID ${houseId} existiert nicht`,
+      redirectUrl: '/home'
+    });
+  }
+
+
+
+  // Validate house has a valid topic
+  const validTopics = Object.keys(questionGenerators);
+  const fallbackTopic = "Plus (Easy)";
+  
+  // Normalize both sides for comparison
+  const normalizeTopic = (topic) => 
+    topic.toLowerCase().replace("multiplication", "multiplikation");
+  
+  const houseTopic = validTopics.find(topic => 
+    normalizeTopic(topic) === normalizeTopic(house.topic)
+  ) || fallbackTopic;
+
+  // Create the level instance with proper question generation
+  const currentLevel = new Levels(
+    levelNum,
+    houseTopic, // Use validated topic
+    house.time || 15, // Default to 15 seconds
+    house.numberStart,
+    house.numberLimit
+  );
+
+  // Get the current question
+  const currentQuestion = currentLevel.generateQuestions();
+  const backgroundStyle = `${house.image}`;
+  res.render('rechnen', {
+    houseId: houseIdNum,
+    houseName: house.name,
+    houseData: houseData,
+    houseDescription: house.description,
+    level: levelNum,
+    levelLimit: house.levelLimit,
+    question: currentQuestion[0].question,
+    image: backgroundStyle,
+    answer: currentQuestion[0].answer,
+    isLastLevel: levelNum === 15,
+    user: sessionUser || null,
+    userProgress: userProgress,
+    timeLimit: house.time || 15,
+    totalLevels: 15,
+    currentTopic: houseTopic,
+    dialogues: {
+      intro: houseDialogue[houseIdNum]?.intro || [],
+      outro: houseDialogue[houseIdNum]?.outro || []
+    }
+  });
+});
+
+
+
+
+
+app.get("/settings", (req, res) => {
+  if (!req.session.user) {
+    return res.redirect('/login');
+  }
+
+  res.render("settings", {
+    user: req.session.user // Just pass the session user
+  });
+});
+
+app.get("/logout", (req, res) => {
+  req.session.destroy(err => {
+    if (err) {
+      console.error('Error destroying session:', err);
+    }
+    res.redirect('/login');
+  });
+});
+
+app.get('/session/refresh', (req, res) => {
+  if (!req.session.user) {
+    return res.status(401).json({ error: "Not authenticated" });
+  }
+  
+  req.session.touch();
+  req.session.save(err => {
+    if (err) {
+      console.error('Session refresh error:', err);
+      return res.status(500).json({ error: "Session error" });
+    }
+    res.json({ success: true });
+  });
+});
+
+app.use((req, res, next) => {
+  // Skip for API routes and static files
+  if (req.path.startsWith('/api') || req.path.startsWith('/static')) {
+    return next();
+  }
+
+  if (req.session.user) {
+    // Refresh session on each request
+    req.session.touch();
+    req.session.save(err => {
+      if (err) console.error('Session refresh error:', err);
+      next();
+    });
+  } else {
+    next();
+  }
+});
+
+io.on('connection', (socket) => {
+  console.log('a user connected');
+});
+
+io.on('connection', async (socket) => {
+  socket.on('chat message', async (msgData) => {
+    const { content, username } = msgData;  
+    let savedMessage;
+
+    try {
+      // Get user's profile picture
+      const user = await collection.findOne({ name: username });
+      const profilePicture = user?.profilePicture || 'https://zahlenmeisterr.s3.eu-central-1.amazonaws.com/default-profile.png';
+
+      // Save message with content, username, and profile picture
+      savedMessage = await Message.create({ 
+        content, 
+        username,
+        profilePicture
+      });
+    } catch (e) {
+      console.error('Failed to save message:', e);
+      return;
+    }
+
+    // Emit message with all data
+    io.emit('chat message', {
+      content,
+      username,
+      profilePicture: savedMessage.profilePicture,
+      createdAt: savedMessage.createdAt,
+      id: savedMessage._id
+    });
+  });
+
+  const offset = socket.handshake.auth?.serverOffset;
+  if (!socket.recovered) {
+    try {
+      let query = {};
+      if (offset && mongoose.Types.ObjectId.isValid(offset)) {
+        query = { _id: { $gt: new mongoose.Types.ObjectId(offset) } };
+      }
+
+      const messages = await Message.find(query).sort({ _id: 1 });
+
+      for (const msg of messages) {
+        socket.emit('chat message', {
+          content: msg.content,
+          username: msg.username,
+          profilePicture: msg.profilePicture,
+          createdAt: msg.createdAt,
+          id: msg._id
+        });
+      }
+    } catch (e) {
+      console.error('Failed to recover messages:', e);
+    }
+  }
+});
+
+// In the complete-house endpoint:
+app.post('/complete-house', async (req, res) => {
+  const { houseId } = req.body;
+  const houseIdNum = parseInt(houseId);
+
+  if (!req.session.user) {
+    return res.json({ 
+      success: true,
+      guestProgress: true
+    });
+  }
+
+  try {
+    const nextHouse = houseIdNum + 1;
+    const updateQuery = {
+      $addToSet: {
+        "progress.completedHouses": houseIdNum
+      }
+    };
+
+    if (houseData.some(h => h.number === nextHouse)) {
+      updateQuery.$addToSet["progress.unlockedHouses"] = nextHouse;
+    }
+
+    const updatedUser = await collection.findByIdAndUpdate(
+      req.session.user.id,
+      updateQuery,
+      { new: true }
+    );
+
+    // Update session and save
+    req.session.user.progress = updatedUser.progress;
+    await new Promise((resolve, reject) => {
+      req.session.save(err => {
+        if (err) {
+          console.error('Session save error:', err);
+          reject(err);
+        } else {
+          resolve();
+        }
+      });
+    });
+
+    res.json({ 
+      success: true,
+      completedHouses: updatedUser.progress.completedHouses,
+      unlockedHouses: updatedUser.progress.unlockedHouses,
+      updatedProgress: updatedUser.progress
+    });
+  } catch (err) {
+    console.error('House completion error:', err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+app.post('/change-username', async (req, res) => {
+  const { newUsername } = req.body;
+  const userId = req.session.user.id;
+  
+  if (!newUsername || newUsername.trim().length < 3) {
+    return res.status(400).json({ 
+      success: false, 
+      error: 'Benutzername muss mindestens 3 Zeichen lang sein' 
+    });
+  }
+  
+  try {
+    // Check if username is already taken
+    const existingUser = await collection.findOne({ name: newUsername });
+    if (existingUser && existingUser._id.toString() !== userId) {
+      return res.status(400).json({ 
+        success: false, 
+        error: 'Benutzername ist bereits vergeben' 
+      });
+    }
+    
+    // Update username
+    const updatedUser = await collection.findByIdAndUpdate(
+      userId,
+      { name: newUsername },
+      { new: true }
+    );
+    
+    // Update session
+    req.session.user.name = newUsername;
+    req.session.save();
+    
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Error changing username:', error);
+    res.status(500).json({ success: false, error: 'Server error' });
+  }
+});
+
+app.post("/signup", async (req,res) => {
+  const { houseId, level } = req.params;
+  const user = req.session.user;
+  const levelNum = parseInt(level);
+  const houseIdNum = parseInt(houseId);
+  const data = {
+    name: req.body.username, 
+    password: req.body.password
+  }
+
+  const existingUser = await collection.findOne({name: data.name});
+
+  if (existingUser) {
+    res.render("signup", { error: "Benutzername ist bereits vergeben" })
+  } else {
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(data.password, saltRounds);
+    data.password = hashedPassword;
+  
+    // Corrected create operation with proper progress initialization
+    const userdata = await collection.create({
+      name: data.name,
+      password: data.password,
+      profilePicture: 'https://zahlenmeisterr.s3.eu-central-1.amazonaws.com/default-profile.png',
+      progress: getDefaultUserProgress() // Initialize properly
+    });
+
+    const sessionUser = {
+      id: userdata._id, 
+      name: data.name,
+      profilePicture: 'https://zahlenmeisterr.s3.eu-central-1.amazonaws.com/default-profile.png',
+      progress: userdata.progress // Now properly nested
+    };
+    
+    req.session.user = sessionUser;
+    
+    res.render("home", {
+      houseId: houseIdNum || 1,
+      level: levelNum || 1,
+      selectedDialogueKey: "home",
+      user: sessionUser,
+      houses: houseData.map(house => ({
+        ...house,
+        isCompleted: sessionUser.progress?.completedHouses?.includes(house.number),
+        isLocked: !sessionUser.progress?.unlockedHouses?.includes(house.number)
+      }))
+    });
+  }
+});
+
+
+app.post("/login", async (req, res) => {
+  try {
+    // Validate request data
+    if (!req.body.username || !req.body.password) {
+      return res.render("login", { error: "Benutzername und Passwort werden benötigt" });
+    }
+
+    const check = await collection.findOne({ name: req.body.username }).select('+password'); // Explicitly include password
+    if (!check) {
+      return res.render("login", { error: "Benutzername nicht gefunden" });
+    }
+
+    // Verify both passwords exist before comparing
+    if (!req.body.password || !check.password) {
+      return res.render("login", { error: "Authentifizierungsfehler" });
+    }
+
+    const isPasswordMatch = await bcrypt.compare(req.body.password, check.password);
+    if (isPasswordMatch) {
+      // Ensure user has progress data (using the correct nested structure)
+      if (!check.progress) {
+        const updatedUser = await collection.findByIdAndUpdate(
+          check._id,
+          { $set: { progress: getDefaultUserProgress() } },
+          { new: true }
+        );
+        check.progress = updatedUser.progress;
+      }
+
+      req.session.user = { 
+        id: check._id, 
+        name: check.name,
+        profilePicture: check.profilePicture || 'https://zahlenmeisterr.s3.eu-central-1.amazonaws.com/default-profile.png',
+        progress: check.progress || getDefaultUserProgress() // Ensure proper structure
+      };
+      return res.redirect('/home');
+    } else {
+      return res.render("login", { error: "Falsches Passwort" });
+    }
+  } catch (err) {
+    console.error("Login error:", err);
+    return res.render("login", { error: "Ein Fehler ist aufgetreten" });
+  }
+});
+
+app.post('/upload-profile-picture', (req, res) => {
+  upload(req, res, async (err) => {
+    if (err) {
+      return res.status(400).json({ 
+        success: false, 
+        error: err instanceof multer.MulterError 
+          ? 'File too large (max 5MB)' 
+          : 'Only images are allowed (JPEG, JPG, PNG, GIF)'
+      });
+    }
+
+    if (!req.file) {
+      return res.status(400).json({ 
+        success: false, 
+        error: 'No file selected' 
+      });
+    }
+
+    if (!req.session.user) {
+      return res.status(401).json({ 
+        success: false, 
+        error: 'Not authenticated' 
+      });
+    }
+
+    try {
+      // Construct the full URL path
+      const profilePicturePath = `/uploads/profile-pictures/${req.file.filename}`;
+      
+      const updatedUser = await collection.findByIdAndUpdate(
+        req.session.user.id,
+        { profilePicture: profilePicturePath },
+        { new: true }
+      );
+
+      req.session.user.profilePicture = updatedUser.profilePicture;
+      req.session.save();
+
+      res.json({ 
+        success: true,
+        profilePicture: updatedUser.profilePicture 
+      });
+    } catch (error) {
+      console.error('Error updating profile picture:', error);
+      res.status(500).json({ 
+        success: false, 
+        error: 'Server error' 
+      });
+    }
+  });
+});
+// Error handling middleware (add this right before your app.listen)
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  
+  if (err instanceof multer.MulterError) {
+    return res.status(400).json({
+      success: false,
+      error: 'File upload error',
+      details: err.message
+    });
+  }
+  
+  if (err.name === 'ValidationError') {
+    return res.status(400).json({
+      success: false,
+      error: 'Validation error',
+      details: err.message
+    });
+  }
+  
+  res.status(err.status || 500).json({
+    success: false,
+    error: process.env.NODE_ENV === 'development' 
+      ? err.message 
+      : 'Something went wrong',
+    ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
+  });
+});
+
+server.listen(process.env.PORT, () => {
+  console.log(`Server running on Port: ${process.env.PORT}`);
+});
+

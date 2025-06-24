@@ -1,0 +1,174 @@
+/* login.css */
+@import './global.css';
+
+.login-page,
+.register-page {
+  min-height: 100vh;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+  url('https://zahlenmeisterr.s3.eu-central-1.amazonaws.com/login.png');
+background-size: cover;
+background-position: center;
+  color: white;
+  font-family: 'Sansation', sans-serif;
+}
+
+/* Navigation */
+.login-page .nav,
+.register-page .nav {
+  padding: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(15, 25, 45, 0.5);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transform: translateZ(0);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Main Content */
+.login-page main,
+.register-page main {
+  max-width: 500px;
+  width: 90%;
+  margin: 3rem auto;
+  padding: 0 1.5rem;
+}
+
+.login-page header,
+.register-page header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.login-page h1,
+.register-page h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  color: var(--farbe-akzent);
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+.login-page header p,
+.register-page header p {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Form Card */
+.auth-card {
+  background: rgba(15, 25, 45, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transform: translateZ(0);
+  border-radius: 16px;
+  padding: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.auth-card h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  color: white;
+  border-bottom: 2px solid var(--farbe-akzent);
+  padding-bottom: 0.5rem;
+  display: inline-block;
+}
+
+/* Form Styles */
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1rem;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px 15px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  font-family: "Source Code Pro", monospace;
+  transition: all 0.3s ease;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: var(--farbe-akzent);
+  box-shadow: 0 0 0 3px rgba(245, 166, 35, 0.2);
+}
+
+/* Button Styles */
+.auth-btn {
+  width: 100%;
+  padding: 12px;
+  background-color: var(--btn-primary);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-family: "Source Code Pro", monospace;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 1rem;
+}
+
+.auth-btn:hover {
+  background-color: var(--btn-primary-hover);
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(245, 166, 35, 0.3);
+}
+
+/* Link Styles */
+.auth-link {
+  display: block;
+  text-align: center;
+  margin-top: 1.5rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.auth-link a {
+  color: var(--farbe-akzent);
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.auth-link a:hover {
+  text-decoration: underline;
+}
+
+/* Error Message */
+.error-message {
+  color: #ff6b6b;
+  background: rgba(255, 0, 0, 0.1);
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  border: 1px solid rgba(255, 0, 0, 0.2);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .login-page main,
+  .register-page main {
+    padding: 0 1rem;
+  }
+  
+  .auth-card {
+    padding: 1.5rem;
+  }
+  
+  
+  .login-page h1,
+  .register-page h1 {
+    font-size: 2rem;
+  }
+}

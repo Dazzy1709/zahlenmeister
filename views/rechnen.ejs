@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sansation:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles/rechnen.css">
+  <title>ZahlenMeister</title>
+</head>
+<body class="rechnen" style="
+background-image: linear-gradient(rgba(0, 0, 0, 0.541), rgba(0, 0, 0, 0.535)), url('<%= image %>');
+background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;">
+  <!-- Audio Elements -->
+<audio id="error-sound" src="/assets/audio/error.wav" preload="auto"></audio>
+<audio id="success-sound" src="/assets/audio/success.mp3" preload="auto"></audio>
+<audio id="completed-sound" src="/assets/audio/completed.wav" preload="auto"></audio>
+  <!-- Completion Modal -->
+<div id="completion-modal" class="modal hidden">
+  <div class="modal-content">
+    <h3>Haus abgeschlossen!</h3>
+    <p id="completion-message"></p>
+    <button id="return-home-btn" class="modal-btn">Zum Hauptmenü</button>
+  </div>
+</div>
+
+<!-- Game Over Modal -->
+<div id="gameover-modal" class="modal hidden">
+  <div class="modal-content">
+    <h3>Keine Leben mehr!</h3>
+    <p>Du hast alle deine Leben aufgebraucht.</p>
+    <button id="gameover-home-btn" class="modal-btn">Zum Hauptmenü</button>
+  </div>
+</div>
+
+<!-- Dialogue Modal -->
+<!-- Replace the existing dialogue modal with this -->
+<div id="dialogue-modal" class="dialogue-box hidden">
+  <div class="character-container">
+    <img src="/assets/img/characters/professor.png" alt="Professor">
+    <div class="character-name">Der Professor</div>
+  </div>
+  <p id="dialogue-text"></p>
+</div>
+
+<!-- Remove or keep this as a fallback -->
+<div id="dialogue-popup" class="dialogue-box hidden" style="display: none;">
+  <div id="dialogue-text-popup"></div>
+  <div class="character-container">
+    <img src="/assets/img/characters/professor.png" alt="">
+    <br>
+    <p>Der professor</p>
+  </div>
+</div>
+
+  
+  <div class="chat-overlay">
+    <div class="chat-top-section">
+      <div class="chat-close-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+        </svg>
+        <span>Schließen</span>
+      </div>
+    </div>
+  
+    <div class="chat-body-section">
+      <h3>Global Chat</h3>
+      <p>Chatte mit anderen Mathematikern wie dich</p>
+    </div>
+    
+    <div class="chat-message-section">
+      <ul id="messages"></ul>
+      <form id="form" action="">
+        <input id="input" autocomplete="off" />
+        <button>Senden</button>
+      </form>
+    </div>
+  </div>
+   <nav class="home-nav nav">
+    <div class="logo-container">
+      <img class="logo" src="/assets/img/logo.png" alt="">
+    </div>
+    <% if(user) { %>
+      <ul class="user-nav">
+        <li>
+          <a class="mainmenu-btn" href="/home">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5">
+              <path fill-rule="evenodd" d="M9.293 2.293a1 1 0 0 1 1.414 0l7 7A1 1 0 0 1 17 11h-1v6a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1v-3a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v3a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-6H3a1 1 0 0 1-.707-1.707l7-7Z" clip-rule="evenodd" />
+            </svg>
+            <br>
+          </a>
+        </li>
+        <li class="chat-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+            <path fill-rule="evenodd" d="M4.848 2.771A49.144 49.144 0 0 1 12 2.25c2.43 0 4.817.178 7.152.52 1.978.292 3.348 2.024 3.348 3.97v6.02c0 1.946-1.37 3.678-3.348 3.97a48.901 48.901 0 0 1-3.476.383.39.39 0 0 0-.297.17l-2.755 4.133a.75.75 0 0 1-1.248 0l-2.755-4.133a.39.39 0 0 0-.297-.17 48.9 48.9 0 0 1-3.476-.384c-1.978-.29-3.348-2.024-3.348-3.97V6.741c0-1.946 1.37-3.68 3.348-3.97ZM6.75 8.25a.75.75 0 0 1 .75-.75h9a.75.75 0 0 1 0 1.5h-9a.75.75 0 0 1-.75-.75Zm.75 2.25a.75.75 0 0 0 0 1.5H12a.75.75 0 0 0 0-1.5H7.5Z" clip-rule="evenodd" />
+          </svg>   
+        </li>
+        <li class="settings-btn">
+          <a  href="/settings">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+              <path fill-rule="evenodd" d="M11.828 2.25c-.916 0-1.699.663-1.85 1.567l-.091.549a.798.798 0 0 1-.517.608 7.45 7.45 0 0 0-.478.198.798.798 0 0 1-.796-.064l-.453-.324a1.875 1.875 0 0 0-2.416.2l-.243.243a1.875 1.875 0 0 0-.2 2.416l.324.453a.798.798 0 0 1 .064.796 7.448 7.448 0 0 0-.198.478.798.798 0 0 1-.608.517l-.55.092a1.875 1.875 0 0 0-1.566 1.849v.344c0 .916.663 1.699 1.567 1.85l.549.091c.281.047.508.25.608.517.06.162.127.321.198.478a.798.798 0 0 1-.064.796l-.324.453a1.875 1.875 0 0 0 .2 2.416l.243.243c.648.648 1.67.733 2.416.2l.453-.324a.798.798 0 0 1 .796-.064c.157.071.316.137.478.198.267.1.47.327.517.608l.092.55c.15.903.932 1.566 1.849 1.566h.344c.916 0 1.699-.663 1.85-1.567l.091-.549a.798.798 0 0 1 .517-.608 7.52 7.52 0 0 0 .478-.198.798.798 0 0 1 .796.064l.453.324a1.875 1.875 0 0 0 2.416-.2l.243-.243c.648-.648.733-1.67.2-2.416l-.324-.453a.798.798 0 0 1-.064-.796c.071-.157.137-.316.198-.478.1-.267.327-.47.608-.517l.55-.091a1.875 1.875 0 0 0 1.566-1.85v-.344c0-.916-.663-1.699-1.567-1.85l-.549-.091a.798.798 0 0 1-.608-.517 7.507 7.507 0 0 0-.198-.478.798.798 0 0 1 .064-.796l.324-.453a1.875 1.875 0 0 0-.2-2.416l-.243-.243a1.875 1.875 0 0 0-2.416-.2l-.453.324a.798.798 0 0 1-.796.064 7.462 7.462 0 0 0-.478-.198.798.798 0 0 1-.517-.608l-.091-.55a1.875 1.875 0 0 0-1.85-1.566h-.344ZM12 15.75a3.75 3.75 0 1 0 0-7.5 3.75 3.75 0 0 0 0 7.5Z" clip-rule="evenodd" />
+            </svg>
+          </a>
+        </li>
+        
+        
+      </ul>
+      <%} else {%>
+    <ul class="guest-nav">
+      <li>
+        <a class="login-btn" href="/login">Einloggen</a>
+      </li>
+      <li>
+        <a class="login-btn" href="/signup">Registrieren</a>
+      </li>
+      <li>
+        <a class="mainmenu-btn" href="/home">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5">
+            <path fill-rule="evenodd" d="M9.293 2.293a1 1 0 0 1 1.414 0l7 7A1 1 0 0 1 17 11h-1v6a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1v-3a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v3a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-6H3a1 1 0 0 1-.707-1.707l7-7Z" clip-rule="evenodd" />
+          </svg>
+          <br>
+        </a>
+      </li>
+    </ul>
+    <%} %>
+  
+  </nav>
+  <h1><%= houseName %></h1>
+  <p class="current-topic"><%= currentTopic %></p>
+ 
+  <main class="game-container">
+    <div class="game-container-top">
+      <div class="progress-container">
+        <div class="progress-bar" style="width: 0%"></div>
+        <span class="current-level-display">Level <%= level %></span>
+      </div>
+      <div class="time-container">
+        <svg id="clock" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="size-6" fill="none" stroke="white" stroke-width="1.5">
+          <!-- Clock circle -->
+          <path stroke-linecap="round" stroke-linejoin="round"
+                d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+          
+          <!-- Clock hand (Zeiger) -->
+          <line id="clock-hand" x1="12" y1="12" x2="12" y2="6"
+                stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        <p class="time">15</p>
+      </div>
+      <p id="lives"></p>
+    </div>
+    <div id="popup-feedback">
+      <p id="feedback"></p>       
+      <button id="next-btn" disabled>Nächstes Level</button>
+    </div>
+    <div id="question-container">
+      <p id="question-text"><%= question %></p> =
+      <input type="number" id="answer-input" autocomplete="off" />
+      <p id="falsche-antwort"></p>
+    </div>
+    
+    <div class="action-buttons">
+      <button class="check" id="check-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5">
+          <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd" />
+        </svg>
+        
+      </button>
+    </div>
+  </main>
+  <script type="module">
+    import musicController from '/js/musicController.js';
+    
+    document.addEventListener('DOMContentLoaded', () => {
+      // For pages where game music should play
+      if (document.body.classList.contains('rechnen')) {
+        musicController.resumePlayback();
+      }
+    });
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/party-js@latest/bundle/party.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    // Chat toggle functionality
+    document.querySelector('.chat-btn')?.addEventListener('click', () => {
+      const chatOverlay = document.querySelector('.chat-overlay');
+      chatOverlay.style.display = 'block';
+      setTimeout(() => {
+        chatOverlay.classList.add('active');
+      }, 10);
+    });
+  
+    document.querySelector('.chat-close-btn')?.addEventListener('click', () => {
+      const chatOverlay = document.querySelector('.chat-overlay');
+      chatOverlay.classList.remove('active');
+      setTimeout(() => {
+        chatOverlay.style.display = 'none';
+      }, 300);
+    });
+  
+    // Socket.IO Chat Functionality
+    const socket = io({
+      auth: {
+        serverOffset: 0
+      }
+    });
+  
+    const form = document.getElementById('form');
+    const input = document.getElementById('input');
+    const messages = document.getElementById('messages');
+    
+    const username = "<%= user ? user.name : 'Guest' %>";
+    const profilePicture = "<%= user ? user.profilePicture : 'https://zahlenmeisterr.s3.eu-central-1.amazonaws.com/default-profile.png' %>";
+  
+    form?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (input.value) {
+        socket.emit('chat message', {
+          content: input.value.trim(),
+          username: username,
+          profilePicture: profilePicture
+        });
+        input.value = '';
+      }
+    });
+  
+    socket.on('chat message', (msg) => {
+      const item = document.createElement('li');
+      item.innerHTML = `
+        <div class="message-user">
+          <img src="${msg.profilePicture}" alt="${msg.username}">
+          <span>${msg.username}</span>
+        </div>
+        <div class="message-content">${msg.content}</div>
+        <div class="message-time">
+          ${new Date(msg.createdAt).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+        </div>
+      `;
+      messages.appendChild(item);
+      messages.scrollTop = messages.scrollHeight;
+    });
+  
+    // Load message history when chat opens
+    document.querySelector('.chat-btn')?.addEventListener('click', async () => {
+      try {
+        const response = await fetch('/messages');
+        const messagesData = await response.json();
+        messages.innerHTML = ''; // Clear existing messages
+        
+        messagesData.reverse().forEach(msg => {
+          const item = document.createElement('li');
+          item.innerHTML = `
+            <div class="message-user">
+              <img src="${msg.profilePicture}" alt="${msg.username}">
+              <span>${msg.username}</span>
+            </div>
+            <div class="message-content">${msg.content}</div>
+            <div class="message-time">
+              ${new Date(msg.createdAt).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+            </div>
+          `;
+          messages.appendChild(item);
+        });
+        messages.scrollTop = messages.scrollHeight;
+      } catch (error) {
+        console.error('Error loading messages:', error);
+      }
+    });
+  </script>
+<script type="module">
+   import { initDialogue, showDialogue } from '/js/dialogue.js'; 
+    import {houseFailureDialogues, houseCompletionDialogues} from '/shared/js/variables.js'
+    const houseId = '<%= houseId %>';
+    const introDialogue = <%- JSON.stringify(dialogues.intro) %>;
+    const outroDialogue = <%- JSON.stringify(dialogues.outro) %>;
+    const levelLimit = <%- JSON.stringify(levelLimit) %>;
+    const currentQuestion = <%- JSON.stringify(question) %>;
+    const currentTime = <%- JSON.stringify(timeLimit) %>;
+    const currentAnswer = <%- JSON.stringify(answer) %>;
+    const backgroundImage = <%- JSON.stringify(image) %>;
+    const houseIdNum = parseInt(houseId); 
+    const houseData = <%- JSON.stringify(houseData) %>;
+    const currentHouse = localStorage.getItem("currentHouse") || "1";
+ 
+    const currentLevel = <%= level %>;
+    const totalLevels = levelLimit;
+    console.log(levelLimit);
+    
+    const clockHand = document.getElementById('clock-hand');
+    const timeDisplay = document.querySelector('.time');
+    let timeLeft = currentTime; 
+    const totalTime = currentTime;
+    
+    const livesDisplay = document.getElementById("lives");
+    const answerInput = document.getElementById('answer-input');
+    const checkBtn = document.getElementById('check-btn');
+    const nextBtn = document.getElementById('next-btn');
+    const feedback = document.getElementById('feedback');
+    const questionText = document.getElementById('question-text');
+    const feedbackPopup = document.getElementById('popup-feedback');
+    const dialoguePopup = document.getElementById('dialogue-popup');
+    const dialogueMessages = document.getElementById('dialogue-text');
+    const progressBar = document.querySelector('.progress-bar');
+    const currentLevelDisplay = document.querySelector('.current-level-display');
+    
+    // Heart SVGs
+    const fullHeart = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+      <path d="m11.645 20.91-.007-.003-.022-.012a15.247 15.247 0 0 1-.383-.218 25.18 25.18 0 0 1-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0 1 12 5.052 5.5 5.5 0 0 1 16.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 0 1-4.244 3.17 15.247 15.247 0 0 1-.383.219l-.022.012-.007.004-.003.001a.752.752 0 0 1-.704 0l-.003-.001Z" />
+    </svg>`;
+    
+    const grayHeart = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#ccc" class="size-6">
+      <path d="m11.645 20.91-.007-.003-.022-.012a15.247 15.247 0 0 1-.383-.218 25.18 25.18 0 0 1-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0 1 12 5.052 5.5 5.5 0 0 1 16.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 0 1-4.244 3.17 15.247 15.247 0 0 1-.383.219l-.022.012-.007.004-.003.001a.752.752 0 0 1-.704 0l-.003-.001Z" />
+    </svg>`;
+
+    const retry = `
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+    </svg>
+    <span>Nochmal versuchen</span>
+    `
+
+    const next = `
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M3 8.689c0-.864.933-1.406 1.683-.977l7.108 4.061a1.125 1.125 0 0 1 0 1.954l-7.108 4.061A1.125 1.125 0 0 1 3 16.811V8.69ZM12.75 8.689c0-.864.933-1.406 1.683-.977l7.108 4.061a1.125 1.125 0 0 1 0 1.954l-7.108 4.061a1.125 1.125 0 0 1-1.683-.977V8.69Z" />
+    </svg>
+    <span>Nächste aufgabe</span>
+    `
+    
+    // Initialize lives system
+ // Initialize lives system
+// Initialize lives system
+let lives = 3;
+let hearts = [fullHeart, fullHeart, fullHeart];
+
+// Load lives from localStorage if same house and level
+if (currentHouse === houseId.toString()) {
+    const savedLives = localStorage.getItem("lives");
+    if (savedLives !== null) {  // Only use saved lives if they exist
+        lives = parseInt(savedLives);
+        hearts = Array(3).fill(grayHeart).fill(fullHeart, 0, lives);
+    }
+} else {
+    // Reset lives for new house
+    localStorage.setItem("currentHouse", houseId.toString());
+    localStorage.setItem("lives", "3");
+}
+
+// Always reset lives if we're at level 1 (start of house)
+if (currentLevel === 1) {
+    lives = 3;
+    hearts = [fullHeart, fullHeart, fullHeart];
+    localStorage.setItem("lives", "3");
+}
+
+livesDisplay.innerHTML = hearts.join("");
+
+// Variables to hold timer interval id
+let countdown = null;
+
+// Disable inputs/buttons initially until intro dialogue done
+answerInput.disabled = true;
+checkBtn.disabled = true;
+nextBtn.disabled = true;
+
+// Create modal elements dynamically if they don't exist
+if (!document.getElementById('completion-modal')) {
+    const completionModal = document.createElement('div');
+    completionModal.id = 'completion-modal';
+    completionModal.className = 'modal hidden';
+    completionModal.innerHTML = `
+        <div class="modal-content">
+            <h3>Haus abgeschlossen!</h3>
+            <p id="completion-message"></p>
+            <button id="return-home-btn" class="modal-btn">Zum Hauptmenü</button>
+        </div>
+    `;
+    document.body.appendChild(completionModal);
+}
+
+if (!document.getElementById('gameover-modal')) {
+    const gameoverModal = document.createElement('div');
+    gameoverModal.id = 'gameover-modal';
+    gameoverModal.className = 'modal hidden';
+    gameoverModal.innerHTML = `
+        <div class="modal-content">
+            <h3>Keine Leben mehr!</h3>
+            <p>Du hast alle deine Leben aufgebraucht.</p>
+            <button id="gameover-home-btn" class="modal-btn">Zum Hauptmenü</button>
+        </div>
+    `;
+    document.body.appendChild(gameoverModal);
+}
+
+if (!document.getElementById('dialogue-modal')) {
+    const dialogueModal = document.createElement('div');
+    dialogueModal.id = 'dialogue-modal';
+    dialogueModal.className = 'modal hidden';
+    dialogueModal.innerHTML = `
+        <div class="modal-content">
+            <div id="dialogue-text" class="dialogue-text"></div>
+            <div class="character-container">
+                <img src="/assets/img/characters/professor.png" alt="Professor">
+                <p>Der Professor</p>
+            </div>
+            <button id="continue-btn" class="modal-btn">Weiter</button>
+        </div>
+    `;
+    document.body.appendChild(dialogueModal);
+}
+
+function initProgressBar() {
+    // Ensure level is between 1-15
+    const displayLevel = Math.min(Math.max(1, currentLevel), totalLevels);
+    
+    // Calculate percentage (level 1 = 0%, level 15 = 100%)
+    const percentage = ((displayLevel - 1) / totalLevels) * 100;
+    
+    // Reset transition and set initial width
+    progressBar.style.transition = 'none';
+    progressBar.style.width = '0%';
+    
+    // Force repaint
+    void progressBar.offsetWidth;
+    
+    // Set final width with animation
+    progressBar.style.transition = 'width 0.5s cubic-bezier(0.65, 0, 0.35, 1)';
+    progressBar.style.width = `${percentage}%`;
+    
+    // Update level display text
+    currentLevelDisplay.textContent = `Level ${displayLevel}/${totalLevels}`;
+    
+    // Add visual feedback
+    currentLevelDisplay.classList.add('pulse');
+    setTimeout(() => currentLevelDisplay.classList.remove('pulse'), 500);
+}
+
+// Show intro dialogue first
+// Update the initial dialogue display logic
+if (currentLevel === 1) {
+    showDialogue(introDialogue, {
+        onComplete: () => {
+            initProgressBar();
+            startLevel();
+        }
+    });
+} else {
+    initProgressBar();
+    startLevel();
+}
+
+// Function to start the level
+function startLevel() {
+
+  if (lives <= 0) {
+        handleGameOver();
+        return;
+    }
+
+    if (countdown) {
+        clearInterval(countdown);
+        countdown = null;
+    }
+    
+    // Show question and enable input & button
+    questionText.textContent = currentQuestion;
+    answerInput.disabled = false;
+    checkBtn.disabled = false;
+    answerInput.value = "";
+    answerInput.focus();
+    feedbackPopup.style.display = "none";
+    nextBtn.disabled = true;
+    nextBtn.innerHTML = next;
+    
+    if (currentLevel !== 1) {
+        answerInput.focus();
+    }
+    
+    // Start timer
+    clockHand.style.transformOrigin = '12px 12px';
+    timeLeft = totalTime;
+    timeDisplay.textContent = timeLeft;
+    countdown = setInterval(() => {
+        timeLeft--;
+        timeDisplay.textContent = timeLeft;
+        
+        // Trigger pulse animation
+        timeDisplay.classList.remove('pulse');
+        void timeDisplay.offsetWidth; 
+        timeDisplay.classList.add('pulse');
+        
+        // Add warning class when time is low
+        if (timeLeft <= 5) {
+            timeDisplay.classList.add('time-warning');
+            timeDisplay.classList.remove('pulse');
+        } else {
+            timeDisplay.classList.remove('time-warning');
+        }
+        
+        const progress = (totalTime - timeLeft) / totalTime;
+        const angle = progress * 360;
+        clockHand.style.transform = `rotate(${angle}deg)`;
+        
+        if (timeLeft <= 0) {
+            timeDisplay.classList.remove('time-warning');
+            clearInterval(countdown);
+            countdown = null;
+            handleTimeOut();
+            return;
+        }
+    }, 1000);
+}
+
+function handleTimeOut() {
+  document.getElementById('error-sound').play();
+    if (!loseLife()) return;
+    
+    feedback.textContent = `Zeit ist abgelaufen! Nur noch ${lives} Leben übrig.`;
+    feedback.style.color = "red";
+    feedbackPopup.style.display = "block";
+    
+    answerInput.disabled = true;
+    checkBtn.disabled = true;
+    nextBtn.disabled = false;
+    nextBtn.innerHTML = retry;
+    
+    nextBtn.onclick = () => {
+        if (lives <= 0) {
+            showGameOverModal();
+        } else {
+            window.location.href = `/rechnen/${houseId}/${currentLevel}`;
+        }
+    };
+}
+
+// Add this function to show completion sequence
+async function showCompletionModal(houseId) {
+    // Show celebration
+    party.confetti(document.body, { 
+        count: 100,
+        spread: 30,
+        size: 1.5
+    });
+
+    try {
+        // First show the professor's outro dialogue if it exists
+        if (outroDialogue && outroDialogue.length > 0) {
+            await showDialogue(outroDialogue);
+        }
+        
+        // Then show the house completion dialogue
+        const completionDialogue = houseCompletionDialogues[houseId] || [
+            `Haus ${houseId} erfolgreich abgeschlossen!`,
+            "Du hast alle Aufgaben gemeistert.",
+            "Der Professor ist beeindruckt von deinen Fähigkeiten!"
+        ];
+        await showDialogue(completionDialogue);
+        
+        // Finally show the completion modal
+        const completionModal = document.getElementById('completion-modal');
+        const completionMessage = document.getElementById('completion-message');
+        const returnHomeBtn = document.getElementById('return-home-btn');
+        
+        completionMessage.textContent = `Glückwunsch! Du hast Haus ${houseId} vollständig abgeschlossen.`;
+        completionModal.classList.remove('hidden');
+        
+        returnHomeBtn.onclick = () => {
+            completionModal.classList.add('hidden');
+            window.location.href = '/home';
+        };
+    } catch (error) {
+        console.error('Error showing completion sequence:', error);
+        // Fallback to simple completion
+        const completionModal = document.getElementById('completion-modal');
+        completionModal.classList.remove('hidden');
+    }
+}
+
+
+async function showGameOverModal() {
+    const gameoverModal = document.getElementById('gameover-modal');
+    const gameoverHomeBtn = document.getElementById('gameover-home-btn');
+    
+    // Show failure dialogue first
+    const failureDialogue = houseFailureDialogues[houseIdNum] || houseFailureDialogues.default;
+    
+    await showDialogue(failureDialogue);
+    
+    // Then show the game over modal
+    gameoverModal.classList.remove('hidden');
+    
+    gameoverHomeBtn.onclick = () => {
+        gameoverModal.classList.add('hidden');
+        window.location.href = '/home';
+    };
+}
+
+function handleGameOver() {
+    // Clear lives from storage when game over
+    localStorage.removeItem("lives");
+    
+    showGameOverModal();
+    
+    // Disable all inputs
+    answerInput.disabled = true;
+    checkBtn.disabled = true;
+}
+
+function loseLife() {
+    if (lives <= 0) return false;
+    
+    lives--;
+    hearts[lives] = grayHeart;
+    localStorage.setItem("lives", lives.toString());
+    livesDisplay.innerHTML = hearts.join("");
+    
+    // Animation for lost life
+    livesDisplay.children[lives].animate([
+        { transform: 'scale(1)' },
+        { transform: 'scale(1.5)', opacity: 0.5 },
+        { transform: 'scale(0.5)', opacity: 0 }
+    ], {
+        duration: 500,
+        easing: 'ease-out'
+    });
+    
+    if (lives <= 0) {
+        handleGameOver();
+        return false;
+    }
+    return true;
+}
+
+// Check answer on button or Enter
+checkBtn.addEventListener('click', checkAnswer);
+answerInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') checkAnswer();
+});
+
+function completeHouse() {
+    // Clear lives when house is completed
+    document.getElementById('completed-sound').play();
+    localStorage.removeItem("lives");
+    
+    // Check if user is logged in or guest
+    const isGuest = <%= !user %>;
+    console.log('Completing house:', houseId, 'Is guest:', isGuest);
+    
+    if (isGuest) {
+        console.log('Handling guest completion');
+        // Handle guest completion
+        handleGuestCompletion();
+    } else {
+      console.log('Sending completion to server');
+      fetch('/complete-house', {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        credentials: 'include',
+        body: JSON.stringify({ houseId: houseId })
+      })
+      .then(response => {
+        console.log('Server response status:', response.status);
+        if (response.status === 401) {
+          console.log('Session expired, redirecting to login');
+          return window.location.href = '/login?sessionExpired=true';
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log('Server response data:', data);
+        if (data?.success) {
+          console.log('House completion successful, refreshing session');
+          fetch('/session/refresh', { credentials: 'include' })
+            .then(() => console.log('Session refreshed'))
+            .catch(e => console.error('Session refresh error:', e));
+          showCompletionModal(houseIdNum);
+        }
+      })
+      .catch(error => {
+        console.error('Completion error:', error);
+        showErrorFeedback(error);
+      });
+    }
+}
+function updateHouseCompletionUI(houseId) {
+    // This would update the UI elements directly
+    const houseElement = document.querySelector(`#Haus${houseId}`);
+    if (houseElement) {
+        houseElement.classList.add('completed');
+        // Update any other UI elements as needed
+    }
+    
+    // For guests, update localStorage
+    if (isGuest) {
+        const guestProgress = JSON.parse(localStorage.getItem('guestProgress')) || {};
+        if (!guestProgress.completedHouses) guestProgress.completedHouses = [];
+        if (!guestProgress.completedHouses.includes(houseId)) {
+            guestProgress.completedHouses.push(houseId);
+            localStorage.setItem('guestProgress', JSON.stringify(guestProgress));
+        }
+    }
+}
+
+
+function handleGuestCompletion() {
+    // Store completion in localStorage for guests
+    const guestProgress = JSON.parse(localStorage.getItem('guestProgress')) || {
+        completedHouses: [],
+        unlockedHouses: [1, 2], // Default unlocked houses for guests
+        houseProgress: {}
+    };
+    
+    // Mark house as completed
+    if (!guestProgress.completedHouses.includes(houseIdNum)) {
+        guestProgress.completedHouses.push(houseIdNum);
+    }
+    
+    // Unlock next house if available
+    const nextHouse = houseIdNum + 1;
+    if (houseData.some(h => h.number === nextHouse)) {
+        if (!guestProgress.unlockedHouses.includes(nextHouse)) {
+            guestProgress.unlockedHouses.push(nextHouse);
+        }
+    }
+    
+    localStorage.setItem('guestProgress', JSON.stringify(guestProgress));
+    showCompletionModal(houseIdNum); // Changed this line
+}
+
+function showCompletionSequence() {
+    // Show celebration
+    party.confetti(document.body, { 
+        count: 100,
+        spread: 30,
+        size: 1.5
+    });
+    
+    // First show the professor's dialogue
+    showDialogueSequence(outroDialogue, () => {
+        // Then show the completion modal
+        const completionModal = document.getElementById('completion-modal');
+        const completionMessage = document.getElementById('completion-message');
+        const returnHomeBtn = document.getElementById('return-home-btn');
+        
+        completionMessage.textContent = `Glückwunsch! Du hast Haus ${houseId} vollständig abgeschlossen.`;
+        completionModal.classList.remove('hidden');
+        
+        returnHomeBtn.onclick = () => {
+            completionModal.classList.add('hidden');
+            window.location.href = '/home';
+        };
+    });
+}
+
+function showErrorFeedback(error) {
+    feedback.textContent = `Fehler: ${error.message}`;
+    feedbackPopup.style.display = 'block';
+    nextBtn.disabled = false;
+    nextBtn.onclick = () => window.location.href = '/home';
+}
+
+function checkAnswer() {
+    const userAnswer = parseInt(answerInput.value.trim());
+    
+    if (lives <= 0) {
+        handleGameOver();
+        return;
+    }
+    
+    if (isNaN(userAnswer)) {
+        feedback.textContent = "Bitte gib eine gültige Zahl ein";
+        feedback.style.color = "red";
+        return;
+    }
+    
+    if (countdown) {
+        clearInterval(countdown);
+        countdown = null;
+    }
+    
+    if (userAnswer === currentAnswer) {
+        // Play success sound
+        document.getElementById('success-sound').play();
+        
+        feedback.textContent = `${currentAnswer} ist richtig! Sehr gut!`;
+        feedback.style.color = "green";
+        answerInput.disabled = true;
+        checkBtn.disabled = true;
+        
+        // Confetti for correct answer
+        party.confetti(document.body, {
+            count: 80,
+            spread: 20,
+            shapes: ["circle"],
+            size: 1.5,
+            speed: party.variation.range(100, 600),
+            gravity: 700,
+        });
+        
+        if (currentLevel < totalLevels) {
+            // Show next button for non-final levels
+            feedbackPopup.style.display = "block";
+            nextBtn.disabled = false;
+            nextBtn.onclick = () => {
+                window.location.href = `/rechnen/${houseId}/${currentLevel + 1}`;
+            };
+        } else {
+            // Immediately trigger completion for final level
+            completeHouse();
+        }
+    } else {
+        // Play error sound
+        document.getElementById('error-sound').play();
+        
+        if (!loseLife()) return;
+        
+        feedback.textContent = `${userAnswer} ist Falsch. Die richtige Antwort lautet ${currentAnswer}. Nur noch ${lives} Leben übrig.`;
+        feedback.style.color = "red";
+        feedbackPopup.style.display = "block";
+        answerInput.disabled = true;
+        checkBtn.disabled = true;
+        nextBtn.disabled = false;
+        nextBtn.innerHTML = retry;
+        
+        nextBtn.onclick = () => {
+            if (lives <= 0) {
+                showGameOverModal();
+            } else {
+                window.location.href = `/rechnen/${houseId}/${currentLevel}`;
+            }
+        };
+    }
+}
+nextBtn.addEventListener('click', () => {
+    if (lives <= 0) {
+        window.location.href = "/home";
+        return;
+    }
+    
+    if (currentLevel < totalLevels) {
+        window.location.href = `/rechnen/${houseId}/${currentLevel + 1}`;
+    } else {
+        localStorage.removeItem("lives");
+        window.location.href = `/home?houseCompleted=${houseId}`;
+    }
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('error-sound').volume = 0.2;
+    document.getElementById('success-sound').volume = 0.2;
+    document.getElementById('completed-sound').volume = 0.2;
+});
+</script>
+</body>
+</html>

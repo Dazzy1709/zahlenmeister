@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sansation:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles/welcome.css">
+  <title>ZahlenMeister</title>
+</head>
+
+<body class="welcome">
+  <div class="video-container">
+    <video autoplay muted loop playsinline>
+      <source src="https://zahlenmeisterr.s3.eu-central-1.amazonaws.com/welcome.mp4" type="video/mp4" />
+      Your browser does not support the video tag.
+    </video>
+  </div>
+  
+  <!-- Initial screen with logo and start button -->
+  <div class="start-screen">
+    <img class="logo" src="/assets/img/logo.png" alt="ZahlenMeister Logo">
+    <button id="startMusicBtn" class="start-button music-btn">STARTEN</button>
+  </div>
+  
+  <!-- Main content (hidden initially) -->
+  <div class="welcome-overlay hidden">
+    <nav class="welcome-nav">
+      <img class="logo" src="/assets/img/logo.png" alt="ZahlenMeister Logo">
+      <div class="auth-buttons">
+        <a href="/login" class="login-btn">Einloggen</a>
+        <a href="/signup" class="login-btn btn-primary">Registrieren</a>
+      </div>
+    </nav>
+  
+    <main class="welcome-content">
+      <div class="welcome-text">
+        <h2 class="tagline">DAS GEHEIMNIS DES ZAHLENKREISES</h2>
+        <h1>ENTDECKE DIE MATHEMATISCHE VERSCHWÖRUNG</h1>
+        <p class="intro-text">
+          Seit genau einer Woche verschwinden in deutschen Großstädten junge Erwachsene – zwischen 16 und 24 Jahren. Erst ein Schüler aus Köln, dann eine Studentin aus Hamburg. Kein Muster, keine Forderungen – nur Stille.
+          <br><br>
+          <span class="highlight">Eine einzige Verbindung:</span> Alle Betroffenen waren Teil eines geheimen Online-Forums für mathematisch Hochbegabte. Der Server? Offline. Die Mitglieder? Verschwunden. Der Name, der immer wieder auftaucht: <em>„Zahlenkreis"</em>.
+          <br><br>
+          Du bist <strong>Noah</strong> (oder <strong>Noa</strong>) – ein ehemaliges Mathe-Wunderkind. Deine Schwester, <strong>Leonie</strong>, verschwand vor zwei Jahren. Bis heute glaubte niemand, dass es ein Verbrechen war. Nicht einmal du.
+          <br><br>
+          Doch heute findest du einen Umschlag ohne Absender. Darin: ein altes, eingerissenes Foto von ihr. Auf der Rückseite steht:
+          <br>
+          <strong>„Sie war bei Stufe 3. Du bist dran. Fang in Kreuzberg an."</strong>
+          <br><br>
+          <span class="highlight">Deine Mission:</span> Tauche ein in zehn verlassene Orte. Löse die mathematischen Prüfungen, die dir gestellt werden. Entschlüsse die Wahrheit über den Zahlenkreis – und über dich selbst.
+          <br><br>
+          Jede Entscheidung zählt. Jeder Fehler bringt dich näher an das Verschwinden.
+        </p>
+        <a href="/home" class="cta-button">BEGINNE DEINE REISE →</a>
+      </div>
+    </main>
+  </div>
+  
+  <div class="dialogue-box hidden">
+    <p id="dialogue-text"></p>
+    <div class="character-container">
+      <img src="/assets/img/characters/professor.png" alt="">
+      <br>
+      <p>Der professor</p>
+    </div>
+  </div>
+  <audio id="backgroundMusic" loop>
+    <source src="/assets/audio/menu-music.mp3" type="audio/mpeg">
+  </audio>
+  <script type="module">
+    import { initMenuPages } from '/shared/js/musicInit.js';
+    
+    // Wait for DOM to be fully loaded
+    document.addEventListener('DOMContentLoaded', () => {
+      // Initialize music system
+      initMenuPages();
+      
+      // Handle start button click
+      document.querySelector('.start-button')?.addEventListener('click', () => {
+        document.querySelector('.start-screen')?.classList.add('hidden');
+        document.querySelector('.welcome-overlay')?.classList.remove('hidden');
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+@import './global.css';
+
+.dialogue-box {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%) translateY(100%);
+  width: 80%;
+  max-width: 800px;
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  font-family: 'Sansation', sans-serif;
+  padding: 20px;
+  border-radius: 12px 12px 0 0;
+  font-size: 18px;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  z-index: 1000;
+  border: 2px solid white;
+  border-bottom: none;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
+  opacity: 0;
+}
+
+.dialogue-box.visible {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+.dialogue-box.hidden {
+  transform: translateX(-50%) translateY(100%);
+  opacity: 0;
+}
+
+/* Rest of your existing CSS remains the same */
+.dialogue-box .character-container {
+  flex-shrink: 0;
+  width: 100px;
+  text-align: center;
+}
+
+.dialogue-box .character-container img {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  border-radius: 50%;
+  border: 2px solid white;
+}
+
+.dialogue-box #dialogue-text {
+  flex: 1;
+  align-items: center;
+  padding: 10px;
+  line-height: 1.4;
+  white-space: pre-wrap;
+  word-break: break-word;
+  min-height: 60px;
+  display: inline-block;
+  opacity: 1;
+  transition: opacity 0.1s ease;
+}
+
+.dialogue-box #dialogue-text.initializing {
+  opacity: 0;
+}
+
+.dialogue-box .character-name {
+  font-size: 14px;
+  color: var(--btn-primary);
+  margin-top: 5px;
+  font-weight: bold;
+}

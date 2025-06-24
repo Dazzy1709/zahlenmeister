@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registrieren | ZahlenMeister</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sansation:wght@300;400;700&family=Source+Code+Pro:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles/global.css">
+  <link rel="stylesheet" href="/styles/login.css">
+</head>
+
+<body class="register-page">
+  <nav class="nav">
+    <div class="logo-container">
+      <img class="logo" src="/assets/img/logo.png" alt="ZahlenMeister">
+    </div>
+  </nav>
+
+  <main>
+    <header>
+      <h1>Neues Konto erstellen</h1>
+      <p>Beginne dein mathematisches Abenteuer</p>
+    </header>
+
+    <div class="auth-card">
+      <% if (typeof error !== 'undefined' && error) { %>
+        <div class="error-message"><%= error %></div>
+      <% } %>
+
+      <form class="auth-form" action="/signup" method="post">
+        <div class="form-group">
+          <label for="username">Benutzername</label>
+          <input type="text" id="username" name="username" placeholder="Wähle einen Benutzernamen" required>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Passwort</label>
+          <input type="password" id="password" name="password" placeholder="Erstelle ein sicheres Passwort" required>
+        </div>
+
+        <button type="submit" class="auth-btn">Registrieren</button>
+      </form>
+
+      <p class="auth-link">
+        Bereits ein Konto? <a href="/login">Einloggen</a>
+      </p>
+    </div>
+  </main>
+  <audio id="backgroundMusic" loop>
+    <source src="/assets/audio/menu-theme.mp3" type="audio/mpeg">
+  </audio>
+</body>
+</html>
