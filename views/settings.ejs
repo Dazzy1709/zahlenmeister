@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sansation:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
+  <title>Einstellungen | ZahlenMeister</title>
+  <link rel="stylesheet" href="/styles/settings.css">
+  <audio id="backgroundMusic" loop>
+    <source src="/assets/audio/menu-music.mp3" type="audio/mpeg">
+  </audio>
+  <style>
+    /* Notification styling */
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #4CAF50;
+      color: white;
+      padding: 15px 25px;
+      border-radius: 5px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+      z-index: 1000;
+      transform: translateX(200%);
+      transition: transform 0.3s ease;
+    }
+    
+    .notification.show {
+      transform: translateX(0);
+    }
+    
+    .notification.error {
+      background: #f44336;
+    }
+    
+    /* Edit button styling */
+    .edit-icon {
+      cursor: pointer;
+      margin-left: 10px;
+      vertical-align: middle;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+    }
+    
+    .edit-icon:hover {
+      opacity: 1;
+    }
+    
+    /* Profile picture edit section */
+    .profile-edit-section {
+      display: none;
+      margin-top: 15px;
+    }
+    
+    .profile-picture-wrapper {
+      position: relative;
+      display: inline-block;
+    }
+    
+    .profile-picture-wrapper.editing .profile-edit-section {
+      display: block;
+    }
+    
+    /* Username edit section */
+    .username-edit-section {
+      display: none;
+      margin-top: 15px;
+    }
+    
+    .username-display {
+      display: flex;
+      align-items: center;
+    }
+    
+    /* Button styles */
+    .upload-btn, .save-btn, .cancel-btn {
+      padding: 8px 16px;
+      margin-right: 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    
+    .upload-btn {
+      background-color: #4CAF50;
+      color: white;
+    }
+    
+    .save-btn {
+      background-color: #2196F3;
+      color: white;
+    }
+    
+    .cancel-btn {
+      background-color: #f44336;
+      color: white;
+    }
+  </style>
+</head>
+<body class="settings-page">
+  <!-- Notification element -->
+  <div id="notification" class="notification"></div>
+
+  <nav class="nav">
+    <div class="logo-container">
+      <img class="logo" src="/assets/img/logo.png" alt="">
+    </div>
+    <ul class="user-nav">
+      <li>
+        <a href="/home" class="back-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+            <path fill-rule="evenodd" d="M11.03 3.97a.75.75 0 0 1 0 1.06l-6.22 6.22H21a.75.75 0 0 1 0 1.5H4.81l6.22 6.22a.75.75 0 1 1-1.06 1.06l-7.5-7.5a.75.75 0 0 1 0-1.06l7.5-7.5a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
+          </svg>
+          Zurück
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <main>
+    <header>
+      <h1>Einstellungen</h1>
+      <p>Angemeldet als: <strong><%= user ? user.name : 'Gast' %></strong></p>
+    </header>
+
+    <section class="settings-container">
+      <!-- Profile Picture Section -->
+      <div class="settings-card">
+        <h2>Profilbild</h2>
+        <br>
+        <div class="profile-picture-wrapper" id="profile-picture-wrapper">
+          <img id="profile-picture-preview" src="<%= user.profilePicture || '/assets/img/default-profile.png' %>" alt="Profilbild" class="profile-picture">
+          <svg class="edit-icon" id="edit-profile-picture" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+            <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-8.4 8.4a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32l8.4-8.4Z" />
+            <path d="M5.25 5.25a3 3 0 0 0-3 3v10.5a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3V13.5a.75.75 0 0 0-1.5 0v5.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5V8.25a1.5 1.5 0 0 1 1.5-1.5h5.25a.75.75 0 0 0 0-1.5H5.25Z" />
+          </svg>
+          
+          <div class="profile-edit-section" id="profile-edit-section">
+            <form id="profile-picture-form" enctype="multipart/form-data">
+              <input type="file" id="profile-picture-input" name="profilePicture" accept="image/*" style="display: none;">
+              <button type="button" class="upload-btn" onclick="document.getElementById('profile-picture-input').click()">
+                Bild auswählen
+              </button>
+              <button type="submit" class="save-btn">Speichern</button>
+              <button type="button" class="cancel-btn" id="cancel-profile-edit">Abbrechen</button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Change Name Section -->
+      <div class="settings-card">
+        <h2>Benutzername ändern</h2>
+        <div class="username-display">
+          <span id="current-username"><%= user ? user.name : 'Gast' %></span>
+          <svg class="edit-icon" id="edit-username" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+            <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-8.4 8.4a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32l8.4-8.4Z" />
+            <path d="M5.25 5.25a3 3 0 0 0-3 3v10.5a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3V13.5a.75.75 0 0 0-1.5 0v5.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5V8.25a1.5 1.5 0 0 1 1.5-1.5h5.25a.75.75 0 0 0 0-1.5H5.25Z" />
+          </svg>
+        </div>
+        
+        <div class="username-edit-section" id="username-edit-section">
+          <form id="change-name-form">
+            <div class="form-group">
+              <label for="new-username">Neuer Benutzername</label>
+              <input type="text" id="new-username" name="newUsername" value="<%= user.name %>" required>
+            </div>
+            <button type="submit" class="save-btn">Speichern</button>
+            <button type="button" class="cancel-btn" id="cancel-username-edit">Abbrechen</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Account Actions -->
+      <div class="settings-card">
+        <h2>Konto</h2>
+        <div class="settings-actions">
+          <a href="/logout" class="logout-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+              <path fill-rule="evenodd" d="M7.5 3.75A1.5 1.5 0 0 0 6 5.25v13.5a1.5 1.5 0 0 0 1.5 1.5h6a1.5 1.5 0 0 0 1.5-1.5V15a.75.75 0 0 1 1.5 0v3.75a3 3 0 0 1-3 3h-6a3 3 0 0 1-3-3V5.25a3 3 0 0 1 3-3h6a3 3 0 0 1 3 3V9A.75.75 0 0 1 15 9V5.25a1.5 1.5 0 0 0-1.5-1.5h-6Zm10.72 4.72a.75.75 0 0 1 1.06 0l3 3a.75.75 0 0 1 0 1.06l-3 3a.75.75 0 1 1-1.06-1.06l1.72-1.72H9a.75.75 0 0 1 0-1.5h10.94l-1.72-1.72a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+            </svg>
+            Abmelden
+          </a>
+        </div>
+      </div>
+      <div class="settings-card">
+        <div class="music-controls">
+          <h3>Audio Settings</h3>
+          <div class="volume-control">
+            <label for="musicVolume">Music Volume:</label>
+            <input type="range" id="musicVolume" min="0" max="1" step="0.1" value="0.5">
+          </div>
+          <button id="muteButton">Mute</button>
+        </div>
+      </div>
+    </section>
+  </main>
+  <script type="module">
+    import musicController from '/js/musicController.js';
+    
+    document.addEventListener('DOMContentLoaded', () => {
+      // Initialize volume controls
+      const volumeSlider = document.getElementById('musicVolume');
+      const muteButton = document.getElementById('muteButton');
+      
+      // Set initial values
+      volumeSlider.value = musicController.volume;
+      muteButton.textContent = musicController.isMuted ? 'Unmute' : 'Mute';
+      
+      // Add event listeners
+      volumeSlider.addEventListener('input', (e) => {
+        musicController.setVolume(parseFloat(e.target.value));
+      });
+      
+      muteButton.addEventListener('click', () => {
+        const isUnmuted = musicController.toggleMute();
+        muteButton.textContent = isUnmuted ? 'Mute' : 'Unmute';
+        
+        // Update volume slider to reflect mute state
+        if (isUnmuted) {
+          volumeSlider.value = musicController.volume;
+        }
+      });
+      
+      // Try to continue playing music if it was playing before
+      if (musicController.isPlaying()) {
+        musicController.getAudioElement().play().catch(e => {
+          console.log('Playback error:', e);
+        });
+      } else {
+        // Or play menu music if nothing was playing
+        musicController.playMenuMusic().catch(e => {
+          console.log('Menu music playback error:', e);
+        });
+      }
+    });
+  </script>
+
+  <script type="module">
+    // Notification function
+    function showNotification(message, isError = false) {
+      const notification = document.getElementById('notification');
+      notification.textContent = message;
+      notification.className = isError ? 'notification error show' : 'notification show';
+      
+      setTimeout(() => {
+        notification.classList.remove('show');
+      }, 3000);
+    }
+
+    // Toggle profile picture edit mode
+    document.getElementById('edit-profile-picture').addEventListener('click', function() {
+      document.getElementById('profile-picture-wrapper').classList.add('editing');
+    });
+
+    // Cancel profile picture edit
+    document.getElementById('cancel-profile-edit').addEventListener('click', function() {
+      document.getElementById('profile-picture-wrapper').classList.remove('editing');
+      // Reset the file input
+      document.getElementById('profile-picture-input').value = '';
+      // Reset the preview if a file was selected but not saved
+      const originalSrc = document.getElementById('profile-picture-preview').getAttribute('data-original-src') || 
+                         '<%= user ? user.profilePicture : "/assets/img/default-profile.png" %>';
+      document.getElementById('profile-picture-preview').src = originalSrc;
+    });
+
+    // Toggle username edit mode
+    document.getElementById('edit-username').addEventListener('click', function() {
+      document.getElementById('username-edit-section').style.display = 'block';
+      document.getElementById('edit-username').style.display = 'none';
+    });
+
+    // Cancel username edit
+    document.getElementById('cancel-username-edit').addEventListener('click', function() {
+      document.getElementById('username-edit-section').style.display = 'none';
+      document.getElementById('edit-username').style.display = 'inline-block';
+      // Reset the username input
+      document.getElementById('new-username').value = document.getElementById('current-username').textContent;
+    });
+
+    // Profile picture preview
+    document.getElementById('profile-picture-input').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        // Store original src in case of cancel
+        if (!document.getElementById('profile-picture-preview').hasAttribute('data-original-src')) {
+          document.getElementById('profile-picture-preview').setAttribute(
+            'data-original-src', 
+            document.getElementById('profile-picture-preview').src
+          );
+        }
+        
+        const reader = new FileReader();
+        reader.onload = function(event) {
+          document.getElementById('profile-picture-preview').src = event.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    // Handle profile picture upload
+    document.getElementById('profile-picture-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const fileInput = document.getElementById('profile-picture-input');
+      if (!fileInput.files || fileInput.files.length === 0) {
+        showNotification('Bitte wählen Sie ein Bild aus!', true);
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('profilePicture', fileInput.files[0]);
+      
+      try {
+        const response = await fetch('/upload-profile-picture', {
+          method: 'POST',
+          body: formData
+        });
+        
+        const result = await response.json();
+        if (result.success) {
+          showNotification('Profilbild wurde erfolgreich aktualisiert!');
+          
+          // Update the displayed image
+          if (result.profilePicture) {
+            document.getElementById('profile-picture-preview').src = result.profilePicture;
+            // Update the original src reference
+            document.getElementById('profile-picture-preview').setAttribute('data-original-src', result.profilePicture);
+          }
+          
+          // Exit edit mode
+          document.getElementById('profile-picture-wrapper').classList.remove('editing');
+        } else {
+          showNotification('Fehler: ' + result.error, true);
+        }
+      } catch (error) {
+        console.error('Upload error:', error);
+        showNotification('Ein Fehler ist aufgetreten', true);
+      }
+    });
+
+    // Handle name change
+    document.getElementById('change-name-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const newUsername = document.getElementById('new-username').value;
+      
+      try {
+        const response = await fetch('/change-username', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ newUsername })
+        });
+        
+        const result = await response.json();
+        if (result.success) {
+          showNotification('Benutzername wurde erfolgreich geändert!');
+          
+          // Update displayed name everywhere
+          document.querySelector('header p strong').textContent = newUsername;
+          document.getElementById('current-username').textContent = newUsername;
+          
+          // Hide form and show edit button again
+          document.getElementById('username-edit-section').style.display = 'none';
+          document.getElementById('edit-username').style.display = 'inline-block';
+        } else {
+          showNotification('Fehler: ' + result.error, true);
+        }
+      } catch (error) {
+        showNotification('Ein Fehler ist aufgetreten', true);
+      }
+    });
+
+    document.getElementById('musicVolume').addEventListener('input', (e) => {
+  musicController.setVolume(parseFloat(e.target.value));
+});
+
+document.getElementById('muteButton').addEventListener('click', () => {
+  const isUnmuted = musicController.toggleMute();
+  document.getElementById('muteButton').textContent = isUnmuted ? 'Mute' : 'Unmute';
+});
+
+// Initialize controls
+document.getElementById('musicVolume').value = musicController.volume;
+document.getElementById('muteButton').textContent = musicController.isMuted ? 'Unmute' : 'Mute';
+  </script>
+</body>
+</html>

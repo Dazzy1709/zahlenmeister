@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sansation:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles/style.css">
+  <audio id="backgroundMusic" loop>
+    <source src="/assets/audio/menu-music.mp3" type="audio/mpeg">
+  </audio>
+  <title>ZahlenMeister</title>
+</head>
+
+
+
+<body class="home">
+  <div id="notification" class="notification">
+    <div class="notification-content">
+      <svg class="notification-icon" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M12,2L1,21H23M12,6L19.53,19H4.47M11,10V14H13V10M11,16V18H13V16"/>
+      </svg>
+      <div class="notification-text"></div>
+    </div>
+  </div>
+  <div class="video-container">
+    <video autoplay muted loop playsinline>
+      <source src="https://zahlenmeisterr.s3.eu-central-1.amazonaws.com/home.mp4" type="video/mp4" />
+      Your browser does not support the video tag.
+    </video>
+  </div>
+  <div id="dialogue-modal" class="dialogue-box slide-in ">
+    <div class="character-container">
+      <img src="/assets/img/characters/professor.png" alt="Professor">
+      <div class="character-name">Der Professor</div>
+    </div>
+    <p id="dialogue-text"></p>
+  </div>
+  <div id="popupOverlay" class="popup-overlay">
+   <figure id="HausPopup" class="house-popup">
+    <div class="popup-inner">
+      <div class="popup-image-container">
+        <img class="popup-image" src="" alt="">
+      </div>
+      <div class="house-info">
+        <h3>Hausname</h3>
+        <span></span>
+        <p>Hausbeschreibung</p>
+      </div>
+      <a id="StartHouseBtn" class="login-btn" >Starten</a>
+      <button id="ClosePopup" class="close-popup">Nein</button>
+    </div>
+   </figure>
+  </div>
+
+  <div class="chat-overlay">
+    <div class="chat-top-section">
+      <div class="chat-close-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+        </svg>
+        <span>Schließen</span>
+      </div>
+    </div>
+
+  <div class="chat-body-section">
+    <h3>Global Chat</h3>
+    <p>Chatte mit anderen Mathematikern wie dich</p>
+  </div>
+  <div class="chat-message-section">
+    <ul id="messages"></ul>
+    <form id="form" action="">
+      <input id="input" autocomplete="off" />
+      <button>Senden</button>
+    </form>
+  </div>
+  </div>
+  <nav class="home-nav nav">
+    <div class="logo-container">
+      <img class="logo" src="/assets/img/logo.png" alt="">
+    </div>
+    <% if(user) { %>
+      <ul class="user-nav">
+        <li class="chat-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="#ffb347" class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 0 1 .865-.501 48.172 48.172 0 0 0 3.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z" />
+          </svg>
+        </li>
+        <li class="settings-btn">
+          <a href="/settings">
+            <% if(user.profilePicture) { %>
+              <img src="<%= user.profilePicture %>" alt="Profile Picture" class="profile-picture-nav">
+            <% } else { %>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="#ffb347" class="size-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 0 1 1.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.559.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.894.149c-.424.07-.764.383-.929.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 0 1-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.398.165-.71.505-.781.929l-.149.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 0 1-.12-1.45l.527-.737c.25-.35.272-.806.108-1.204-.165-.397-.506-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.108-1.204l-.526-.738a1.125 1.125 0 0 1 .12-1.45l.773-.773a1.125 1.125 0 0 1 1.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894Z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+              </svg>
+            <% } %>
+          </a>
+        </li>
+        <li>
+          <button id="musicToggle" class="music-control-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M13.5 4.06c0-1.336-1.616-2.005-2.56-1.06l-4.5 4.5H4.508c-1.141 0-2.318.664-2.66 1.905A9.76 9.76 0 0 0 1.5 12c0 .898.121 1.768.35 2.595.341 1.24 1.518 1.905 2.659 1.905h1.93l4.5 4.5c.945.945 2.561.276 2.561-1.06V4.06ZM18.584 5.106a.75.75 0 0 1 1.06 0c3.808 3.807 3.808 9.98 0 13.788a.75.75 0 0 1-1.06-1.06 8.25 8.25 0 0 0 0-11.668.75.75 0 0 1 0-1.06Z" />
+              <path d="M15.932 7.757a.75.75 0 0 1 1.061 0 6 6 0 0 1 0 8.486.75.75 0 0 1-1.06-1.061 4.5 4.5 0 0 0 0-6.364.75.75 0 0 1 0-1.06Z" />
+            </svg>
+          </button>
+        </li>
+      </ul>
+     
+    <% } else { %>
+      <ul class="guest-nav">
+        <li>
+          <a class="login-btn" href="/login">Einloggen</a>
+        </li>
+        <li>
+          <a class="login-btn" href="/signup">Registrieren</a>
+        </li>
+        <li><button id="musicToggle" class="music-control-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M13.5 4.06c0-1.336-1.616-2.005-2.56-1.06l-4.5 4.5H4.508c-1.141 0-2.318.664-2.66 1.905A9.76 9.76 0 0 0 1.5 12c0 .898.121 1.768.35 2.595.341 1.24 1.518 1.905 2.659 1.905h1.93l4.5 4.5c.945.945 2.561.276 2.561-1.06V4.06ZM18.584 5.106a.75.75 0 0 1 1.06 0c3.808 3.807 3.808 9.98 0 13.788a.75.75 0 0 1-1.06-1.06 8.25 8.25 0 0 0 0-11.668.75.75 0 0 1 0-1.06Z" />
+            <path d="M15.932 7.757a.75.75 0 0 1 1.061 0 6 6 0 0 1 0 8.486.75.75 0 0 1-1.06-1.061 4.5 4.5 0 0 0 0-6.364.75.75 0 0 1 0-1.06Z" />
+          </svg>
+        </button></li>
+      </ul>
+      
+    <% } %>
+  </nav>
+  <main>  
+    <header>
+      <% if(user) { %>
+        <h1>Wilkommen , <%= user.name %>!</h1>
+         <%} else {%> 
+         <h1>Wilkommen bei ZahlenMeister</h1>
+         <p>Logge dich ein oder Registriere dich damit dein Spielestand gespeichert wird</p>
+         <%} %> 
+    </header>
+    <section class="container house-section">
+      <h2>Häuser</h2>
+
+      <div class="house-container">
+        <% houses.forEach((house, index) => { %>
+          <figure id="Haus<%= house.number %>" class="house" data-index="<%= index %>"></figure>
+        <% }); %>
+      </div>
+    </section>
+     
+  </main>
+ 
+  <script type="module" src="/shared/js/variables.js"></script>
+  <script type="module" src="/js/gameMenu.js"></script>
+  <script type="module" src="/js/dialogue.js"></script>
+  
+  <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
+  
+
+ <script type="module">
+  // Main initialization module
+  import { initHouses } from '/js/gameMenu.js';
+  import { showDialogue } from '/js/dialogue.js';
+  import musicController from '/js/musicController.js';
+  import { professorIntro, houseCompletionDialogues } from '/shared/js/variables.js';
+
+  // Global references
+  const userAccount = <%- JSON.stringify(user || {}) %>;
+  const startHouses = <%- JSON.stringify(houses) %>;
+  
+  // Initialize user progress
+  let userProgress;
+  if (<%- !user %>) {
+    const guestProgress = localStorage.getItem('guestProgress');
+    userProgress = guestProgress ? JSON.parse(guestProgress) : {
+      unlockedHouses: [1, 2],
+      completedHouses: []
+    };
+  } else {
+    userProgress = <%- JSON.stringify(user?.progress || {
+      unlockedHouses: [1, 2],
+      completedHouses: []
+    }) %>;
+  }
+
+  // DOM Ready Handler
+  document.addEventListener('DOMContentLoaded', async () => {
+    // 1. Initialize music
+    await musicController.playMenuMusic().catch(() => {});
+    
+    // 2. Set up music toggle
+    const musicToggle = document.getElementById('musicToggle');
+    if (musicToggle) {
+      musicToggle.addEventListener('click', () => {
+        musicController.toggleMute();
+        musicToggle.classList.toggle('muted', musicController.isMuted);
+      });
+      musicToggle.classList.toggle('muted', musicController.isMuted);
+    }
+
+    // 3. Initialize houses and dialogue
+    initHouses(userProgress);
+    
+    // 4. Show contextual dialogue after houses load
+    setTimeout(() => showContextualDialogue(userProgress), 500);
+  });
+
+  // Dialogue Controller
+  async function showContextualDialogue(progress) {
+    const isFirstVisit = !localStorage.getItem('hasVisitedBefore');
+    const lastCompletedHouse = progress.completedHouses.slice(-1)[0];
+    
+    // Dialogue sequence
+    const sequence = [];
+    
+    // First visit greeting
+    if (isFirstVisit) {
+      sequence.push({
+        messages: professorIntro.newPlayer,
+        options: { typingSpeed: 40, delay: 0 }
+      });
+      localStorage.setItem('hasVisitedBefore', 'true');
+    } 
+    // Returning player greeting
+    else if (progress.completedHouses.length === 0) {
+      sequence.push({
+        messages: professorIntro.returningPlayer,
+        options: { typingSpeed: 40, delay: 0 }
+      });
+    }
+    
+    // House completion message
+    if (lastCompletedHouse && houseCompletionDialogues[lastCompletedHouse]) {
+      sequence.push({
+        messages: houseCompletionDialogues[lastCompletedHouse],
+        options: { typingSpeed: 30, delay: 500 }
+      });
+    }
+    
+    // Play sequence
+    for (const {messages, options} of sequence) {
+      await new Promise(resolve => {
+        showDialogue(messages, { ...options, onComplete: resolve });
+      });
+    }
+  }
+
+  // Handle house unlocks from URL
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.has('unlockedHouse')) {
+    const houseId = urlParams.get('unlockedHouse');
+    showDialogue([
+      `Neues Haus freigeschaltet! (Haus ${houseId})`,
+      "Besuche es in deiner Haus-Übersicht."
+    ]);
+    window.history.replaceState({}, '', window.location.pathname);
+  }
+</script>
+  
+  <!-- Rest of your chat scripts remain the same -->
+  <script>
+ // Chat button handlers
+document.querySelector(".chat-btn").addEventListener("click", () => {
+  const chatOverlay = document.querySelector(".chat-overlay");
+  chatOverlay.style.display = "block";
+  setTimeout(() => {
+    chatOverlay.classList.add("active");
+  }, 10);
+  document.getElementById('input').focus();
+});
+
+document.querySelector(".chat-close-btn").addEventListener("click", () => {
+  const chatOverlay = document.querySelector(".chat-overlay");
+  chatOverlay.classList.remove("active");
+  setTimeout(() => {
+    chatOverlay.style.display = "none";
+  }, 300);
+});
+
+const socket = io({
+  auth: {
+    serverOffset: 0
+  }
+});
+
+const form = document.getElementById('form');
+const input = document.getElementById('input');
+const messages = document.getElementById('messages');
+const username = "<%= user ? user.name : 'Guest' %>";
+const profilePicture = "<%= user ? user.profilePicture : 'https://zahlenmeisterr.s3.eu-central-1.amazonaws.com/default-profile.png' %>";
+
+form.addEventListener('submit', (e) => {
+  e.preventDefault();
+  if (input.value.trim()) {
+    socket.emit('chat message', {
+      content: input.value.trim(),
+      username: username,
+      profilePicture: profilePicture,
+      createdAt: new Date().toISOString()
+    });
+    input.value = '';
+  }
+});
+
+function formatTime(dateString) {
+  const date = new Date(dateString);
+  return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+}
+
+socket.on('chat message', (msg) => {
+  const item = document.createElement('li');
+  item.innerHTML = `
+    <div class="message-user">
+      <img src="${msg.profilePicture}" alt="${msg.username}'s profile">
+      <span>${msg.username}</span>
+    </div>
+    <div class="message-content">${msg.content}</div>
+    <div class="message-time">${formatTime(msg.createdAt)}</div>
+  `;
+  messages.appendChild(item);
+  messages.scrollTop = messages.scrollHeight;
+});
+
+// Load previous messages when opening chat
+document.querySelector('.chat-btn').addEventListener('click', async () => {
+  try {
+    const response = await fetch('/api/messages');
+    const messages = await response.json();
+    messages.forEach(msg => {
+      const item = document.createElement('li');
+      item.innerHTML = `
+        <div class="message-user">
+          <img src="${msg.profilePicture || 'https://zahlenmeisterr.s3.eu-central-1.amazonaws.com/default-profile.png'}" alt="${msg.username}'s profile">
+          <span>${msg.username}</span>
+        </div>
+        <div class="message-content">${msg.content}</div>
+        <div class="message-time">${formatTime(msg.createdAt)}</div>
+      `;
+      document.getElementById('messages').appendChild(item);
+    });
+    messages.scrollTop = messages.scrollHeight;
+  } catch (error) {
+    console.error('Error loading messages:', error);
+  }
+});
+</script>
+</body>
+</html>
