@@ -62,17 +62,17 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   cookie: {
-    secure: process.env.NODE_ENV === 'production', // Only HTTPS in production
+    secure: process.env.NODE_ENV === 'production', // HTTPS only in production
     httpOnly: true,
-    sameSite: process.env.NODE_ENV === 'production' ? 'lax' : 'strict',
-    maxAge: 24 * 60 * 60 * 1000
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // Required for cross-site
+    domain: process.env.NODE_ENV === 'production' ? '.onrender.com' : undefined, // Allow subdomains
+    maxAge: 24 * 60 * 60 * 1000 // 24 hours
   },
   store: MongoStore.create({
     client: mongoose.connection.getClient(),
-    ttl: 24 * 60 * 60
+    ttl: 24 * 60 * 60 // Match cookie maxAge
   })
 }));
-
 
 const server = createServer(app);
 const io = new Server(server, {
