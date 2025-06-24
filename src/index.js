@@ -304,10 +304,28 @@ app.get("/settings", (req, res) => {
     return res.redirect('/login');
   }
 
-  res.render("settings", {
-    user: req.session.user,
-     nonce: res.locals.nonce// Just pass the session user
-  });
+  // Refresh session data from database to ensure it's current
+  collection.findById(req.session.user.id)
+    .then(user => {
+      if (user) {
+        // Update session with fresh data
+        req.session.user = {
+          ...req.session.user,
+          profilePicture: user.profilePicture,
+          name: user.name
+        };
+        req.session.save();
+      }
+      
+      res.render("settings", {
+        user: req.session.user,
+        nonce: res.locals.nonce
+      });
+    })
+    .catch(err => {
+      console.error("Error fetching user:", err);
+      res.redirect('/home');
+    });
 });
 
 app.get("/logout", (req, res) => {
@@ -559,46 +577,65 @@ app.post("/signup", async (req,res) => {
 
 app.post("/login", async (req, res) => {
   try {
-    // Validate request data
     if (!req.body.username || !req.body.password) {
       return res.render("login", { error: "Benutzername und Passwort werden benötigt" });
     }
 
-    const check = await collection.findOne({ name: req.body.username }).select('+password'); // Explicitly include password
-    if (!check) {
+    const user = await collection.findOne({ name: req.body.username }).select('+password');
+    if (!user) {
       return res.render("login", { error: "Benutzername nicht gefunden" });
     }
 
-    // Verify both passwords exist before comparing
-    if (!req.body.password || !check.password) {
-      return res.render("login", { error: "Authentifizierungsfehler" });
-    }
-
-    const isPasswordMatch = await bcrypt.compare(req.body.password, check.password);
-    if (isPasswordMatch) {
-      // Ensure user has progress data (using the correct nested structure)
-      if (!check.progress) {
-        const updatedUser = await collection.findByIdAndUpdate(
-          check._id,
-          { $set: { progress: getDefaultUserProgress() } },
-          { new: true }
-        );
-        check.progress = updatedUser.progress;
-      }
-
-      req.session.user = { 
-        id: check._id, 
-        name: check.name,
-        profilePicture: check.profilePicture || 'https://zahlenmeisterr.s3.eu-central-1.amazonaws.com/default-profile.png',
-        progress: check.progress || getDefaultUserProgress() // Ensure proper structure
-      };
-      return res.redirect('/home');
-    } else {
+    const isPasswordMatch = await bcrypt.compare(req.body.password, user.password);
+    if (!isPasswordMatch) {
       return res.render("login", { error: "Falsches Passwort" });
     }
+
+    // Ensure progress exists
+    if (!user.progress) {
+      await collection.findByIdAndUpdate(
+        user._id,
+        { $set: { progress: getDefaultUserProgress() } },
+        { new: true }
+      );
+    }
+
+    // Create session
+    req.session.user = { 
+      id: user._id,
+      name: user.name,
+      profilePicture: user.profilePicture || 'https://zahlenmeisterr.s3.eu-central-1.amazonaws.com/default-profile.png',
+      progress: user.progress || getDefaultUserProgress()
+    };
+
+    // Explicitly save session before responding
+    req.session.save((err) => {
+      if (err) {
+        console.error("Session save error:", err);
+        return res.render("login", { error: "Login fehlgeschlagen" });
+      }
+      
+      // Option 1: Render directly like signup does (recommended)
+      res.render("home", {
+        houseId: 1,
+        level: 1,
+        user: req.session.user,
+        houses: houseData.map(house => ({
+          ...house,
+          isCompleted: req.session.user.progress.completedHouses.includes(house.number),
+          isLocked: !req.session.user.progress.unlockedHouses.includes(house.number)
+        })),
+        nonce: res.locals.nonce
+      });
+      
+      // Option 2: If you must redirect, ensure cookie is set
+      // res.set('Cache-Control', 'no-cache');
+      // res.redirect('/home');
+    });
+
   } catch (err) {
     console.error("Login error:", err);
-    return res.render("login", { error: "Ein Fehler ist aufgetreten" });
+    res.render("login", { error: "Ein Fehler ist aufgetreten" });
   }
 });
 
