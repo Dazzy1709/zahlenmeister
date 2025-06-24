@@ -197,7 +197,7 @@
       </div>
     </section>
   </main>
-  <script type="module">
+  <script nonce="<%= nonce %>" type="module">
     import musicController from '/js/musicController.js';
     
     document.addEventListener('DOMContentLoaded', () => {
@@ -238,7 +238,7 @@
     });
   </script>
 
-  <script type="module">
+  <script nonce="<%= nonce %>" type="module">
     // Notification function
     function showNotification(message, isError = false) {
       const notification = document.getElementById('notification');
