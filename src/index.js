@@ -84,6 +84,23 @@ app.use(cors({
   credentials: true
 }));
 
+// In your server.js (or app.js)
+const crypto = require('crypto');
+
+app.use((req, res, next) => {
+  res.locals.nonce = crypto.randomBytes(16).toString('hex');
+  next();
+});
+
+// Set CSP header with nonce
+app.use((req, res, next) => {
+  res.setHeader(
+    'Content-Security-Policy',
+    `script-src 'self' 'nonce-${res.locals.nonce}' https://cdn.socket.io`
+  );
+  next();
+});
+
 
 
 // Configure Multer for file uploads
