@@ -693,8 +693,8 @@ app.use((err, req, res, next) => {
     ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
   });
 });
-
-server.listen(process.env.PORT, () => {
-  console.log(`Server running on Port: ${process.env.PORT}`);
+const PORT = process.env.PORT || 10000;
+server.listen(PORT, () => {
+  console.log(`Server running on Port: ${PORT}`);
 });
 
