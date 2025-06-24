@@ -105,14 +105,7 @@ app.use((req, res, next) => {
   
   res.setHeader(
     'Content-Security-Policy',
-    `default-src 'self';
-     script-src 'self' 'nonce-${nonce}' https://cdn.socket.io;
-     style-src 'self' 'unsafe-inline';
-     img-src 'self' data: https://zahlenmeisterr.s3.eu-central-1.amazonaws.com;
-     font-src 'self';
-     connect-src 'self' ws://localhost:${process.env.PORT} wss://zahlenmeister.onrender.com;
-     frame-src 'none';
-     object-src 'none'`
+    `default-src 'self'; script-src 'self' 'nonce-${nonce}' https://cdn.socket.io; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://zahlenmeisterr.s3.eu-central-1.amazonaws.com; font-src 'self'; connect-src 'self' ws://localhost:${process.env.PORT} wss://zahlenmeister.onrender.com; frame-src 'none'; object-src 'none'`
   );
   next();
 });
