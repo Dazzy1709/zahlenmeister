@@ -3,6 +3,7 @@ import express from 'express';
 import session from 'express-session';
 import MongoStore from 'connect-mongo';
 import mongoose from 'mongoose';
+import crypto from 'crypto'; 
 import multer from 'multer';
 import helmet from 'helmet';
 import compression from 'compression';
@@ -83,14 +84,6 @@ app.use(cors({
     : 'https://zahlenmeister.onrender.com/',
   credentials: true
 }));
-
-// In your server.js (or app.js)
-const crypto = require('crypto');
-
-app.use((req, res, next) => {
-  res.locals.nonce = crypto.randomBytes(16).toString('hex');
-  next();
-});
 
 // Set CSP header with nonce
 // Replace your current CSP middleware with this:
