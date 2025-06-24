@@ -155,7 +155,7 @@
   <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
   
 
- <script type="module">
+ <script nonce="<%= nonce %>" type="module" >
   // Main initialization module
   import { initHouses } from '/js/gameMenu.js';
   import { showDialogue } from '/js/dialogue.js';
@@ -256,7 +256,7 @@
 </script>
   
   <!-- Rest of your chat scripts remain the same -->
-  <script>
+  <script nonce="<%= nonce %>">
  // Chat button handlers
 document.querySelector(".chat-btn").addEventListener("click", () => {
   const chatOverlay = document.querySelector(".chat-overlay");
