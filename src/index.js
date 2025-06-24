@@ -99,18 +99,7 @@ app.use(cors({
 
 // Set CSP header with nonce
 // Replace your current CSP middleware with this:
-app.use((req, res, next) => {
-  const nonce = crypto.randomBytes(16).toString('hex');
-  res.locals.nonce = nonce;
-  
-  res.setHeader(
-    'Content-Security-Policy',
-    `default-src 'self'; script-src 'self' 'nonce-${nonce}' https://cdn.socket.io; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://zahlenmeisterr.s3.eu-central-1.amazonaws.com; font-src 'self'; connect-src 'self' ws://localhost:${process.env.PORT} wss://zahlenmeister.onrender.com; frame-src 'none'; object-src 'none'`
-  );
-  next();
-});
-
-
+app.use((req, res, next) => { const nonce = crypto.randomBytes(16).toString('hex'); res.locals.nonce = nonce; res.setHeader('Content-Security-Policy', `default-src 'self' https://zahlenmeisterr.s3.eu-central-1.amazonaws.com; script-src 'self' 'nonce-${nonce}' https://cdn.socket.io; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://zahlenmeisterr.s3.eu-central-1.amazonaws.com; media-src 'self' https://zahlenmeisterr.s3.eu-central-1.amazonaws.com; connect-src 'self' wss://zahlenmeister.onrender.com https://cdn.socket.io; frame-src 'none'; object-src 'none'`); next(); });
 
 // Configure Multer for file uploads
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
