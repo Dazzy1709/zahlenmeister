@@ -93,7 +93,7 @@ app.use(compression());
 app.use(cors({
   origin: process.env.NODE_ENV === 'development' 
     ? 'http://localhost:3000' 
-    : 'https://zahlenmeister.onrender.com/',
+    : 'https://zahlenmeister.onrender.com',
   credentials: true
 }));
 
