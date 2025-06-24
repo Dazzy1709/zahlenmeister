@@ -69,7 +69,7 @@
   <audio id="backgroundMusic" loop>
     <source src="/assets/audio/menu-music.mp3" type="audio/mpeg">
   </audio>
-  <script type="module">
+  <script nonce="<%= nonce %>" type="module">
     import { initMenuPages } from '/shared/js/musicInit.js';
     
     // Wait for DOM to be fully loaded
