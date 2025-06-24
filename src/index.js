@@ -93,10 +93,21 @@ app.use((req, res, next) => {
 });
 
 // Set CSP header with nonce
+// Replace your current CSP middleware with this:
 app.use((req, res, next) => {
+  const nonce = crypto.randomBytes(16).toString('hex');
+  res.locals.nonce = nonce;
+  
   res.setHeader(
     'Content-Security-Policy',
-    `script-src 'self' 'nonce-${res.locals.nonce}' https://cdn.socket.io`
+    `default-src 'self';
+     script-src 'self' 'nonce-${nonce}' https://cdn.socket.io;
+     style-src 'self' 'unsafe-inline';
+     img-src 'self' data: https://zahlenmeisterr.s3.eu-central-1.amazonaws.com;
+     font-src 'self';
+     connect-src 'self' ws://localhost:${process.env.PORT} wss://zahlenmeister.onrender.com;
+     frame-src 'none';
+     object-src 'none'`
   );
   next();
 });
@@ -173,7 +184,8 @@ app.get("/home", async (req, res) => {
       isLocked: !userProgress.unlockedHouses.includes(house.number),
       isCompleted: userProgress.completedHouses.includes(house.number)
     })),
-    isGuest: !user
+    isGuest: !user,
+     nonce: res.locals.nonce
   });
 });
 app.get ("/login", (req, res) => {
@@ -289,6 +301,7 @@ app.get('/rechnen/:houseId/:level',async (req, res) => {
     timeLimit: house.time || 15,
     totalLevels: 15,
     currentTopic: houseTopic,
+     nonce: res.locals.nonce,
     dialogues: {
       intro: houseDialogue[houseIdNum]?.intro || [],
       outro: houseDialogue[houseIdNum]?.outro || []
@@ -306,7 +319,8 @@ app.get("/settings", (req, res) => {
   }
 
   res.render("settings", {
-    user: req.session.user // Just pass the session user
+    user: req.session.user,
+     nonce: res.locals.nonce// Just pass the session user
   });
 });
 
