@@ -461,18 +461,15 @@ function startLevel() {
     answerInput.disabled = false;
     checkBtn.disabled = false;
     answerInput.value = "";
-    answerInput.focus();
+
     feedbackPopup.style.display = "none";
     nextBtn.disabled = true;
     nextBtn.innerHTML = next;
 
     setTimeout(() => {
       answerInput.focus();
-    }, 50);
+    }, 100);
     
-    if (currentLevel !== 1) {
-        answerInput.focus();
-    }
     
     // Start timer
     clockHand.style.transformOrigin = '12px 12px';
@@ -532,7 +529,7 @@ function handleTimeOut() {
 
     setTimeout(() => {
       nextBtn.focus();
-    }, 50);
+    }, 100);
 }
 
 // Add this function to show completion sequence
@@ -775,6 +772,7 @@ function checkAnswer() {
     if (isNaN(userAnswer)) {
         feedback.textContent = "Bitte gib eine gültige Zahl ein";
         feedback.style.color = "red";
+        answerInput.focus();
         return;
     }
     
@@ -834,6 +832,7 @@ function checkAnswer() {
                 window.location.href = `/rechnen/${houseId}/${currentLevel}`;
             }
         };
+        setTimeout(() => nextBtn.focus(), 100);
     }
 }
 nextBtn.addEventListener('click', () => {
