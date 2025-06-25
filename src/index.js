@@ -53,6 +53,14 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 app.set('trust proxy', 1);
+app.use(cors({
+  origin: process.env.NODE_ENV === 'development' 
+    ? 'http://localhost:3000' 
+    : 'https://zahlenmeister.onrender.com',
+  credentials: true,
+  exposedHeaders: ['set-cookie'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'Cookie']
+}));
 
 // Session config adjustment for development
 app.use(session({
@@ -63,7 +71,7 @@ app.use(session({
     secure: process.env.NODE_ENV === 'production', // HTTPS only in production
     httpOnly: true,
     sameSite: 'none', // Required for cross-site
-    domain: process.env.NODE_ENV === 'production' ? '.onrender.com' : undefined, // Allow subdomains
+    domain: process.env.NODE_ENV === 'production' ? 'zahlenmeister.onrender.com' : undefined
     maxAge: 24 * 60 * 60 * 1000 // 24 hours
   },
   store: MongoStore.create({
@@ -88,13 +96,7 @@ app.use(express.static("public"));
 // Then add these after your other middleware setup
 app.use(helmet());
 app.use(compression());
-app.use(cors({
-  origin: process.env.NODE_ENV === 'development' 
-    ? 'http://localhost:3000' 
-    : 'https://zahlenmeister.onrender.com',
-  credentials: true,
-  exposedHeaders: ['set-cookie']
-}));
+
 
 // Set CSP header with nonce
 // Replace your current CSP middleware with this:
