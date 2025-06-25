@@ -487,26 +487,31 @@ app.post('/complete-house', async (req, res) => {
 
 app.post('/change-username', async (req, res) => {
   const { newUsername } = req.body;
-  const userId = req.session.user.id;
+  const userId = req.session.user?.id;
+  
+  if (!userId) {
+    return res.status(401).json({ 
+      success: false, 
+      error: 'Not authenticated' 
+    });
+  }
   
   if (!newUsername || newUsername.trim().length < 3) {
     return res.status(400).json({ 
       success: false, 
-      error: 'Benutzername muss mindestens 3 Zeichen lang sein' 
+      error: 'Username must be at least 3 characters' 
     });
   }
   
   try {
-    // Check if username is already taken
     const existingUser = await collection.findOne({ name: newUsername });
     if (existingUser && existingUser._id.toString() !== userId) {
       return res.status(400).json({ 
         success: false, 
-        error: 'Benutzername ist bereits vergeben' 
+        error: 'Username already taken' 
       });
     }
     
-    // Update username
     const updatedUser = await collection.findByIdAndUpdate(
       userId,
       { name: newUsername },
@@ -522,6 +527,59 @@ app.post('/change-username', async (req, res) => {
     console.error('Error changing username:', error);
     res.status(500).json({ success: false, error: 'Server error' });
   }
+});
+
+
+app.post('/upload-profile-picture', (req, res) => {
+  upload(req, res, async (err) => {
+    if (err) {
+      return res.status(400).json({ 
+        success: false, 
+        error: err instanceof multer.MulterError 
+          ? 'File too large (max 5MB)' 
+          : 'Only images are allowed (JPEG, JPG, PNG, GIF)'
+      });
+    }
+
+    if (!req.file) {
+      return res.status(400).json({ 
+        success: false, 
+        error: 'No file selected' 
+      });
+    }
+
+    if (!req.session.user) {
+      return res.status(401).json({ 
+        success: false, 
+        error: 'Not authenticated' 
+      });
+    }
+
+    try {
+      const profilePicturePath = `/uploads/profile-pictures/${req.file.filename}`;
+      
+      const updatedUser = await collection.findByIdAndUpdate(
+        req.session.user.id,
+        { profilePicture: profilePicturePath },
+        { new: true }
+      );
+
+      // Update session
+      req.session.user.profilePicture = updatedUser.profilePicture;
+      req.session.save(); // Explicitly save session
+
+      res.json({ 
+        success: true,
+        profilePicture: updatedUser.profilePicture 
+      });
+    } catch (error) {
+      console.error('Error updating profile picture:', error);
+      res.status(500).json({ 
+        success: false, 
+        error: 'Server error' 
+      });
+    }
+  });
 });
 
 app.post("/signup", async (req,res) => {
@@ -639,57 +697,6 @@ app.post("/login", async (req, res) => {
   }
 });
 
-app.post('/upload-profile-picture', (req, res) => {
-  upload(req, res, async (err) => {
-    if (err) {
-      return res.status(400).json({ 
-        success: false, 
-        error: err instanceof multer.MulterError 
-          ? 'File too large (max 5MB)' 
-          : 'Only images are allowed (JPEG, JPG, PNG, GIF)'
-      });
-    }
-
-    if (!req.file) {
-      return res.status(400).json({ 
-        success: false, 
-        error: 'No file selected' 
-      });
-    }
-
-    if (!req.session.user) {
-      return res.status(401).json({ 
-        success: false, 
-        error: 'Not authenticated' 
-      });
-    }
-
-    try {
-      // Construct the full URL path
-      const profilePicturePath = `/uploads/profile-pictures/${req.file.filename}`;
-      
-      const updatedUser = await collection.findByIdAndUpdate(
-        req.session.user.id,
-        { profilePicture: profilePicturePath },
-        { new: true }
-      );
-
-      req.session.user.profilePicture = updatedUser.profilePicture;
-      req.session.save();
-
-      res.json({ 
-        success: true,
-        profilePicture: updatedUser.profilePicture 
-      });
-    } catch (error) {
-      console.error('Error updating profile picture:', error);
-      res.status(500).json({ 
-        success: false, 
-        error: 'Server error' 
-      });
-    }
-  });
-});
 // Error handling middleware (add this right before your app.listen)
 app.use((err, req, res, next) => {
   console.error(err.stack);
