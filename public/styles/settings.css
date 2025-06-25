@@ -1,6 +1,50 @@
 /* settings.css */
 @import './global.css';
 
+   .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #4CAF50;
+      color: white;
+      padding: 15px 25px;
+      border-radius: 5px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+      z-index: 1000;
+      transform: translateX(200%);
+      transition: transform 0.3s ease;
+    }
+    
+    .notification.show {
+      transform: translateX(0);
+    }
+    
+    .notification.error {
+      background: #f44336;
+    }
+    
+    /* Edit button styling */
+    .edit-icon {
+      cursor: pointer;
+      margin-left: 10px;
+      vertical-align: middle;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+    }
+    
+    .edit-icon:hover {
+      opacity: 1;
+    }
+
+    /* Button styles */
+    .upload-btn, .save-btn, .cancel-btn {
+      padding: 8px 16px;
+      margin-right: 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    
 .settings-page {
   background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
                    url('https://zahlenmeisterr.s3.eu-central-1.amazonaws.com/login.png');
