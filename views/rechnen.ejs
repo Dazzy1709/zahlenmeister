@@ -172,19 +172,9 @@ background-position: center;
       </button>
     </div>
   </main>
-  <script type="module">
-    import musicController from '/js/musicController.js';
-    
-    document.addEventListener('DOMContentLoaded', () => {
-      // For pages where game music should play
-      if (document.body.classList.contains('rechnen')) {
-        musicController.resumePlayback();
-      }
-    });
-  </script>
 
-  <script src="https://cdn.jsdelivr.net/npm/party-js@latest/bundle/party.min.js"></script>
-  <script src="/socket.io/socket.io.js"></script>
+  <script nonce="<%= nonce %>" src="https://cdn.jsdelivr.net/npm/party-js@latest/bundle/party.min.js"></script>
+  <script nonce="<%= nonce %>" src="/socket.io/socket.io.js"></script>
   <script>
     // Chat toggle functionality
     document.querySelector('.chat-btn')?.addEventListener('click', () => {
@@ -272,7 +262,7 @@ background-position: center;
       }
     });
   </script>
-<script type="module">
+<script nonce="<%= nonce %>" type="module">
    import { initDialogue, showDialogue } from '/js/dialogue.js'; 
     import {houseFailureDialogues, houseCompletionDialogues} from '/shared/js/variables.js'
     const houseId = '<%= houseId %>';
