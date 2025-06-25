@@ -174,8 +174,8 @@ background-position: center;
   </main>
 
   <script nonce="<%= nonce %>" src="https://cdn.jsdelivr.net/npm/party-js@latest/bundle/party.min.js"></script>
-  <script src="/socket.io/socket.io.js"></script>
-  <script>
+  <script nonce="<%= nonce %>" src="/socket.io/socket.io.js"></script>
+  <script nonce="<%= nonce %>">
     // Chat toggle functionality
     document.querySelector('.chat-btn')?.addEventListener('click', () => {
       const chatOverlay = document.querySelector('.chat-overlay');
