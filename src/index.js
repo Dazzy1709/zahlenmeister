@@ -99,8 +99,7 @@ app.use(cors({
 
 // Set CSP header with nonce
 // Replace your current CSP middleware with this:
-app.use((req, res, next) => { const nonce = crypto.randomBytes(16).toString('hex'); res.locals.nonce = nonce; res.setHeader('Content-Security-Policy', "default-src 'self' https://zahlenmeisterr.s3.eu-central-1.amazonaws.com; script-src 'self' 'nonce-"+nonce+"' https://cdn.socket.io; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https://zahlenmeisterr.s3.eu-central-1.amazonaws.com; media-src 'self' https://zahlenmeisterr.s3.eu-central-1.amazonaws.com blob:; connect-src 'self' wss://zahlenmeister.onrender.com https://cdn.socket.io; frame-src 'none'; object-src 'none'"); next(); });
-// Configure Multer for file uploads
+app.use((req, res, next) => { const nonce = crypto.randomBytes(16).toString('hex'); res.locals.nonce = nonce; res.setHeader('Content-Security-Policy', "default-src 'self' https://zahlenmeisterr.s3.eu-central-1.amazonaws.com;script-src 'self' 'nonce-"+nonce+"' https://cdn.socket.io https://cdn.jsdelivr.net;style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;font-src 'self' https://fonts.gstatic.com data:;img-src 'self' data: https://zahlenmeisterr.s3.eu-central-1.amazonaws.com;media-src 'self' https://zahlenmeisterr.s3.eu-central-1.amazonaws.com blob:;connect-src 'self' wss://zahlenmeister.onrender.com https://cdn.socket.io;frame-src 'none';object-src 'none'"); next(); });
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
