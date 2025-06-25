@@ -47,7 +47,7 @@
 .rechnen {
   position: relative;
   min-height: 100vh;
-  margin-bottom: 40px;
+  margin-bottom: 10px;
 }
 
 .rechnen .user-nav {
@@ -217,7 +217,7 @@ h1 {
 /* Question Container */
 #question-container {
   background: rgba(255, 255, 255, 0.9);
-  border-radius: 12px;
+  border-radius: 14px;
   padding: 1.5rem;
   margin: 1rem 0;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
@@ -230,7 +230,7 @@ h1 {
 #question-text {
   font-size: 3rem;
   color: #1a1a1a;
-  font-weight: 700;
+  font-weight: 900;
 }
 
 /* Answer Input */
