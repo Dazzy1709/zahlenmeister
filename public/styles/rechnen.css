@@ -47,7 +47,7 @@
 .rechnen {
   position: relative;
   min-height: 100vh;
-  padding-bottom: 50px;
+  margin-bottom: 40px;
 }
 
 .rechnen .user-nav {
@@ -427,7 +427,8 @@ input[type="number"] {
   .game-container {
     padding: 1rem;
     width: 95%;
-    margin-bottom: 50px ;
+    padding-bottom: 50px ;
+    max-width: 100%; 
   }
   
   #question-container {
