@@ -71,7 +71,7 @@ app.use(session({
     secure: process.env.NODE_ENV === 'production', // HTTPS only in production
     httpOnly: true,
     sameSite: 'none', // Required for cross-site
-    domain: process.env.NODE_ENV === 'production' ? 'zahlenmeister.onrender.com' : undefined
+    domain: process.env.NODE_ENV === 'production' ? 'zahlenmeister.onrender.com' : undefined,
     maxAge: 24 * 60 * 60 * 1000 // 24 hours
   },
   store: MongoStore.create({
