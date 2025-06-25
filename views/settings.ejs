@@ -240,24 +240,6 @@
 
   <script nonce="<%= nonce %>" type="module">
 
-    fetch('/session/refresh', { 
-      credentials: 'include' 
-    }).catch(e => console.log('Session refresh error:', e));
-
-    fetch('/upload-profile-picture', {
-      method: 'POST',
-      body: formData,
-      credentials: 'include' // Add this
-    });
-
-    fetch('/change-username', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ newUsername }),
-      credentials: 'include' // Add this
-    });
    
     function showNotification(message, isError = false) {
       const notification = document.getElementById('notification');
@@ -329,7 +311,8 @@
       try {
         const response = await fetch('/upload-profile-picture', {
           method: 'POST',
-          body: formData
+          body: formData,
+          credentials: 'include'  
         });
         
         const result = await response.json();
@@ -364,7 +347,8 @@
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({ newUsername })
+          body: JSON.stringify({ newUsername }),
+          credentials: 'include'  
         });
         
         const result = await response.json();
