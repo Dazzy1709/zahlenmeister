@@ -240,7 +240,7 @@ html {
 
 .nav svg {
   transition: 0.2s ease-in-out all;
-  width: 40px;
+  width: 35px;
   cursor: pointer;
   filter: drop-shadow(0 2px 4px rgba(0,0,0,0.7));
 }
