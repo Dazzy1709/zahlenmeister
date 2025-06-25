@@ -11,93 +11,7 @@
   <audio id="backgroundMusic" loop>
     <source src="/assets/audio/menu-music.mp3" type="audio/mpeg">
   </audio>
-  <style>
-    /* Notification styling */
-    .notification {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      background: #4CAF50;
-      color: white;
-      padding: 15px 25px;
-      border-radius: 5px;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.2);
-      z-index: 1000;
-      transform: translateX(200%);
-      transition: transform 0.3s ease;
-    }
-    
-    .notification.show {
-      transform: translateX(0);
-    }
-    
-    .notification.error {
-      background: #f44336;
-    }
-    
-    /* Edit button styling */
-    .edit-icon {
-      cursor: pointer;
-      margin-left: 10px;
-      vertical-align: middle;
-      opacity: 0.7;
-      transition: opacity 0.2s;
-    }
-    
-    .edit-icon:hover {
-      opacity: 1;
-    }
-    
-    /* Profile picture edit section */
-    .profile-edit-section {
-      display: none;
-      margin-top: 15px;
-    }
-    
-    .profile-picture-wrapper {
-      position: relative;
-      display: inline-block;
-    }
-    
-    .profile-picture-wrapper.editing .profile-edit-section {
-      display: block;
-    }
-    
-    /* Username edit section */
-    .username-edit-section {
-      display: none;
-      margin-top: 15px;
-    }
-    
-    .username-display {
-      display: flex;
-      align-items: center;
-    }
-    
-    /* Button styles */
-    .upload-btn, .save-btn, .cancel-btn {
-      padding: 8px 16px;
-      margin-right: 10px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    
-    .upload-btn {
-      background-color: #4CAF50;
-      color: white;
-    }
-    
-    .save-btn {
-      background-color: #2196F3;
-      color: white;
-    }
-    
-    .cancel-btn {
-      background-color: #f44336;
-      color: white;
-    }
-  </style>
+
 </head>
 <body class="settings-page">
   <!-- Notification element -->
@@ -140,7 +54,7 @@
           <div class="profile-edit-section" id="profile-edit-section">
             <form id="profile-picture-form" enctype="multipart/form-data">
               <input type="file" id="profile-picture-input" name="profilePicture" accept="image/*" style="display: none;">
-              <button type="button" class="upload-btn" onclick="document.getElementById('profile-picture-input').click()">
+              <button type="button" class="upload-btn" id="select-profile-picture">
                 Bild auswählen
               </button>
               <button type="submit" class="save-btn">Speichern</button>
@@ -251,17 +165,22 @@
       }, 3000);
     }
 
+    // Add this near your other event listeners
+    document.getElementById('select-profile-picture').addEventListener('click', function() {
+      document.getElementById('profile-picture-input').click();
+    });
+
     document.getElementById('edit-profile-picture').addEventListener('click', function() {
       document.getElementById('profile-picture-wrapper').classList.add('editing');
     });
 
     document.getElementById('cancel-profile-edit').addEventListener('click', function() {
       document.getElementById('profile-picture-wrapper').classList.remove('editing');
-      // Reset the file input
+    
       document.getElementById('profile-picture-input').value = '';
-      // Reset the preview if a file was selected but not saved
+     
       const originalSrc = document.getElementById('profile-picture-preview').getAttribute('data-original-src') || 
-                         '<%= user ? user.profilePicture : "/assets/img/default-profile.png" %>';
+      '<%= user ? user.profilePicture : "/assets/img/default-profile.png" %>';
       document.getElementById('profile-picture-preview').src = originalSrc;
     });
 
