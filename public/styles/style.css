@@ -457,6 +457,7 @@ header p {
   position: relative;
   cursor: not-allowed;
   pointer-events: none;
+  animation:none;
 }
 
 
