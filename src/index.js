@@ -45,6 +45,8 @@ const getDefaultUserProgress = () => ({
 const app = express();
 connectDB();
 
+app.set('trust proxy', 1);
+
 if (process.env.NODE_ENV === 'development') {
   app.use((req, res, next) => {
     console.log(`${req.method} ${req.url}`);
@@ -52,7 +54,7 @@ if (process.env.NODE_ENV === 'development') {
   });
 }
 
-app.set('trust proxy', 1);
+
 app.use(cors({
   origin: process.env.NODE_ENV === 'development' 
     ? 'http://localhost:3000' 
