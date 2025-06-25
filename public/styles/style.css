@@ -495,7 +495,7 @@ header p {
 /* Completion indicator (unchanged) */
 .house.completed {
   position: relative;
-  box-shadow: 0 0 0 1.5px var(--btn-primary);
+  box-shadow: 0 0 0 1.5px green;
 }
 
 .house.completed .house-number {
