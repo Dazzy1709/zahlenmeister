@@ -28,17 +28,13 @@ mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   ssl: true,
-  tlsAllowInvalidCertificates: false, // Only for testing
+  tlsAllowInvalidCertificates: false, 
 })
 .then(() => console.log('✅ MongoDB Connected'))
 .catch(err => {
   console.error('❌ MongoDB connection error:', err);
   process.exit(1);
 });
-
-
-
-
 
 const getDefaultUserProgress = () => ({
   completedHouses: [],
@@ -56,6 +52,8 @@ if (process.env.NODE_ENV === 'development') {
   });
 }
 
+app.set('trust proxy', 1);
+
 // Session config adjustment for development
 app.use(session({
   secret: process.env.SESSION_SECRET || 'fallback-secret',
@@ -64,7 +62,7 @@ app.use(session({
   cookie: {
     secure: process.env.NODE_ENV === 'production', // HTTPS only in production
     httpOnly: true,
-    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // Required for cross-site
+    sameSite: 'none', // Required for cross-site
     domain: process.env.NODE_ENV === 'production' ? '.onrender.com' : undefined, // Allow subdomains
     maxAge: 24 * 60 * 60 * 1000 // 24 hours
   },
@@ -94,7 +92,8 @@ app.use(cors({
   origin: process.env.NODE_ENV === 'development' 
     ? 'http://localhost:3000' 
     : 'https://zahlenmeister.onrender.com',
-  credentials: true
+  credentials: true,
+  exposedHeaders: ['set-cookie']
 }));
 
 // Set CSP header with nonce
