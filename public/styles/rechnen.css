@@ -39,6 +39,53 @@
   100% { transform: translate(-50%, -50%) scale(1); }
 }
 
+@keyframes popIn {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+  }
+  70% {
+    transform: translate(-50%, -50%) scale(1.1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+}
+
+
+
+@keyframes popOut {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+  30% {
+    transform: translate(-50%, -50%) scale(1.1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+  }
+}
+
+
+@keyframes pulse-glow {
+  0% { transform: scale(0.95); opacity: 0.5; }
+  50% { transform: scale(1.05); opacity: 0.8; }
+  100% { transform: scale(0.95); opacity: 0.5; }
+}
+
+#popup-feedback.show {
+  animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+#popup-feedback:not(.show) {
+  animation: popOut 0.3s ease-out forwards;
+}
+
 .current-level-display.pulse {
   animation: progress-pulse 0.5s ease;
 }
@@ -47,7 +94,6 @@
 .rechnen {
   position: relative;
   min-height: 100vh;
-  margin-bottom: 10px;
 }
 
 .rechnen .user-nav {
@@ -62,6 +108,7 @@
 
 .rechnen .mainmenu-btn svg {
   width: 40px;
+  color: var(--btn-primary);
 }
 
 .rechnen .dialogue-box {
@@ -73,39 +120,163 @@
 
 /* Game Container */
 .game-container {
-  background: rgba(27, 38, 59, 0.85);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
-  transform: translateZ(0);
-  border: 2px solid var(--farbe-akzent);
-  border-radius: 16px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-  padding: 2rem;
+  background: rgba(27, 38, 59, 0.7);
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4),
+              inset 0 4px 12px rgba(255, 255, 255, 0.1),
+              inset 0 -4px 12px rgba(0, 0, 0, 0.2);
+  padding: 2.5rem;
   max-width: 800px;
   margin: 2rem auto;
   color: white;
   position: relative;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  transition: all 0.4s cubic-bezier(0.215, 0.61, 0.355, 1);
 }
 
+/* Modern Decorative Elements */
 .game-container::before {
   content: "";
   position: absolute;
-  top: -30px;
-  right: -30px;
-  width: 100px;
-  height: 100px;
-  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="%23f5a62320"><path d="M50 0L100 50L50 100L0 50Z"/></svg>');
-  background-size: contain;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, 
+              var(--btn-primary), 
+              rgba(255,255,255,0.8), 
+              var(--btn-primary));
+  background-size: 200% 100%;
+  animation: gradientFlow 3s linear infinite;
+}
+
+@keyframes gradientFlow {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+.game-container::after {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at center, 
+              rgba(245, 166, 35, 0.1) 0%, 
+              transparent 70%);
+  z-index: -1;
+  animation: rotateSlow 60s linear infinite;
+}
+
+@keyframes rotateSlow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Modern Corner Accents */
+.game-container .corner-accent {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  border: 2px solid rgba(245, 166, 35, 0.5);
   z-index: -1;
 }
 
+.game-container .corner-accent:nth-child(1) {
+  top: -2px;
+  left: -2px;
+  border-right: none;
+  border-bottom: none;
+  border-radius: 24px 0 0 0;
+}
+
+.game-container .corner-accent:nth-child(2) {
+  top: -2px;
+  right: -2px;
+  border-left: none;
+  border-bottom: none;
+  border-radius: 0 24px 0 0;
+}
+
+.game-container .corner-accent:nth-child(3) {
+  bottom: -2px;
+  left: -2px;
+  border-right: none;
+  border-top: none;
+  border-radius: 0 0 0 24px;
+}
+
+.game-container .corner-accent:nth-child(4) {
+  bottom: -2px;
+  right: -2px;
+  border-left: none;
+  border-top: none;
+  border-radius: 0 0 24px 0;
+}
+
+/* Modern Title Styling */
+.game-container h1 {
+  font-size: 2.2rem;
+  background: linear-gradient(to right, white, #f5d073);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: none;
+  margin-bottom: 1.5rem;
+  position: relative;
+  display: inline-block;
+}
+
+.game-container h1::after {
+  content: "";
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(to right, 
+              transparent, 
+              var(--btn-primary), 
+              transparent);
+}
+
+/* Modern Question Container */
+#question-container {
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 2rem;
+  margin: 1.5rem 0;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2),
+              inset 0 2px 4px rgba(255, 255, 255, 0.05);
+  transition: all 0.3s ease;
+}
+
+#question-container:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3),
+              inset 0 2px 4px rgba(255, 255, 255, 0.1);
+}
+
+
 /* Game Header */
 .game-container-top {
+  width: 100%;
   margin-bottom: 2rem;
   position: relative;
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+  flex-wrap: wrap;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 1px ;
 }
 
 h1 {
@@ -117,9 +288,10 @@ h1 {
 
 .current-topic {
   text-align: center;
-  margin-bottom: 2rem;
-  font-size: 1.2rem;
-  color: rgba(255,255,255,0.8);
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  font-weight: 300;
+  color: var(--btn-primary);
 }
 
 /* Progress Bar */
@@ -127,11 +299,12 @@ h1 {
 .progress-container {
   position: relative;
   width: 80%;
-  height: 30px;
+  height: 25px;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 15px;
   overflow: hidden;
-  margin: 0 auto 1.5rem;
+  margin: 0px auto ;
+  margin-bottom: 10px;
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
@@ -174,7 +347,7 @@ h1 {
 .time-container {
   position: absolute;
   right: 0;
-  top: -7.5px;
+  top: -5px;
   display: flex;
   align-items: center;
   gap: 2px;
@@ -196,22 +369,19 @@ h1 {
 }
 
 #clock {
-  width: 40px;
-  height: 40px;
+  width: 35px;
+  height: 35px;
   animation: rotate 60s linear infinite;
 }
 
 #lives {
-  position: absolute;
-  right: 0;
-  top: 27.5px;
   display: flex;
-  gap: 5px;
+  gap: 10px;
 }
 
 #lives svg {
   animation: heartbeat 2s ease-in-out infinite;
-  width: 40px;
+  width: 50px;
   color: var(--btn-primary);
 }
 
@@ -244,6 +414,7 @@ h1 {
   padding: 0.5rem;
   text-align: center;
   transition: all 0.3s ease;
+  font-weight: 900;
 }
 
 #answer-input:focus {
@@ -262,8 +433,9 @@ input[type="number"] {
 }
 
 /* Check Button */
+/* Check Button - Enhanced Version */
 #check-btn {
-  background: var(--btn-primary);
+  background: linear-gradient(135deg, var(--btn-primary) 0%,  #f5d073 100%);
   width: 80px;
   height: 80px;
   border-radius: 50%;
@@ -272,25 +444,81 @@ input[type="number"] {
   justify-content: center;
   margin: 1rem auto;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(245, 166, 35, 0.3);
+  box-shadow: 0 4px 15px rgba(245, 166, 35, 0.3),
+              inset 0 2px 4px rgba(255,255,255,0.3),
+              inset 0 -2px 4px rgba(0,0,0,0.2);
   border: none;
   cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+#check-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, 
+              rgba(255,255,255,0.2) 0%, 
+              rgba(255,255,255,0) 50%);
+  border-radius: 50%;
+  z-index: -1;
+}
+
+#check-btn::after {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  right: -5px;
+  bottom: -5px;
+  background: linear-gradient(135deg, 
+              var(--btn-primary) 0%, 
+              #f5d073 100%);
+  border-radius: 50%;
+  z-index: -2;
+  opacity: 0.5;
+  filter: blur(10px);
+  animation: pulse-glow 2s infinite;
 }
 
 #check-btn:hover {
   transform: scale(1.1) translateY(-2px);
-  box-shadow: 0 8px 20px rgba(245, 166, 35, 0.4);
+  box-shadow: 0 8px 25px rgba(245, 166, 35, 0.5),
+              inset 0 2px 4px rgba(255,255,255,0.3),
+              inset 0 -2px 4px rgba(0,0,0,0.2);
+  animation: none; /* Disable pulse on hover */
+}
+
+#check-btn:active {
+  transform: scale(0.95) translateY(0);
+  box-shadow: 0 2px 10px rgba(245, 166, 35, 0.3),
+              inset 0 2px 4px rgba(0,0,0,0.2);
 }
 
 #check-btn svg {
   width: 40px;
   height: 40px;
   color: white;
+  filter: drop-shadow(0 2px 2px rgba(0,0,0,0.3));
+  transition: transform 0.2s ease;
+}
+
+#check-btn:hover svg {
+  transform: scale(1.1);
+}
+
+#check-btn:active svg {
+  transform: scale(0.9);
 }
 
 /* Feedback Popup */
+/* Feedback Popup */
 #popup-feedback {
-  background: rgba(27, 38, 59, 0.95);
+  background: rgb(27, 38, 59);
   border: 2px solid var(--farbe-akzent);
   border-radius: 16px;
   padding: 2rem;
@@ -299,16 +527,35 @@ input[type="number"] {
   position: fixed;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
   text-align: center;
   z-index: 100;
-  display: none;
   color: white;
+  transform: translate(-50%, -50%) scale(0);
+  opacity: 0;
+  transition: all 0.3s ease;
+  pointer-events: none;
+  box-shadow: 0 4px 30px var(--btn-primary);
+
+}
+
+#popup-feedback.show {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#popup-feedback.show::before {
+  opacity: 1;
+}
+
+#popup-feedback.show::before {
+  opacity: 1;
 }
 
 #feedback {
-  font-size: 1.5rem;
+  font-size: 2rem;
   margin-bottom: 1.5rem;
+  font-weight: 900;
 }
 
 #next-btn {
@@ -317,7 +564,7 @@ input[type="number"] {
   border: none;
   border-radius: 8px;
   padding: 0.8rem 1.5rem;
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: bold;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -426,17 +673,23 @@ input[type="number"] {
 /* Responsive Adjustments */
 @media (max-width: 768px) {
   .rechnen {
-    margin-bottom: 20px;
+    padding: 0;
+    margin-bottom: 40px;
+    min-height: 100%;
+  }
+
+  h1 {
+    font-size: 25px;
   }
   
   .game-container {
     padding: 1rem;
-    max-width: 95%; 
+    max-width: 90%; 
   }
   
   #question-container {
     flex-direction: column;
-    gap: 10px;
+    gap: 1px;
   }
   
   #question-text, #answer-input {
@@ -457,6 +710,7 @@ input[type="number"] {
     position: static;
     justify-content: center;
     width: 100%;
+    margin: 0;
   }
   
   #popup-feedback {
