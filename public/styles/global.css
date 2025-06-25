@@ -309,6 +309,13 @@ html {
   margin-left: auto;
 }
 
+.sound-on, .sound-off {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
 .music-control-btn svg {
   width: 27.5px;
   height: 27.5px;
