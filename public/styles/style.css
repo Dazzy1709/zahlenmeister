@@ -19,7 +19,7 @@
 }
 
 .house.completed {
-  animation: pulse 2s infinite;
+  animation: none;
 }
 
 .house.completed img {
@@ -436,6 +436,7 @@ header p {
   padding: 15px;
   box-shadow: var(--schatten-groß);
   border: 1px solid #607092d5;
+  animation: pulse 2s infinite;
 }
 
 .house-content {
@@ -552,7 +553,7 @@ header p {
 .house-time,
 .house-lives,
 .house-topic {
-  margin: 2.5px 0;
+  margin: 1px 0;
   letter-spacing: 0px;
 }
 
