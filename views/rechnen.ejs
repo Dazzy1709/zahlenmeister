@@ -134,6 +134,10 @@ background-position: center;
   <p class="current-topic"><%= currentTopic %></p>
  
   <main class="game-container">
+    <div class="corner-accent"></div>
+<div class="corner-accent"></div>
+<div class="corner-accent"></div>
+<div class="corner-accent"></div>
     <div class="game-container-top">
       <div class="progress-container">
         <div class="progress-bar" style="width: 0%"></div>
@@ -308,17 +312,17 @@ background-position: center;
     </svg>`;
 
     const retry = `
+    <span>Nochmal versuchen</span>
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
       <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
     </svg>
-    <span>Nochmal versuchen</span>
     `
 
     const next = `
+    <span>Nächste aufgabe</span>
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
       <path stroke-linecap="round" stroke-linejoin="round" d="M3 8.689c0-.864.933-1.406 1.683-.977l7.108 4.061a1.125 1.125 0 0 1 0 1.954l-7.108 4.061A1.125 1.125 0 0 1 3 16.811V8.69ZM12.75 8.689c0-.864.933-1.406 1.683-.977l7.108 4.061a1.125 1.125 0 0 1 0 1.954l-7.108 4.061a1.125 1.125 0 0 1-1.683-.977V8.69Z" />
     </svg>
-    <span>Nächste aufgabe</span>
     `
     
     // Initialize lives system
@@ -403,6 +407,17 @@ if (!document.getElementById('dialogue-modal')) {
     document.body.appendChild(dialogueModal);
 }
 
+function showFeedbackPopup() {
+  feedbackPopup.classList.add('show');
+  setTimeout(() => {
+    nextBtn.focus(); // Focus the button after animation
+  }, 400);
+}
+
+function hideFeedbackPopup() {
+  feedbackPopup.classList.remove('show');
+}
+
 function initProgressBar() {
     // Ensure level is between 1-15
     const displayLevel = Math.min(Math.max(1, currentLevel), totalLevels);
@@ -462,13 +477,13 @@ function startLevel() {
     checkBtn.disabled = false;
     answerInput.value = "";
 
-    feedbackPopup.style.display = "none";
+    hideFeedbackPopup();
     nextBtn.disabled = true;
     nextBtn.innerHTML = next;
 
     setTimeout(() => {
       answerInput.focus();
-    }, 100);
+    }, 150);
     
     
     // Start timer
@@ -511,13 +526,15 @@ function handleTimeOut() {
     if (!loseLife()) return;
     
     feedback.textContent = `Zeit ist abgelaufen! Nur noch ${lives} Leben übrig.`;
-    feedback.style.color = "red";
-    feedbackPopup.style.display = "block";
+    feedbackPopup.style.borderColor = "red"
+    feedbackPopup.style.boxShadow = "0 4px 30px red";
+    showFeedbackPopup();
     
     answerInput.disabled = true;
     checkBtn.disabled = true;
     nextBtn.disabled = false;
     nextBtn.innerHTML = retry;
+    nextBtn.style.backgroundColor = "red"
     
     nextBtn.onclick = () => {
         if (lives <= 0) {
@@ -756,7 +773,7 @@ function showCompletionSequence() {
 
 function showErrorFeedback(error) {
     feedback.textContent = `Fehler: ${error.message}`;
-    feedbackPopup.style.display = 'block';
+    howFeedbackPopup();
     nextBtn.disabled = false;
     nextBtn.onclick = () => window.location.href = '/home';
 }
@@ -786,9 +803,11 @@ function checkAnswer() {
         document.getElementById('success-sound').play();
         
         feedback.textContent = `${currentAnswer} ist richtig! Sehr gut!`;
-        feedback.style.color = "green";
+        feedbackPopup.style.boxShadow = "0 4px 30px green";
+        feedbackPopup.style.borderColor = "green"
         answerInput.disabled = true;
         checkBtn.disabled = true;
+        nextBtn.style.backgroundColor = "green"
         
         // Confetti for correct answer
         party.confetti(document.body, {
@@ -802,7 +821,7 @@ function checkAnswer() {
         
         if (currentLevel < totalLevels) {
             // Show next button for non-final levels
-            feedbackPopup.style.display = "block";
+            showFeedbackPopup();
             nextBtn.disabled = false;
             nextBtn.onclick = () => {
                 window.location.href = `/rechnen/${houseId}/${currentLevel + 1}`;
@@ -818,12 +837,14 @@ function checkAnswer() {
         if (!loseLife()) return;
         
         feedback.textContent = `${userAnswer} ist Falsch. Die richtige Antwort lautet ${currentAnswer}. Nur noch ${lives} Leben übrig.`;
-        feedback.style.color = "red";
-        feedbackPopup.style.display = "block";
+        feedbackPopup.style.borderColor = "red"
+        feedbackPopup.style.boxShadow = "0 4px 30px red";
+        showFeedbackPopup();
         answerInput.disabled = true;
         checkBtn.disabled = true;
         nextBtn.disabled = false;
         nextBtn.innerHTML = retry;
+        nextBtn.style.backgroundColor = "red"
         
         nextBtn.onclick = () => {
             if (lives <= 0) {
