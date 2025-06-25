@@ -323,10 +323,6 @@ html {
   transition: all 0.3s ease;
 }
 
-.music-control-btn:hover svg {
-  transform: scale(1.1);
-}
-
 /* Start music button */
 .music-btn {
   background-color: rgba(255, 179, 71, 0.8);
@@ -342,10 +338,6 @@ html {
   gap: 8px;
 }
 
-.music-btn:hover {
-  background-color: rgba(255, 179, 71, 1);
-  transform: scale(1.05);
-}
 
 .music-control-btn {
   transition: all 0.3s ease;
