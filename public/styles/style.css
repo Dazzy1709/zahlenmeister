@@ -499,7 +499,8 @@ header p {
 }
 
 .house.completed .house-number {
-  color: var(--btn-primary);
+  color: green;
+  font-weight:900;
   opacity: 0.7;
 }
 
