@@ -239,7 +239,26 @@
   </script>
 
   <script nonce="<%= nonce %>" type="module">
-    // Notification function
+
+    fetch('/session/refresh', { 
+      credentials: 'include' 
+    }).catch(e => console.log('Session refresh error:', e));
+
+    fetch('/upload-profile-picture', {
+      method: 'POST',
+      body: formData,
+      credentials: 'include' // Add this
+    });
+
+    fetch('/change-username', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ newUsername }),
+      credentials: 'include' // Add this
+    });
+   
     function showNotification(message, isError = false) {
       const notification = document.getElementById('notification');
       notification.textContent = message;
@@ -250,12 +269,10 @@
       }, 3000);
     }
 
-    // Toggle profile picture edit mode
     document.getElementById('edit-profile-picture').addEventListener('click', function() {
       document.getElementById('profile-picture-wrapper').classList.add('editing');
     });
 
-    // Cancel profile picture edit
     document.getElementById('cancel-profile-edit').addEventListener('click', function() {
       document.getElementById('profile-picture-wrapper').classList.remove('editing');
       // Reset the file input
@@ -266,13 +283,11 @@
       document.getElementById('profile-picture-preview').src = originalSrc;
     });
 
-    // Toggle username edit mode
     document.getElementById('edit-username').addEventListener('click', function() {
       document.getElementById('username-edit-section').style.display = 'block';
       document.getElementById('edit-username').style.display = 'none';
     });
 
-    // Cancel username edit
     document.getElementById('cancel-username-edit').addEventListener('click', function() {
       document.getElementById('username-edit-section').style.display = 'none';
       document.getElementById('edit-username').style.display = 'inline-block';
@@ -280,11 +295,10 @@
       document.getElementById('new-username').value = document.getElementById('current-username').textContent;
     });
 
-    // Profile picture preview
     document.getElementById('profile-picture-input').addEventListener('change', function(e) {
       const file = e.target.files[0];
       if (file) {
-        // Store original src in case of cancel
+
         if (!document.getElementById('profile-picture-preview').hasAttribute('data-original-src')) {
           document.getElementById('profile-picture-preview').setAttribute(
             'data-original-src', 
@@ -300,7 +314,6 @@
       }
     });
 
-    // Handle profile picture upload
     document.getElementById('profile-picture-form').addEventListener('submit', async function(e) {
       e.preventDefault();
       
@@ -341,7 +354,6 @@
       }
     });
 
-    // Handle name change
     document.getElementById('change-name-form').addEventListener('submit', async function(e) {
       e.preventDefault();
       const newUsername = document.getElementById('new-username').value;
@@ -359,7 +371,6 @@
         if (result.success) {
           showNotification('Benutzername wurde erfolgreich geändert!');
           
-          // Update displayed name everywhere
           document.querySelector('header p strong').textContent = newUsername;
           document.getElementById('current-username').textContent = newUsername;
           
@@ -383,7 +394,6 @@ document.getElementById('muteButton').addEventListener('click', () => {
   document.getElementById('muteButton').textContent = isUnmuted ? 'Mute' : 'Unmute';
 });
 
-// Initialize controls
 document.getElementById('musicVolume').value = musicController.volume;
 document.getElementById('muteButton').textContent = musicController.isMuted ? 'Unmute' : 'Mute';
   </script>
