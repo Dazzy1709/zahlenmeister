@@ -424,10 +424,13 @@ input[type="number"] {
 
 /* Responsive Adjustments */
 @media (max-width: 768px) {
+  .rechnen {
+    margin-bottom: 20px;
+  }
+  
   .game-container {
     padding: 1rem;
     width: 95%;
-    padding-bottom: 50px ;
     max-width: 100%; 
   }
   
