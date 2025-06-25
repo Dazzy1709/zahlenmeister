@@ -498,6 +498,10 @@ header p {
   box-shadow: 0 0 0 1.5px green;
 }
 
+.house.completed:hover {
+  border-color:green;
+}
+
 .house.completed .house-number {
   color: green;
   font-weight:900;
