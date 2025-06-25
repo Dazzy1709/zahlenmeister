@@ -465,6 +465,10 @@ function startLevel() {
     feedbackPopup.style.display = "none";
     nextBtn.disabled = true;
     nextBtn.innerHTML = next;
+
+    setTimeout(() => {
+      answerInput.focus();
+    }, 50);
     
     if (currentLevel !== 1) {
         answerInput.focus();
@@ -525,6 +529,10 @@ function handleTimeOut() {
             window.location.href = `/rechnen/${houseId}/${currentLevel}`;
         }
     };
+
+    setTimeout(() => {
+      nextBtn.focus();
+    }, 50);
 }
 
 // Add this function to show completion sequence
