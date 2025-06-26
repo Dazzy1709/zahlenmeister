@@ -248,14 +248,27 @@
 /* Modern Question Container */
 #question-container {
   background: rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
   border-radius: 16px;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 2rem;
+  padding: 3rem 1;
   margin: 1.5rem 0;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2),
               inset 0 2px 4px rgba(255, 255, 255, 0.05);
+
+}
+
+#question-container {
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 16px;
+  padding: 2rem 0;
+  margin: 1rem 0;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
   transition: all 0.3s ease;
 }
 
@@ -264,7 +277,6 @@
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3),
               inset 0 2px 4px rgba(255, 255, 255, 0.1);
 }
-
 
 /* Game Header */
 .game-container-top {
@@ -281,7 +293,7 @@
 
 h1 {
   text-align: center;
-  margin: 0 0 1rem;
+  margin-top: 15px;
   font-size: 2rem;
   text-shadow: 0 2px 4px rgba(0,0,0,0.5);
 }
@@ -386,21 +398,9 @@ h1 {
 }
 
 /* Question Container */
-#question-container {
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: 14px;
-  padding: 1.5rem;
-  margin: 1rem 0;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 15px;
-}
 
 #question-text {
   font-size: 3rem;
-  color: #1a1a1a;
   font-weight: 900;
 }
 
@@ -442,7 +442,7 @@ input[type="number"] {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 1rem auto;
+  margin: 2rem auto;
   transition: all 0.3s ease;
   box-shadow: 0 4px 15px rgba(245, 166, 35, 0.3),
               inset 0 2px 4px rgba(255,255,255,0.3),
@@ -518,10 +518,12 @@ input[type="number"] {
 /* Feedback Popup */
 /* Feedback Popup */
 #popup-feedback {
-  background: rgb(27, 38, 59);
-  border: 2px solid var(--farbe-akzent);
+  background:linear-gradient(to bottom left, #153162ce 10%, #181818ad 70%);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--farbe-akzent);
   border-radius: 16px;
-  padding: 2rem;
+  padding: 3rem;
   width: 80%;
   max-width: 500px;
   position: fixed;
@@ -535,7 +537,6 @@ input[type="number"] {
   transition: all 0.3s ease;
   pointer-events: none;
   box-shadow: 0 4px 30px var(--btn-primary);
-
 }
 
 #popup-feedback.show {
@@ -553,7 +554,7 @@ input[type="number"] {
 }
 
 #feedback {
-  font-size: 2rem;
+  font-size: 2.5rem;
   margin-bottom: 1.5rem;
   font-weight: 900;
 }
@@ -680,6 +681,7 @@ input[type="number"] {
 
   h1 {
     font-size: 25px;
+    margin-top: 20px;
   }
   
   .game-container {
@@ -715,10 +717,10 @@ input[type="number"] {
   
   #popup-feedback {
     width: 90%;
-    padding: 1rem;
+    padding: 1.5rem;
   }
   
   #feedback {
-    font-size: 1.2rem;
+    font-size: 1.75rem;
   }
 }
