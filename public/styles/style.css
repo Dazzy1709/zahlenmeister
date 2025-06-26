@@ -3,7 +3,7 @@
 
 @keyframes pulse {
   0% { transform: scale(1); }
-  50% { transform: scale(1.02); }
+  50% { transform: scale(1.05); }
   100% { transform: scale(1); }
 }
 
@@ -420,23 +420,22 @@ header p {
 .house {
   overflow: hidden;
   position: relative;
-  background:#0f192d82;
+  background:#09090982;
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   transform: translateZ(0);
   margin: var(--abstand-klein);
-  border-radius: 15px;
+  border-radius: 10px;
   color: white;
   transition: var(--übergang-schnell);
   cursor: pointer;
   display: flex;
   align-items: center;
-  width: 42%;
+  width: 45%;
   transition: 0.2s ease all;
   padding: 15px;
-  box-shadow: var(--schatten-groß);
-  border: 1px solid #607092d5;
-  animation: pulse 2s infinite;
+  box-shadow: 0px 2px 20px var(--btn-primary);
+  animation: pulse 3s infinite;
 }
 
 .house-content {
@@ -446,9 +445,8 @@ header p {
 .house:hover {
   color: white;
   transform: translateY(-2.5px);
-  border-color: var(--btn-primary);
   background-color:#0000004d;
-  box-shadow: 0 5px 15px rgba(255,163,26,0.3);
+  box-shadow: 0px 2px 30px var(--btn-primary);
 }
 /* Locked house styling */
 .house.locked {
@@ -457,7 +455,7 @@ header p {
   position: relative;
   cursor: not-allowed;
   pointer-events: none;
-  animation:none;
+  animation: none;
 }
 
 
@@ -496,7 +494,7 @@ header p {
 /* Completion indicator (unchanged) */
 .house.completed {
   position: relative;
-  box-shadow: 0 0 0 1.5px green;
+  box-shadow: 0 0 0 1px #18b818a9;
 }
 
 .house.completed:hover {
@@ -506,21 +504,29 @@ header p {
 .house.completed .house-number {
   color: green;
   font-weight:900;
-  opacity: 0.7;
+  opacity: 0.6;
+}
+
+.house.completed .house .house-time svg,
+.house.completed .house .house-time svg, 
+.house.completed .house .house-time svg {
+  color: green;
 }
 
 .house.completed::before {
   content: "";
   position: absolute;
-  top: 10px;
-  right: 10px;
-  width: 30px;
-  height: 30px;
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%2300C853"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>');
+  top: 40%;
+  right: 35%;
+  width: 60px;
+  height: 60px;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="%2300C853" class="size-5"><path fill-rule="evenodd" d="M9.661 2.237a.531.531 0 0 1 .678 0 11.947 11.947 0 0 0 7.078 2.749.5.5 0 0 1 .479.425c.069.52.104 1.05.104 1.59 0 5.162-3.26 9.563-7.834 11.256a.48.48 0 0 1-.332 0C5.26 16.564 2 12.163 2 7c0-.538.035-1.069.104-1.589a.5.5 0 0 1 .48-.425 11.947 11.947 0 0 0 7.077-2.75Zm4.196 5.954a.75.75 0 0 0-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 1 0-1.06 1.061l2.5 2.5a.75.75 0 0 0 1.137-.089l4-5.5Z" clip-rule="evenodd" /></svg>');
   background-repeat: no-repeat;
   background-position: center;
+  opacity: 0.5;
   z-index: 2;
   filter: drop-shadow(0 0 2px rgba(0,0,0,0.5));
+
 }
 
 /* Lock text styling (modified) */
@@ -537,23 +543,22 @@ header p {
   padding: 0 10px;
   box-sizing: border-box;
   /* Ensure text isn't grayscaled */
-  filter: none;
 }
 
 .house-number {
   position: absolute;
-  top: 30%;
-  left: 43%;
+  top: -4%;
+  right: -2.5%;
   margin: var(--abstand-klein);
-  color: #ffffff90;
+  color: var(--btn-primary);
   font-weight: 900;
-  font-size: 60px;
+  font-size: 40px;
   height: 60px;
   width: 60px;
   border-radius: 50%;
   text-align: center;
   padding: 2px;
-  opacity: 0.1;
+  opacity: 0.6;
 }
 
 .house-time,
@@ -567,7 +572,8 @@ header p {
   font-weight: 700;
   font-size: 25px;
   z-index: 1;
-  opacity: 0.8;  
+  opacity: 1;  
+  width: 85%;
 }
 
 .house p {
