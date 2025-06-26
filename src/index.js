@@ -47,7 +47,7 @@ connectDB();
 
 app.set('trust proxy', 1);
 
-if (process.env.NODE_ENV === 'development') {
+if (process.env.NODE_ENV === 'production') {
   app.use((req, res, next) => {
     console.log(`${req.method} ${req.url}`);
     next();
@@ -56,7 +56,7 @@ if (process.env.NODE_ENV === 'development') {
 
 
 app.use(cors({
-  origin: process.env.NODE_ENV === 'development' 
+  origin: process.env.NODE_ENV === 'production' 
     ? 'http://localhost:3000' 
     : 'https://zahlenmeister.onrender.com',
   credentials: true,
