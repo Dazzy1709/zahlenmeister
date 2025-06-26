@@ -54,16 +54,18 @@ header p {
 .popup-overlay {
   position: fixed;
   width: 100%;
-  background-color: #000000c6;
+  background-color: #000000e0;
   height: 100%;
   z-index: 100;
   top: 0;
   left: 0;
   display: none;
 }
+
 .house-popup {
-  background: linear-gradient(135deg, #1f3f6ed7 0%, #0e1a30e4 100%);
-  border: 0.5px solid var(--btn-primary);
+  background: linear-gradient(135deg, #3d4d665c 0%, #1f32576a 100%);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border-radius: 16px;
   position: fixed;
   top: 50%;
@@ -72,12 +74,13 @@ header p {
   width: 85%;
   max-width: 600px;
   max-height: 85vh;
+  border: 1px solid rgba(255, 255, 255, 0.121);
   color: white;
   z-index: 999;
   display: none;
   flex-direction: column;
   overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  box-shadow: 0 0px 30px 10px rgba(75, 75, 75, 0.605);
 }
 
 .popup-image-container {
@@ -85,6 +88,8 @@ header p {
   width: 100%;
   position: relative;
   overflow: hidden;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.562);
 }
 
 .popup-image {
@@ -93,13 +98,14 @@ header p {
   object-fit: cover;
   opacity: 0.7;
   filter: brightness(0.6);
+
 }
 
 .popup-inner {
-  padding: 25px;
+  padding: 10px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 10px;
 }
 
 .house-info {
@@ -108,8 +114,8 @@ header p {
 
 .house-popup h3 {
   font-size: 28px;
-  margin-bottom: 8px;
-  color: var(--farbe-akzent);
+  margin-bottom: 3px;
+  color: white;
   text-shadow: 0 2px 4px rgba(0,0,0,0.3);
 }
 
@@ -118,12 +124,13 @@ header p {
   background: rgba(255,255,255,0.1);
   padding: 5px 15px;
   border-radius: 20px;
-  font-size: 14px;
+  font-size: 12px;
   margin-bottom: 15px;
+  color: var(--btn-primary);
 }
 
 .house-popup p {
-  font-size: 12px;
+  font-size: 16px;
   line-height: 1.6;
   opacity: 0.9;
   margin: 0;
@@ -397,7 +404,6 @@ header p {
 .house-section h2 {
   font-size: 30px;
   font-weight: 600;
-  margin: var(--abstand-mittel);
   text-align: center;
 }
 
@@ -420,26 +426,34 @@ header p {
 .house {
   overflow: hidden;
   position: relative;
-  background:#09090982;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background:linear-gradient(to bottom left, #37496767 10%, #3131314b 70%);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   transform: translateZ(0);
-  margin: var(--abstand-klein);
+  margin: 20px 20px;
   border-radius: 10px;
   color: white;
   transition: var(--übergang-schnell);
   cursor: pointer;
   display: flex;
   align-items: center;
-  width: 45%;
+  width: 40%;
   transition: 0.2s ease all;
-  padding: 15px;
+  padding: 15px 20px 10px 20px;
   box-shadow: 0px 2px 20px var(--btn-primary);
   animation: pulse 3s infinite;
+  border: 0.75px solid #ffffffe7;
 }
 
 .house-content {
   display: flex;
+}
+
+.house svg {
+  width: 27.5px;
+  margin-right: 15px;
+  color: var(  --btn-primary);
+  z-index: 10;
 }
 
 .house:hover {
@@ -456,6 +470,7 @@ header p {
   cursor: not-allowed;
   pointer-events: none;
   animation: none;
+  border: none;
 }
 
 
@@ -486,7 +501,6 @@ header p {
   filter: drop-shadow(0 2px 4px rgba(0,0,0,0.7));
 }
 
-
 .house.locked .lock-icon {
   filter: none !important;
 }
@@ -494,36 +508,27 @@ header p {
 /* Completion indicator (unchanged) */
 .house.completed {
   position: relative;
-  box-shadow: 0 0 0 1px #18b818a9;
-}
-
-.house.completed:hover {
-  border-color:green;
+  box-shadow: 0px 0px 10px 1.5px #52525268;
+  border:none;
 }
 
 .house.completed .house-number {
-  color: green;
-  font-weight:900;
-  opacity: 0.6;
-}
-
-.house.completed .house .house-time svg,
-.house.completed .house .house-time svg, 
-.house.completed .house .house-time svg {
-  color: green;
+  color: white;
+  font-weight: 600;
+  opacity: 1;
 }
 
 .house.completed::before {
   content: "";
   position: absolute;
-  top: 40%;
-  right: 35%;
-  width: 60px;
-  height: 60px;
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="%2300C853" class="size-5"><path fill-rule="evenodd" d="M9.661 2.237a.531.531 0 0 1 .678 0 11.947 11.947 0 0 0 7.078 2.749.5.5 0 0 1 .479.425c.069.52.104 1.05.104 1.59 0 5.162-3.26 9.563-7.834 11.256a.48.48 0 0 1-.332 0C5.26 16.564 2 12.163 2 7c0-.538.035-1.069.104-1.589a.5.5 0 0 1 .48-.425 11.947 11.947 0 0 0 7.077-2.75Zm4.196 5.954a.75.75 0 0 0-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 1 0-1.06 1.061l2.5 2.5a.75.75 0 0 0 1.137-.089l4-5.5Z" clip-rule="evenodd" /></svg>');
+  top: -25%;
+  right: -125px;
+  width: 350px;
+  height: 350px;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="%23f5a623" class="size-5"><path fill-rule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm3.857-9.809a.75.75 0 0 0-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 1 0-1.06 1.061l2.5 2.5a.75.75 0 0 0 1.137-.089l4-5.5Z" clip-rule="evenodd" /></svg>');
   background-repeat: no-repeat;
   background-position: center;
-  opacity: 0.5;
+  opacity: 0.3;
   z-index: 2;
   filter: drop-shadow(0 0 2px rgba(0,0,0,0.5));
 
@@ -550,9 +555,9 @@ header p {
   top: -4%;
   right: -2.5%;
   margin: var(--abstand-klein);
-  color: var(--btn-primary);
+  color: #80808080;
   font-weight: 900;
-  font-size: 40px;
+  font-size: 45px;
   height: 60px;
   width: 60px;
   border-radius: 50%;
@@ -564,8 +569,8 @@ header p {
 .house-time,
 .house-lives,
 .house-topic {
-  margin: 1px 0;
-  letter-spacing: 0px;
+  margin: 5px 0;
+  letter-spacing: 0.25px;
 }
 
 .house figcaption {
@@ -573,28 +578,25 @@ header p {
   font-size: 25px;
   z-index: 1;
   opacity: 1;  
-  width: 85%;
+  width: 95%;
+  margin-bottom: 10px;
 }
 
 .house p {
   font-family: "Sansation";
   display: flex;
-  font-size: var(--schriftgröße-groß);
-  font-weight: 400;
-  margin: 12.5px 0;
+  font-size: var(--schriftgröße-mittel);
+  font-weight: 300;
+  margin: 5px 0;
   z-index: 1;
+  opacity: 0.7;
 }
 
-.house svg {
-  width: 27.5px;
-  margin-right: 10px;
-  color: var(  --btn-primary);
-  z-index: 10;
-}
+
 
 .house img {
   opacity: 0.5;
-  width: 30%;
+  width: 40%;
   border-radius: 5px;
 }
 
