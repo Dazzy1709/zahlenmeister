@@ -79,7 +79,7 @@ class MusicController {
 
       this.currentTrack = 'menu';
       const audio = this.getAudioElement();
-      audio.src = '../assets/audio/menu-music.mp3';
+      audio.src = '/assets/audio/menu-music.mp3';
       audio.volume = this._isMuted ? 0 : this.volume;
 
       if (this.readyToPlay) {
