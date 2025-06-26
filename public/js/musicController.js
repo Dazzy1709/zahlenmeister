@@ -9,8 +9,6 @@ class MusicController {
     
     this.loadPreferences();
     this.setupInteractionListener();
-    this.isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || 
-                (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
   }
   
   // Getter for audio element that lazy-loads it when needed
@@ -75,30 +73,27 @@ class MusicController {
     document.addEventListener('touchstart', enablePlayback, { once: true });
   }
   
-  async playMenuMusic() {
+  playMenuMusic() {
     return new Promise((resolve, reject) => {
       if (this.currentTrack === 'menu') return resolve();
 
       this.currentTrack = 'menu';
       const audio = this.getAudioElement();
-      audio.src = '/assets/audio/menu-music.mp3'; // Fixed path
+      audio.src = '/assets/audio/menu-music.mp3';
       audio.volume = this._isMuted ? 0 : this.volume;
 
-      // Special handling for iOS
-      if (this.isIOS) {
-        audio.load(); // iOS requires explicit load()
-        document.body.addEventListener('touchstart', () => {
-          audio.play().then(resolve).catch(reject);
-        }, { once: true });
-        return;
-      }
-
       if (this.readyToPlay) {
-        audio.play().then(resolve).catch(e => {
-          console.error('Playback failed:', e);
-          this.readyToPlay = false;
-          reject(e);
-        });
+        const playPromise = audio.play();
+        
+        if (playPromise !== undefined) {
+          playPromise
+            .then(() => resolve())
+            .catch(e => {
+              console.error('Playback failed:', e);
+              this.readyToPlay = false; // Reset for next attempt
+              reject(e);
+            });
+        }
       } else {
         reject(new Error('User interaction required'));
       }
