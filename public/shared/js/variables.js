@@ -148,7 +148,7 @@ const houseData = [
     lives: 3,
     numberStart: 1,
     numberLimit: 20,
-    description: "Kreuzberg. Dein erster Hinweis führt in ein verlassenes Drogenversteck. An den Wänden bluten frisch gerechnete Additionen: '13 + █ = 19' – Leonies Alter beim Verschwinden. Ein Handy vibriert mit einer Nachricht: 'Löse alle Summen im Keller. Die fehlende Zahl verrät, wie viele sie diese Woche schon nahmen.' Die letzte Gleichung? 'Dein Alter + ihr Verschwinden = Eintrittspreis.'",
+    description: "Die Dealer verwendeten Mathe als Code. Auf Wänden, in SMS, auf Preislisten. Die Zahlen sind verschlüsselte Routen und Übergaben. Um das Versteck von „13“ zu finden, musst du Additionen knacken – denn die Summe ergibt GPS-Koordinaten",
     image: "https://zahlenmeisterr.s3.eu-central-1.amazonaws.com/houseimages/berlin.png"
   },
   { 
@@ -159,7 +159,7 @@ const houseData = [
     lives: 3,
     numberStart: 3,
     numberLimit: 20,
-    description: "Zwischen Gartenzwergen findest du Opa Günthers Tagebuch: 'Tag 7: Sie subtrahieren Erinnerungen. 47 Nachbarn - 3 Augen = 44 Lügen.' Eingeweckte Augen starren dich an. Leonies letzte Spur hier? Eine Subtraktion an den Schuppen: '19 - 16 = 3'. Stufe 3. Genau wo sie verschwand. Jede gelöste Aufgabe enthüllt ein Stück des Zahlenkreises-Logos.",
+    description: "Opa Günthers Tagebuch ist in Zahlen geschrieben. Jede Subtraktion entfernt eine Schicht Lüge, offenbart Wahrheit. Nur wer den wahren „Unterschied“ kennt, erkennt die Identitäten der Verschwörer.",
     image: "https://zahlenmeisterr.s3.eu-central-1.amazonaws.com/houseimages/sachsen.png"
   },
   { 
@@ -170,7 +170,7 @@ const houseData = [
     lives: 3,
     numberStart: 0,
     numberLimit: 13,
-    description: "Die WG-Bewohner sind weg – nur ihre Schatten vervielfachen sich. Leonies altes Mathebuch liegt aufgedacht: '13×13=169 Türen. Nur eine führt zu mir.' Die Glühbirnen explodieren im Sekundentakt. Bei jeder Multiplikation wächst das Flüstern in den Wänden: 'Du bist das Produkt ihrer Berechnungen.'",
+    description: "Die Schatten vervielfachen sich – weil jemand das „Produkt“ manipuliert. In Beckys Mathebuch steckt ein Code: Jede richtige Multiplikation schaltet eine Tür frei.",
     image: "https://zahlenmeisterr.s3.eu-central-1.amazonaws.com/houseimages/rostock.png"
   },
   { 
@@ -181,7 +181,7 @@ const houseData = [
     lives: 3,
     numberStart: 1,
     numberLimit: 13,
-    description: "Die Wände teilen sich wie Brüche. 'Wir werden durch Geheimnisse dividiert', steht auf Leonies Kalender. Ihr Schatten läuft durch den Flur. Der Kühlschrank zeigt eine Gleichung: '1/2 Wahrheit + 1/2 Lüge = 1 Verschwundener'. Um sie zu finden, musst du beweisen, dass du unteilbar bist – sonst wirst du wie die anderen zerschnitten.",
+    description: "Hier wird die Wahrheit „geteilt“. Wände und Tagebuchseiten brechen in Bruchteile. Becky schrieb: „Jede Division spaltet einen Teil von mir ab.",
     image: "https://zahlenmeisterr.s3.eu-central-1.amazonaws.com/houseimages/neumu%CC%88nster.png"
   },
   { 
@@ -192,7 +192,7 @@ const houseData = [
     lives: 3,
     numberStart: 0,
     numberLimit: 18,
-    description: "Das flüsternde Gemälde zeigt 13/26 von Leonies Gesicht. 'Vereinfache mich', zischt es. Jeder falsche Bruch macht es realer. Unter dem Boden findest du Forum-Protokolle: 'Mitglied 13: Bruchstücke sind leichter zu lagern.' Die letzte Aufgabe? 'Addiere alle Brüche deiner Erinnerungen an sie.' Das Ergebnis ist ein Datum – der Tag deiner Schwester ging.",
+    description: "Ein Wandgemälde flüstert Brüche – es ist Beckys Gesicht, fragmentiert in Dezimalwerte. Jede gelöste Bruchrechnung bringt ein Stück zurück. Richtig vereinfachte Brüche rekonstruieren ihr Gesicht. Du rechnest, um sie zu „sehen“. Das Ergebnis ist nicht nur ein Bild – es ist Erinnerung",
     image: "https://zahlenmeisterr.s3.eu-central-1.amazonaws.com/houseimages/ko%CC%88ln.png"
   },
   { 
@@ -203,7 +203,7 @@ const houseData = [
     lives: 3,
     numberStart: 10,
     numberLimit: 25,
-    description: "Alexa spuckt Störgeräusche: '3000 % 7 = █. Der Rest führt zu ihr.' Die Wände pulsieren im Takt von Modulo-Berechnungen. Leonies Laptop blinkt: 'Forum gelöscht. Nur Reste bleiben.' Jede gelöste Aufgabe zeigt Fragmente ihres letzten Streams – sie rechnete verzweifelt, als jemand die Tür aufbrach. 'Sie kommen für die, deren Leben keine Primzahl ist.'",
+    description: "Ihr letzter Stream war voller Modulo-Operationen – sie wusste, sie wird verfolgt. Jeder Rest in der Rechnung war ein Hinweis auf ihr Versteck. Die Reste (Modulo-Ergebnisse) ergeben ein Passwort. Ohne Rechnen kein Zugriff auf ihre Notizen, keine Chance, ihren letzten Standort zu sehen",
     image: "https://zahlenmeisterr.s3.eu-central-1.amazonaws.com/houseimages/eimsbu%CC%88ttel.png"
   },
   { 
@@ -214,7 +214,7 @@ const houseData = [
     lives: 4,
     numberStart: 5,
     numberLimit: 13,
-    description: "Kinder klopfen an – alle zeigen Leonies Alter potenziert: 13², 13³... 'Wir sind ihre ungelösten Gleichungen', flüstern sie. Im Keller brennt eine Botschaft: '5³ = 125 Jahre Gefängnis für Verrat.' Die Hausnummern ändern sich. Nur wer die richtige Potenz löst, findet den versteckten Serverraum – und die Liste der nächsten Opfer.",
+    description: "Der Server im Keller ist verschlüsselt mit Exponentialcodes – nur wer die richtigen Potenzen kennt, bekommt Zugriff. Jeder Fehler = Alarm",
     image: "https://zahlenmeisterr.s3.eu-central-1.amazonaws.com/houseimages/bockenheim.png"
   },
   { 
@@ -225,7 +225,7 @@ const houseData = [
     lives: 5,
     numberStart: 3,
     numberLimit: 10,
-    description: "Dein Kater ist logarithmisch: log₂(8) Stunden fehlen. Die Wände schwingen im Bass von 'logₓ(6561) = 8'. Leonies Spiegelbild starrt dich an: 'Finde die Basis ihrer Macht.' In einem versteckten Safe – Bitcoin-Wallets mit Transaktionen im Takt von Primzahlen. Der Zahlenkreis finanziert sich durch kryptografischen Menschenhandel.",
+    description: "Becky versteckte Daten in einem Logarithmus-basierten Soundfile – je tiefer du in die Basis steigst, desto mehr siehst du",
     image: "https://zahlenmeisterr.s3.eu-central-1.amazonaws.com/houseimages/reeperbahn.png"
   },
   { 
@@ -236,7 +236,7 @@ const houseData = [
     lives: 5,
     numberStart: 5,
     numberLimit: 30,
-    description: "Der KI-Milliardär hinterließ eine Frage: '30! Möglichkeiten, Menschen zu zerlegen. Wie viele sind moralisch?' Seine letzte Berechnung: '13! Wege, Leonie zu vergessen.' Die Wände zeigen Permutationen ihres Gesichts. Jede falsche Kombination löscht ein Detail. Die Lösung? Die Anordnung, bei der alle Narben das Zahlenkreis-Logo bilden.",
+    description: "Der Milliardär entwickelte einen Algorithmus, der Menschen permutiert – in Daten, Verhalten, Entscheidungen. Jede Aufgabe spiegelt eine mögliche Becky. Die Kombinatorik zeigt: Wer ist die echte Becky? Nur die richtige Reihenfolge rettet ihr Bewusstsein. Du musst rechnen, um sie nicht zu verlieren",
     image: "https://zahlenmeisterr.s3.eu-central-1.amazonaws.com/houseimages/blankenese.png"
   },
   { 
@@ -247,7 +247,7 @@ const houseData = [
     lives: 5,
     numberStart: 3,
     numberLimit: 300,
-    description: "Die Villa atmet Primzahlen. 13 Türen, 7 Fenster, 23 Stufen – alles unteilbar. Leonie liegt gefesselt an eine Rechenmaschine: 'Sie zerlegen uns in Primfaktoren... unsere Seelen sind ihr Kryptowährung.' Die finale Aufgabe: 'Beweise, dass eure Bindung eine Primzahl ist.' Die CPU beginnt zu zählen. Bei 301 – der ersten Nicht-Primzahl – wird sie gelöscht.",
+    description: "Die Maschine zählt nur Primzahlen – unteilbare Seelen, sagt der Kult. Becky wurde in ihrer Primstruktur gespeichert. Jede falsche Zahl bringt sie näher an das Nichts",
     image: "https://zahlenmeisterr.s3.eu-central-1.amazonaws.com/houseimages/ostsee.png"
   }
 ];
