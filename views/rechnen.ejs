@@ -42,7 +42,7 @@ background-position: center;
 <div id="dialogue-modal" class="dialogue-box hidden">
   <div class="character-container">
     <img src="https://zahlenmeisterr.s3.eu-central-1.amazonaws.com/characters/professor-jay.png" alt="Professor">
-    <div class="character-name">Der Professor</div>
+    <div class="character-name">Professor Jay</div>
   </div>
   <p id="dialogue-text"></p>
 </div>
@@ -53,7 +53,7 @@ background-position: center;
   <div class="character-container">
     <img src="https://zahlenmeisterr.s3.eu-central-1.amazonaws.com/characters/professor-jay.png" alt="">
     <br>
-    <p>Der professor</p>
+    <p>Professor Jay</p>
   </div>
 </div>
 
@@ -399,7 +399,7 @@ if (!document.getElementById('dialogue-modal')) {
             <div id="dialogue-text" class="dialogue-text"></div>
             <div class="character-container">
                 <img src="https://zahlenmeisterr.s3.eu-central-1.amazonaws.com/characters/professor-jay.png" alt="Professor">
-                <p>Der Professor</p>
+                <p>Professor Jay</p>
             </div>
             <button id="continue-btn" class="modal-btn">Weiter</button>
         </div>
@@ -568,7 +568,7 @@ async function showCompletionModal(houseId) {
         const completionDialogue = houseCompletionDialogues[houseId] || [
             `Haus ${houseId} erfolgreich abgeschlossen!`,
             "Du hast alle Aufgaben gemeistert.",
-            "Der Professor ist beeindruckt von deinen Fähigkeiten!"
+            "Ich bin beeindruckt von deinen Fähigkeiten!"
         ];
         await showDialogue(completionDialogue);
         
