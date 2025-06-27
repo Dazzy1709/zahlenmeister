@@ -13,8 +13,6 @@
   <title>ZahlenMeister</title>
 </head>
 
-
-
 <body class="home">
   <div id="notification" class="notification">
     <div class="notification-content">
@@ -53,7 +51,6 @@
     </div>
    </figure>
   </div>
-
   <div class="chat-overlay">
     <div class="chat-top-section">
       <div class="chat-close-btn">
@@ -63,7 +60,6 @@
         <span>Schließen</span>
       </div>
     </div>
-
   <div class="chat-body-section">
     <h3>Global Chat</h3>
     <p>Chatte mit anderen Mathematikern wie dich</p>
@@ -113,7 +109,6 @@
           </button>
         </li>
       </ul>
-     
     <% } else { %>
       <ul class="guest-nav">
         <li>
@@ -134,7 +129,6 @@
           </button>
         </li>
       </ul>
-      
     <% } %>
   </nav>
   <main>  
@@ -148,20 +142,16 @@
     </header>
     <section class="container house-section">
       <h2>Häuser</h2>
-
       <div class="house-container">
         <% houses.forEach((house, index) => { %>
           <figure id="Haus<%= house.number %>" class="house" data-index="<%= index %>"></figure>
         <% }); %>
       </div>
     </section>
-     
   </main>
- 
   <script type="module" src="/shared/js/variables.js"></script>
   <script type="module" src="/js/gameMenu.js"></script>
   <script type="module" src="/js/dialogue.js"></script>
-  
   <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script> 
   <script nonce="<%= nonce %>" > 
     setInterval(() => {
@@ -170,20 +160,15 @@
     }).catch(console.error);
     }, 5 * 60 * 1000);
   </script>
-  
-
  <script nonce="<%= nonce %>" type="module" >
-  // Main initialization module
   import { initHouses } from '/js/gameMenu.js';
   import { showDialogue } from '/js/dialogue.js';
   import musicController from '/js/musicController.js';
   import { professorIntro, houseCompletionDialogues } from '/shared/js/variables.js';
 
-  // Global references
   const userAccount = <%- JSON.stringify(user || {}) %>;
   const startHouses = <%- JSON.stringify(houses) %>;
-  
-  // Initialize user progress
+
   let userProgress;
   if (<%- !user %>) {
     const guestProgress = localStorage.getItem('guestProgress');
@@ -197,47 +182,32 @@
       completedHouses: []
     }) %>;
   }
-
-  // DOM Ready Handler
+  
+  
   document.addEventListener('DOMContentLoaded', async () => {
-    // 1. Initialize music
     await musicController.playMenuMusic().catch(() => {});
-    
-    // 2. Set up music toggle
- const musicToggle = document.getElementById('musicToggle');
-if (musicToggle) {
-  musicToggle.addEventListener('click', () => {
-    const isNowUnmuted = musicController.toggleMute();
-    const soundOnIcon = musicToggle.querySelector('.sound-on');
-    const soundOffIcon = musicToggle.querySelector('.sound-off');
-    
-    soundOnIcon.style.display = isNowUnmuted ? 'block' : 'none';
-    soundOffIcon.style.display = isNowUnmuted ? 'none' : 'block';
-  });
-
-  // Set initial state
-  const soundOnIcon = musicToggle.querySelector('.sound-on');
-  const soundOffIcon = musicToggle.querySelector('.sound-off');
-  soundOnIcon.style.display = musicController.isMuted ? 'none' : 'block';
-  soundOffIcon.style.display = musicController.isMuted ? 'block' : 'none';
-}
-
-    // 3. Initialize houses and dialogue
+    const musicToggle = document.getElementById('musicToggle');
+    if (musicToggle) {
+      musicToggle.addEventListener('click', () => {
+      const isNowUnmuted = musicController.toggleMute();
+      const soundOnIcon = musicToggle.querySelector('.sound-on');
+      const soundOffIcon = musicToggle.querySelector('.sound-off');
+      soundOnIcon.style.display = isNowUnmuted ? 'block' : 'none';
+      soundOffIcon.style.display = isNowUnmuted ? 'none' : 'block';
+      });
+      const soundOnIcon = musicToggle.querySelector('.sound-on');
+      const soundOffIcon = musicToggle.querySelector('.sound-off');
+      soundOnIcon.style.display = musicController.isMuted ? 'none' : 'block';
+      soundOffIcon.style.display = musicController.isMuted ? 'block' : 'none';
+    }
     initHouses(userProgress);
-    
-    // 4. Show contextual dialogue after houses load
     setTimeout(() => showContextualDialogue(userProgress), 500);
   });
 
-  // Dialogue Controller
   async function showContextualDialogue(progress) {
     const isFirstVisit = !localStorage.getItem('hasVisitedBefore');
     const lastCompletedHouse = progress.completedHouses.slice(-1)[0];
-    
-    // Dialogue sequence
     const sequence = [];
-    
-    // First visit greeting
     if (isFirstVisit) {
       sequence.push({
         messages: professorIntro.newPlayer,
@@ -245,15 +215,13 @@ if (musicToggle) {
       });
       localStorage.setItem('hasVisitedBefore', 'true');
     } 
-    // Returning player greeting
     else if (progress.completedHouses.length === 0) {
       sequence.push({
         messages: professorIntro.returningPlayer,
         options: { typingSpeed: 40, delay: 0 }
       });
     }
-    
-    // House completion message
+
     if (lastCompletedHouse && houseCompletionDialogues[lastCompletedHouse]) {
       sequence.push({
         messages: houseCompletionDialogues[lastCompletedHouse],
@@ -261,7 +229,6 @@ if (musicToggle) {
       });
     }
     
-    // Play sequence
     for (const {messages, options} of sequence) {
       await new Promise(resolve => {
         showDialogue(messages, { ...options, onComplete: resolve });
@@ -269,7 +236,6 @@ if (musicToggle) {
     }
   }
 
-  // Handle house unlocks from URL
   const urlParams = new URLSearchParams(window.location.search);
   if (urlParams.has('unlockedHouse')) {
     const houseId = urlParams.get('unlockedHouse');
@@ -279,94 +245,90 @@ if (musicToggle) {
     ]);
     window.history.replaceState({}, '', window.location.pathname);
   }
-</script>
+  </script>
   
-  <!-- Rest of your chat scripts remain the same -->
-  <script nonce="<%= nonce %>">
- // Chat button handlers
-document.querySelector(".chat-btn").addEventListener("click", () => {
-  const chatOverlay = document.querySelector(".chat-overlay");
-  chatOverlay.style.display = "block";
-  setTimeout(() => {
-    chatOverlay.classList.add("active");
-  }, 10);
-  document.getElementById('input').focus();
-});
+<script nonce="<%= nonce %>">
+  document.querySelector(".chat-btn").addEventListener("click", () => {
+    const chatOverlay = document.querySelector(".chat-overlay");
+    chatOverlay.style.display = "block";
+    setTimeout(() => {
+      chatOverlay.classList.add("active");
+    }, 10);
+    document.getElementById('input').focus();
+  });
 
-document.querySelector(".chat-close-btn").addEventListener("click", () => {
-  const chatOverlay = document.querySelector(".chat-overlay");
-  chatOverlay.classList.remove("active");
-  setTimeout(() => {
-    chatOverlay.style.display = "none";
-  }, 300);
-});
-
-const socket = io({
-  auth: {
-    serverOffset: 0
+  document.querySelector(".chat-close-btn").addEventListener("click", () => {
+    const chatOverlay = document.querySelector(".chat-overlay");
+    chatOverlay.classList.remove("active");
+    setTimeout(() => {
+      chatOverlay.style.display = "none";
+    }, 300);
+  });
+  
+  const socket = io({
+    auth: {
+      serverOffset: 0
+    }
+  });
+  const form = document.getElementById('form');
+  const input = document.getElementById('input');
+  const messages = document.getElementById('messages');
+  const username = "<%= user ? user.name : 'Guest' %>";
+  const profilePicture = "<%= user ? user.profilePicture : 'https://zahlenmeisterr.s3.eu-central-1.amazonaws.com/default-profile.png' %>";
+  
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (input.value.trim()) {
+      socket.emit('chat message', {
+        content: input.value.trim(),
+        username: username,
+        profilePicture: profilePicture,
+        createdAt: new Date().toISOString()
+      });
+      input.value = '';
+    }
+  });
+  
+  function formatTime(dateString) {
+    const date = new Date(dateString);
+    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   }
-});
-
-const form = document.getElementById('form');
-const input = document.getElementById('input');
-const messages = document.getElementById('messages');
-const username = "<%= user ? user.name : 'Guest' %>";
-const profilePicture = "<%= user ? user.profilePicture : 'https://zahlenmeisterr.s3.eu-central-1.amazonaws.com/default-profile.png' %>";
-
-form.addEventListener('submit', (e) => {
-  e.preventDefault();
-  if (input.value.trim()) {
-    socket.emit('chat message', {
-      content: input.value.trim(),
-      username: username,
-      profilePicture: profilePicture,
-      createdAt: new Date().toISOString()
-    });
-    input.value = '';
-  }
-});
-
-function formatTime(dateString) {
-  const date = new Date(dateString);
-  return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-}
-
-socket.on('chat message', (msg) => {
-  const item = document.createElement('li');
-  item.innerHTML = `
-    <div class="message-user">
-      <img src="${msg.profilePicture}" alt="${msg.username}'s profile">
-      <span>${msg.username}</span>
-    </div>
-    <div class="message-content">${msg.content}</div>
-    <div class="message-time">${formatTime(msg.createdAt)}</div>
-  `;
-  messages.appendChild(item);
-  messages.scrollTop = messages.scrollHeight;
-});
-
-// Load previous messages when opening chat
-document.querySelector('.chat-btn').addEventListener('click', async () => {
-  try {
-    const response = await fetch('/api/messages');
-    const messages = await response.json();
-    messages.forEach(msg => {
-      const item = document.createElement('li');
-      item.innerHTML = `
-        <div class="message-user">
-          <img src="${msg.profilePicture || 'https://zahlenmeisterr.s3.eu-central-1.amazonaws.com/default-profile.png'}" alt="${msg.username}'s profile">
-          <span>${msg.username}</span>
-        </div>
-        <div class="message-content">${msg.content}</div>
-        <div class="message-time">${formatTime(msg.createdAt)}</div>
-      `;
-      document.getElementById('messages').appendChild(item);
-    });
+  
+  socket.on('chat message', (msg) => {
+    const item = document.createElement('li');
+    item.innerHTML = `
+      <div class="message-user">
+        <img src="${msg.profilePicture}" alt="${msg.username}'s profile">
+        <span>${msg.username}</span>
+      </div>
+      <div class="message-content">${msg.content}</div>
+      <div class="message-time">${formatTime(msg.createdAt)}</div>
+    `;
+    messages.appendChild(item);
     messages.scrollTop = messages.scrollHeight;
-  } catch (error) {
-    console.error('Error loading messages:', error);
-  }
-});
+  });
+  
+  document.querySelector('.chat-btn').addEventListener('click', async () => {
+    try {
+      const response = await fetch('/api/messages');
+      const messages = await response.json();
+      messages.forEach(msg => {
+        const item = document.createElement('li');
+        item.innerHTML = `
+          <div class="message-user">
+            <img src="${msg.profilePicture || 'https://zahlenmeisterr.s3.eu-central-1.amazonaws.com/default-profile.png'}" alt="${msg.username}'s profile">
+            <span>${msg.username}</span>
+          </div>
+          <div class="message-content">${msg.content}</div>
+          <div class="message-time">${formatTime(msg.createdAt)}</div>
+        `;
+        document.getElementById('messages').appendChild(item);
+      });
+      messages.scrollTop = messages.scrollHeight;
+    } catch (error) {
+      console.error('Error loading messages:', error);
+    }
+  });
 </script>
 </body>
 </html>

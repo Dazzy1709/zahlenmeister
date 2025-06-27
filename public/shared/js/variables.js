@@ -1,5 +1,4 @@
 const questionGenerators = {
-  // Grundrechenarten
   "Addition": (a, b) => {
     return { question: `${a} + ${b}`, answer: a + b };
   },
@@ -13,8 +12,6 @@ const questionGenerators = {
     const produkt = a * b;
     return { question: `${produkt} ÷ ${a}`, answer: b };
   },
-
-  // Erweiterte Themen
   "Prozentrechnung": (a, b) => {
     return { 
       question: `${b}% von ${a}`, 
@@ -69,8 +66,6 @@ const questionGenerators = {
       answer: a * 4 
     };
   },
-
-  // NEUE HERAUSFORDERUNGEN
   "Modulo (Rest)": (a, b) => {
     return { 
       question: `Rest von ${a} ÷ ${b}?`, 
@@ -80,7 +75,7 @@ const questionGenerators = {
   "Primzahlen": (a) => {
     return { 
       question: `Ist ${a} prim? (1=Ja, 0=Nein)`, 
-      answer: [0, 0, 1, 1, 0, 1, 0, 1, 0, 0][a] // Vordefinierte Primzahlen bis 9
+      answer: [0, 0, 1, 1, 0, 1, 0, 1, 0, 0][a] 
     };
   },
   "Binärzahlen": (a) => {
@@ -93,12 +88,6 @@ const questionGenerators = {
     return { 
       question: `Durchschnitt von ${a}, ${b}, ${c}? (Ganzzahl)`, 
       answer: Math.round((a + b + c) / 3) 
-    };
-  },
-  "Gleichungen (x gesucht)": (a, b) => {
-    return { 
-      question: `${a}x + ${b} = ${a * 3 + b}. x = ?`, 
-      answer: 3 
     };
   },
   "Textaufgabe (Alter)": (a, b) => {
@@ -220,7 +209,7 @@ const houseData = [
   { 
     number: 8,
     name: "Loft Wohnung an der Reeperbahn",
-    topic: "Logarithmus",
+    topic: "Schweres Rätsel",
     levelLimit: 20,
     lives: 5,
     numberStart: 3,

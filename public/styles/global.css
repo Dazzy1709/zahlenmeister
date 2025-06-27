@@ -1,5 +1,3 @@
-
-
 *,
 *::before,
 *::after {
@@ -15,7 +13,6 @@ body {
   height: 100vh;
   overflow-x: hidden;  
   overflow-y: auto;  
- 
 }
 
 @keyframes bgScroll {
@@ -37,7 +34,6 @@ p {
   opacity: 0.8;
 }
 
-
 a {
   text-decoration: none;
   color: var(--farbe-text);
@@ -52,12 +48,11 @@ html {
 }
 
 :root {
-  /* 🎨 Farben */
   --farbe-haupt: #1f3f6e;            
   --farbe-haupt-dunkel: #357ab8;
-  --farbe-akzent: #f5a623;           /* Akzentfarbe (Orange) */
-  --farbe-erfolg: #27ae60;           /* Richtig */
-  --farbe-fehler: #e74c3c;           /* Falsch */
+  --farbe-akzent: #f5a623;          
+  --farbe-erfolg: #27ae60;         
+  --farbe-fehler: #e74c3c;          
   --farbe-hintergrund: #f9f9f9;
   --farbe-hover: #ffb347;
   --farbe-oberfläche: #ffffff;
@@ -119,6 +114,12 @@ html {
   }
 }
 
+@keyframes houseUnlockGlow {
+  0% { box-shadow: 0 0 5px 0 rgba(255, 179, 71, 0); }
+  50% { box-shadow: 0 0 20px 5px rgba(255, 179, 71, 0.7); }
+  100% { box-shadow: 0 0 5px 0 rgba(255, 179, 71, 0); }
+}
+
 .video-container {
   position: fixed;
   top: 0;
@@ -151,17 +152,15 @@ html {
   filter: brightness(0.6);
 }
 
-
-/* Zoom out on smaller screens */
 @media (max-width: 768px) {
   .video-container video {
-    transform: translate(-50%, -50%) scale(0.4); /* Reduced from 0.9 */
+    transform: translate(-50%, -50%) scale(0.4); 
   }
 }
 
 @media (max-width: 480px) {
   .video-container video {
-    transform: translate(-50%, -50%) scale(0.3); /* Reduced from 0.8 */
+    transform: translate(-50%, -50%) scale(0.3); 
   }
 }
 
@@ -194,6 +193,7 @@ html {
   left: 7.5px;
 }
 
+/* Nav */
 .nav {
   display: flex;
   justify-content: space-between;
@@ -255,7 +255,49 @@ html {
   color: var(--btn-primary-hover);
 }
 
-/* Notification styling - Updated version */
+.settings-btn {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-picture-nav {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--btn-primary);
+  transition: var(--übergang-schnell);
+}
+
+.profile-picture-nav:hover {
+  transform: scale(1.1);
+  border-color: var(--btn-primary-hover);
+  box-shadow: 0 0 10px rgba(255, 179, 71, 0.5);
+}
+
+.user-nav {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.user-nav li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.732);
+}
+
+.user-nav li svg {
+  margin-bottom: 3.5px;
+}
+
+
 .notification {
   position: fixed;
   top: -100px;
@@ -281,26 +323,17 @@ html {
 .notification.show {
   top: 20px;
   opacity: 1;
-  pointer-events: auto; /* Re-enable when visible */
+  pointer-events: auto; 
 }
 
-/* Make sure the notification appears above everything */
 .notification {
-  z-index: 9999; /* Increased from 1000 */
-}
-/* Animation for newly unlocked house */
-@keyframes houseUnlockGlow {
-  0% { box-shadow: 0 0 5px 0 rgba(255, 179, 71, 0); }
-  50% { box-shadow: 0 0 20px 5px rgba(255, 179, 71, 0.7); }
-  100% { box-shadow: 0 0 5px 0 rgba(255, 179, 71, 0); }
+  z-index: 9999; 
 }
 
 .house.newly-unlocked {
   animation: houseUnlockGlow 2s infinite;
 }
 
-
-/* Music control button */
 .music-control-btn {
   background: none;
   border: none;
@@ -316,7 +349,6 @@ html {
   transition: all 0.3s ease;
 }
 
-/* Start music button */
 .music-btn {
   background-color: rgba(255, 179, 71, 0.8);
   color: white;
@@ -331,14 +363,13 @@ html {
   gap: 8px;
 }
 
-
 .music-control-btn {
   transition: all 0.3s ease;
 }
 
 .music-control-btn.muted {
   position: relative;
-  color: #888; /* Gray color */
+  color: #888; 
 }
 
 .music-control-btn.muted svg {

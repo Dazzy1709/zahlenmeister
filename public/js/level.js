@@ -14,16 +14,12 @@ class Levels {
   }
 
   validateTopic(topic) {
-      // Return the topic if it exists exactly
       if (questionGenerators[topic]) return topic;
-    
-      // Try case-insensitive match
       const lowerTopic = topic.toLowerCase();
       const matchedKey = Object.keys(questionGenerators).find(
         key => key.toLowerCase() === lowerTopic
       );
-      
-      return matchedKey || "Plus (Easy)"; // Final fallback
+      return matchedKey || "Plus (Easy)"; 
   }
 
   generateQuestions () {
@@ -32,7 +28,6 @@ class Levels {
       if (typeof generator !== 'function') {
         throw new Error(`No generator found for topic: ${this.topic}`);
       }
-
       const questions = [];
       for (let i = 0; i < this.questionCount; i++) {
         const a = this.random(this.numberStart, this.numberLimit);
@@ -42,7 +37,6 @@ class Levels {
       return questions;
     } catch (error) {
       console.error("Question generation failed:", error);
-      // Fallback to simple addition
       return [{
         question: "1 + 1",
         answer: 2

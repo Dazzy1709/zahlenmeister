@@ -12,7 +12,6 @@ background-position: center;
   font-family: 'Sansation', sans-serif;
 }
 
-/* Navigation */
 .login-page .nav,
 .register-page .nav {
   padding: 1.5rem;
@@ -26,7 +25,6 @@ background-position: center;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* Main Content */
 .login-page main,
 .register-page main {
   max-width: 500px;
@@ -55,7 +53,6 @@ background-position: center;
   color: rgba(255, 255, 255, 0.8);
 }
 
-/* Form Card */
 .auth-card {
   background: rgba(15, 25, 45, 0.7);
   backdrop-filter: blur(8px);
@@ -76,7 +73,6 @@ background-position: center;
   display: inline-block;
 }
 
-/* Form Styles */
 .form-group {
   margin-bottom: 1.5rem;
 }
@@ -105,7 +101,6 @@ background-position: center;
   box-shadow: 0 0 0 3px rgba(245, 166, 35, 0.2);
 }
 
-/* Button Styles */
 .auth-btn {
   width: 100%;
   padding: 12px;
@@ -126,7 +121,6 @@ background-position: center;
   box-shadow: 0 5px 15px rgba(245, 166, 35, 0.3);
 }
 
-/* Link Styles */
 .auth-link {
   display: block;
   text-align: center;
@@ -144,7 +138,6 @@ background-position: center;
   text-decoration: underline;
 }
 
-/* Error Message */
 .error-message {
   color: #ff6b6b;
   background: rgba(255, 0, 0, 0.1);
@@ -155,7 +148,6 @@ background-position: center;
   border: 1px solid rgba(255, 0, 0, 0.2);
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .login-page main,
   .register-page main {
@@ -165,7 +157,6 @@ background-position: center;
   .auth-card {
     padding: 1.5rem;
   }
-  
   
   .login-page h1,
   .register-page h1 {

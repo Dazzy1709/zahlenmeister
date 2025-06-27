@@ -3,42 +3,35 @@
 @import './login.css';
 @import "./dialogue.css";
 
-/* Animations */
 @keyframes heartbeat {
   0% { transform: scale(1); }
   14% { transform: scale(1.1); }
   28% { transform: scale(1); }
   100% { transform: scale(1); }
 }
-
 @keyframes pulse {
   0% { transform: scale(1); color: white; }
   50% { transform: scale(1.2); color: var(--btn-primary); }
   100% { transform: scale(1); color: white; }
 }
-
 @keyframes pulseWarning {
   0% { transform: scale(1); color: white; }
   50% { transform: scale(1.2); color: red; }
   100% { transform: scale(1); color: white; }
 }
-
 @keyframes rotate {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
-
 @keyframes confetti-fall {
   0% { transform: translateY(-100vh) rotate(0deg); }
   100% { transform: translateY(100vh) rotate(360deg); }
 }
-
 @keyframes progress-pulse {
   0% { transform: translate(-50%, -50%) scale(1); }
   50% { transform: translate(-50%, -50%) scale(1.1); }
   100% { transform: translate(-50%, -50%) scale(1); }
 }
-
 @keyframes popIn {
   0% {
     transform: translate(-50%, -50%) scale(0);
@@ -53,9 +46,6 @@
     opacity: 1;
   }
 }
-
-
-
 @keyframes popOut {
   0% {
     transform: translate(-50%, -50%) scale(1);
@@ -70,12 +60,18 @@
     opacity: 0;
   }
 }
-
-
 @keyframes pulse-glow {
   0% { transform: scale(0.95); opacity: 0.5; }
   50% { transform: scale(1.05); opacity: 0.8; }
   100% { transform: scale(0.95); opacity: 0.5; }
+}
+@keyframes gradientFlow {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+@keyframes rotateSlow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 #popup-feedback.show {
@@ -86,11 +82,6 @@
   animation: popOut 0.3s ease-out forwards;
 }
 
-.current-level-display.pulse {
-  animation: progress-pulse 0.5s ease;
-}
-
-/* Base Styles */
 .rechnen {
   position: relative;
   min-height: 100vh;
@@ -117,8 +108,6 @@
   padding: 1.5rem;
 }
 
-
-/* Game Container */
 .game-container {
   background: rgba(27, 38, 59, 0.7);
   backdrop-filter: blur(12px) saturate(180%);
@@ -138,7 +127,6 @@
   transition: all 0.4s cubic-bezier(0.215, 0.61, 0.355, 1);
 }
 
-/* Modern Decorative Elements */
 .game-container::before {
   content: "";
   position: absolute;
@@ -152,11 +140,6 @@
               var(--btn-primary));
   background-size: 200% 100%;
   animation: gradientFlow 3s linear infinite;
-}
-
-@keyframes gradientFlow {
-  0% { background-position: 0% 50%; }
-  100% { background-position: 200% 50%; }
 }
 
 .game-container::after {
@@ -173,12 +156,6 @@
   animation: rotateSlow 60s linear infinite;
 }
 
-@keyframes rotateSlow {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-/* Modern Corner Accents */
 .game-container .corner-accent {
   position: absolute;
   width: 60px;
@@ -219,7 +196,6 @@
   border-radius: 0 0 24px 0;
 }
 
-/* Modern Title Styling */
 .game-container h1 {
   font-size: 2.2rem;
   background: linear-gradient(to right, white, #f5d073);
@@ -245,40 +221,6 @@
               transparent);
 }
 
-/* Modern Question Container */
-#question-container {
-  background: rgba(255, 255, 255, 0.12);
-  border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 3rem 1;
-  margin: 1.5rem 0;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2),
-              inset 0 2px 4px rgba(255, 255, 255, 0.05);
-
-}
-
-#question-container {
-  background: rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border-radius: 16px;
-  padding: 2rem 0;
-  margin: 1rem 0;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 15px;
-  transition: all 0.3s ease;
-}
-
-#question-container:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3),
-              inset 0 2px 4px rgba(255, 255, 255, 0.1);
-}
-
-/* Game Header */
 .game-container-top {
   width: 100%;
   margin-bottom: 2rem;
@@ -306,8 +248,6 @@ h1 {
   color: var(--btn-primary);
 }
 
-/* Progress Bar */
-/* Progress Bar */
 .progress-container {
   position: relative;
   width: 80%;
@@ -355,7 +295,10 @@ h1 {
   pointer-events: none;
 }
 
-/* Timer and Lives */
+.current-level-display.pulse {
+  animation: progress-pulse 0.5s ease;
+}
+
 .time-container {
   position: absolute;
   right: 0;
@@ -397,14 +340,33 @@ h1 {
   color: var(--btn-primary);
 }
 
-/* Question Container */
+#question-container {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 16px;
+  padding: 3rem 0;
+  margin: 1rem 0;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  transition: all 0.3s ease;
+}
+
+#question-container:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3),
+              inset 0 2px 4px rgba(255, 255, 255, 0.1);
+}
 
 #question-text {
   font-size: 3rem;
   font-weight: 900;
 }
 
-/* Answer Input */
 #answer-input {
   font-size: 3rem;
   width: 150px;
@@ -432,8 +394,6 @@ input[type="number"] {
   -moz-appearance: textfield;
 }
 
-/* Check Button */
-/* Check Button - Enhanced Version */
 #check-btn {
   background: linear-gradient(135deg, var(--btn-primary) 0%,  #f5d073 100%);
   width: 80px;
@@ -490,7 +450,7 @@ input[type="number"] {
   box-shadow: 0 8px 25px rgba(245, 166, 35, 0.5),
               inset 0 2px 4px rgba(255,255,255,0.3),
               inset 0 -2px 4px rgba(0,0,0,0.2);
-  animation: none; /* Disable pulse on hover */
+  animation: none; 
 }
 
 #check-btn:active {
@@ -515,8 +475,6 @@ input[type="number"] {
   transform: scale(0.9);
 }
 
-/* Feedback Popup */
-/* Feedback Popup */
 #popup-feedback {
   background:linear-gradient(to bottom left, #153162ce 10%, #181818ad 70%);
   backdrop-filter: blur(10px);
@@ -585,7 +543,6 @@ input[type="number"] {
   height: 20px;
 }
 
-/* Completion Celebration */
 .completion-celebration {
   position: fixed;
   top: 0;
@@ -606,7 +563,6 @@ input[type="number"] {
   animation: confetti-fall linear forwards;
 }
 
-/* Modal Styles */
 .modal {
   position: fixed;
   top: 0;
@@ -671,7 +627,6 @@ input[type="number"] {
   border-radius: 50%;
 }
 
-/* Responsive Adjustments */
 @media (max-width: 768px) {
   .rechnen {
     padding: 0;

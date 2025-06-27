@@ -16,8 +16,6 @@
   animation: fadeIn 1s ease-out forwards;
 }
 
-
-
 .welcome .logo,
 .welcome nav,
 .welcome-header,
@@ -25,13 +23,13 @@
 .welcome-main-content,
 .welcome-message p,
 h1 {
-  opacity: 0; /* Start hidden */
+  opacity: 0; 
   animation: fadeIn 3s ease-out forwards;
 }
 
 .welcome-main-content,
 .welcome-nav {
-  position: relative; /* Ensures content appears above video */
+  position: relative; 
   z-index: 2;
 }
 
@@ -127,7 +125,6 @@ h1 {
   box-shadow: 0 10px 20px rgba(0,0,0,0.2);
 }
 
-/* Add these to your existing CSS */
 .start-screen {
   position: fixed;
   top: 0;
@@ -144,7 +141,6 @@ h1 {
 .start-screen .logo {
   position: relative;
   width: 300px;
-
 }
 
 .start-button {
