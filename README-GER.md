@@ -1,6 +1,4 @@
-Hier ist die professionell übersetzte Version Ihres READMEs, wobei der Stil und die Formatierung beibehalten wurden:
 
-````markdown
 # ZahlenMeister 🎲🧠
 
 Spiel spielen: -> zahlenmeister.onrender.com <-
