@@ -84,10 +84,10 @@ const questionGenerators = {
       answer: parseInt(a.toString(2), 10) 
     };
   },
-  "Durchschnitt berechnen": (a, b, c) => {
+  "Durchschnitt berechnen": (a, b,) => {
     return { 
-      question: `Durchschnitt von ${a}, ${b}, ${c}? (Ganzzahl)`, 
-      answer: Math.round((a + b + c) / 3) 
+      question: `Durchschnitt von ${a}, ${b} ? (Ganzzahl)`, 
+      answer: Math.round((a + b ) / 2) 
     };
   },
   "Textaufgabe (Alter)": (a, b) => {
@@ -133,7 +133,7 @@ const houseData = [
     number: 1,
     name: "Traphouse in Berlin Kreuzberg",
     topic: "Addition",
-    levelLimit: 10,
+    levelLimit: 5,
     lives: 3,
     numberStart: 1,
     numberLimit: 20,
@@ -144,7 +144,7 @@ const houseData = [
     number: 2,
     name: "Kleingarten in der Nähe von Dresden",
     topic: "Subtraktion",
-    levelLimit: 10,
+    levelLimit: 5,
     lives: 3,
     numberStart: 3,
     numberLimit: 20,
@@ -166,7 +166,7 @@ const houseData = [
     number: 4,
     name: "Kleine Wohnung in Neumünster",
     topic: "Division",
-    levelLimit: 15,
+    levelLimit: 10,
     lives: 3,
     numberStart: 1,
     numberLimit: 13,
@@ -176,33 +176,33 @@ const houseData = [
   { 
     number: 5,
     name: "Altbauwohnung in Köln",
-    topic: "Multiplikation",
-    levelLimit: 15,
+    topic: "Potenzen",
+    levelLimit: 10,
     lives: 3,
-    numberStart: 0,
-    numberLimit: 18,
+    numberStart: 3,
+    numberLimit: 13,
     description: "Ein Wandgemälde flüstert Brüche – es ist Beckys Gesicht, fragmentiert in Dezimalwerte. Jede gelöste Bruchrechnung bringt ein Stück zurück. Richtig vereinfachte Brüche rekonstruieren ihr Gesicht. Du rechnest, um sie zu „sehen“. Das Ergebnis ist nicht nur ein Bild – es ist Erinnerung",
     image: "https://zahlenmeisterr.s3.eu-central-1.amazonaws.com/houseimages/ko%CC%88ln.png"
   },
   { 
     number: 6,
     name: "2-Zimmer Wohnung in Hamburg Eimsbüttel",
-    topic: "Division",
+    topic: "Wurzelrechnung",
     levelLimit: 15,
     lives: 3,
-    numberStart: 10,
-    numberLimit: 25,
-    description: "Ihr letzter Stream war voller Modulo-Operationen – sie wusste, sie wird verfolgt. Jeder Rest in der Rechnung war ein Hinweis auf ihr Versteck. Die Reste (Modulo-Ergebnisse) ergeben ein Passwort. Ohne Rechnen kein Zugriff auf ihre Notizen, keine Chance, ihren letzten Standort zu sehen",
+    numberStart: 2,
+    numberLimit: 13,
+    description: "Ihr letzter Stream war voller Wurzel-Operationen – sie wusste, sie wird verfolgt. Jeder Rest in der Rechnung war ein Hinweis auf ihr Versteck. Die ergebnisse von den Wurzeln ergeben ein Passwort. Ohne Rechnen kein Zugriff auf ihre Notizen, keine Chance, ihren letzten Standort zu sehen",
     image: "https://zahlenmeisterr.s3.eu-central-1.amazonaws.com/houseimages/eimsbu%CC%88ttel.png"
   },
   { 
     number: 7,
     name: "Reihenhaus in Frankfurt Bockenheim",
-    topic: "Potenzen",
-    levelLimit: 20,
-    lives: 4,
-    numberStart: 5,
-    numberLimit: 13,
+    topic: "Durchschnitt berechnen",
+    levelLimit: 15,
+    lives: 3,
+    numberStart: 2,
+    numberLimit: 300,
     description: "Der Server im Keller ist verschlüsselt mit Exponentialcodes – nur wer die richtigen Potenzen kennt, bekommt Zugriff. Jeder Fehler = Alarm",
     image: "https://zahlenmeisterr.s3.eu-central-1.amazonaws.com/houseimages/bockenheim.png"
   },
@@ -221,8 +221,8 @@ const houseData = [
     number: 9,
     name: "Penthouse Wohnung in Hamburg Blankenese",
     topic: "Kombinatorik",
-    levelLimit: 25,
-    lives: 5,
+    levelLimit: 15,
+    lives: 3,
     numberStart: 5,
     numberLimit: 30,
     description: "Der Milliardär entwickelte einen Algorithmus, der Menschen permutiert – in Daten, Verhalten, Entscheidungen. Jede Aufgabe spiegelt eine mögliche Becky. Die Kombinatorik zeigt: Wer ist die echte Becky? Nur die richtige Reihenfolge rettet ihr Bewusstsein. Du musst rechnen, um sie nicht zu verlieren",
@@ -232,15 +232,14 @@ const houseData = [
     number: 10,
     name: "Privat Insel Villa an der Ostsee",
     topic: "Primzahlen",
-    levelLimit: 25,
-    lives: 5,
+    levelLimit: 20,
+    lives: 3,
     numberStart: 3,
     numberLimit: 300,
     description: "Die Maschine zählt nur Primzahlen – unteilbare Seelen, sagt der Kult. Becky wurde in ihrer Primstruktur gespeichert. Jede falsche Zahl bringt sie näher an das Nichts",
     image: "https://zahlenmeisterr.s3.eu-central-1.amazonaws.com/houseimages/ostsee.png"
   }
 ];
-
 const introDialogue = [
   "Ein Riss zieht sich durch das Reich der Mathematik.",
   "Die Häuser der Zahlen wurden einst von großen Denkern erbaut – nun liegen sie im Schatten.",
@@ -250,173 +249,184 @@ const introDialogue = [
 
 const professorIntro = {
   newPlayer: [
-    "Ah, ein neues Gesicht! Ich bin der Professor.",
-    "Seit Jahrzehnten erforsche ich die mysteriösen Verbindungen zwischen Mathematik und der realen Welt.",
-    "Doch nun ist etwas Unheimliches im Gange... die Zahlenwelt gerät aus den Fugen!",
-    "Ich brauche deine Hilfe, um die mathematischen Geheimnisse hinter diesen Vorfällen zu lüften.",
-    "Jedes Haus, das du betrittst, wird dich einem neuen mathematischen Konzept näherbringen.",
-    "Bist du bereit, dieses Rätsel mit mir zu lösen?"
+    "Ah... du bist also gekommen.",
+    "Verzeih meine Direktheit – aber wir haben keine Zeit für Förmlichkeiten. Ich bin Professor Jay.",
+    "Früher unterrichtete ich Mathematik an der Humboldt-Universität... bis Studenten begannen zu verschwinden.",
+    "Zuerst war es Zufall. Dann... Zahlen. Immer wieder Zahlen. Und dann der Kreis.",
+    "Freunde. Kollegen. Mein Sohn.",
+    "Jetzt ist deine Schwester verschwunden. Becky.",
+    "Sie folgte einer Zahlenfolge bis nach Kreuzberg. Dann... Stille.",
+    "Jedes Haus ist ein Fragment der Wahrheit. Jede Aufgabe ein Code. Jeder Fehler... eine Tür weiter in den Abgrund.",
+    "Ich werde dich führen – aber du musst rechnen, um sie zu finden. Um dich selbst zu retten.",
+    "Fang damit an das Haus in Kreuzberg zu Untersuchen",
+    "Viel Glück..."
   ],
   returningPlayer: [
-    "Ah, du bist zurück! Die Mathematik braucht wieder dein Können.",
+    "Wieder hier? Gut. Die Zahlen haben dich also nicht verschluckt.",
+    "Becky wartet noch. Und der Kreis zählt weiter.",
+    "Lass uns weitermachen – bevor du auch nur noch eine Gleichung bist."
   ]
 };
 
+
 const houseCompletionDialogues = {
   1: [
-    "Das Traphouse in Kreuzberg ist nun sicher!",
-    "Die Addition war der Schlüssel - du hast bewiesen, dass Zusammenführung stärker ist als Trennung.",
-    "Aber dies war erst der Anfang... die nächsten Häuser warten."
+    "Du hast das Traphouse in Kreuzberg durchquert.",
+    "Zwischen alten Rechnungen und kaputten Neonlichtern hast du ihren Namen gefunden – eingeritzt, wie eine Warnung: 'Becky war hier.'",
+    "Ein Flüstern bleibt zurück: '13 war erst der Anfang...'"
   ],
   2: [
-    "Der Schrebergarten ist gerettet!",
-    "Durch Subtraktion hast du das Unnötige entfernt und das Wesentliche bewahrt.",
-    "Die Gartenzwerge können wieder in Frieden leben."
+    "Der Schrebergarten hat sein Schweigen gebrochen.",
+    "Opa Günthers Tagebuch endete mit einem Namen – deiner. Jemand wusste, dass du kommen würdest.",
+    "Im Schuppen lag eine Polaroid-Kamera. Das letzte Bild zeigt Becky… mit jemandem, den du kennst."
   ],
   3: [
-    "Der Dachboden in Rostock ist geheilt!",
-    "Deine Multiplikationsfähigkeiten haben das Dunkel vervielfacht... bis es sich selbst aufgelöst hat.",
-    "Ein kluger Zug, Zahlenmeister!"
+    "Der Dachboden in Rostock hat gesprochen.",
+    "Hinter den alten Tapeten: Notizen in ihrer Handschrift. Mathematische Muster. Wiederkehrend.",
+    "Und ein Symbol: ein Kreis mit 13 Punkten. Der Zahlenkreis hat sie nicht vergessen – sie war Teil ihrer Gleichung."
   ],
   4: [
-    "Die Wohnung in Neumünster ist wieder bewohnbar!",
-    "Durch präzise Division hast du den Raum gerecht geteilt.",
-    "Die Schatten werden dich nicht mehr belästigen."
+    "Die Wohnung in Neumünster war mehr als nur leer.",
+    "Du hast ein USB-Stick in einem zerbrochenen Spiegel gefunden. Darauf: ein abgebrochener Video-Stream. Becky rechnet. Jemand steht hinter ihr.",
+    "Du konntest nur ein Wort hören, bevor es endete: 'Primzahl.'"
   ],
   5: [
-    "Das Gemälde in Köln ist zum Schweigen gebracht!",
-    "Deine Prozentrechnungen haben die magischen Formeln neutralisiert.",
-    "Der Vorbesitzer kann nun endlich ruhen."
+    "Köln war ein Fragment aus Erinnerungen.",
+    "Das Gemälde hat sich verändert, nachdem du die Brüche gelöst hast – Beckys Gesicht. Traurig. Wachsam.",
+    "Dahinter: ein alter Forenzugang. Das Forum der 'Zahlenmeister'. Letzter Login: vor 2 Jahren. Von ihr."
   ],
   6: [
-    "Die Eimsbütteler Wohnung ist wieder normal!",
-    "Durch Einheitenumrechnung hast du die Dimensionen stabilisiert.",
-    "Alexa spricht jetzt nur noch Wetterberichte - wie es sich gehört."
+    "Eimsbüttel hat seine letzte Nachricht gesendet.",
+    "Du hast den Restwert entschlüsselt. Eine Koordinate. Eine Zeit.",
+    "Und dann eine Datei: 'Projekt: Seele = Produkt(Primfaktorisierung).' Was wollten sie aus ihr machen?"
   ],
   7: [
-    "Das Reihenhaus in Bockenheim ist befriedet!",
-    "Mit Potenzen hast du die dimensionalen Risse geschlossen.",
-    "Die Kinder an der Tür waren nur Projektionen... oder?"
+    "Bockenheim war eine Warnung in Kinderform.",
+    "Du hast die Potenz entschlüsselt – und die Tür zum Serverraum geöffnet.",
+    "Ein Countdown lief im Hintergrund. Ziel: dein Geburtsdatum. Der Kreis kennt dich."
   ],
   8: [
-    "Das Loft an der Reeperbahn ist entschlüsselt!",
-    "Algebra war der Schlüssel zu den Rätseln der Nacht.",
-    "Die Uhren laufen wieder - und du weißt jetzt, was wirklich passiert ist."
+    "Die Reeperbahn hat ihre Basis verraten.",
+    "Im Safe: Kryptowährungen – und Rechnungen auf Menschenleben.",
+    "Du hast das erste Mal gezweifelt, ob du wirklich rechnen willst, wenn Zahlen Leben kosten. Becky war die Variable."
   ],
   9: [
-    "Das Penthouse in Blankenese ist gesichert!",
-    "Flächenberechnung hat die KI-Matrix durchschaubar gemacht.",
-    "Der Milliardär war nur ein Algorithmus... aber seine Warnung war real."
+    "Blankenese hat die Maske fallen lassen.",
+    "Er war nie real – der Milliardär. Nur Code. Eine KI, programmiert aus gelösten Gleichungen.",
+    "Doch seine letzte Aussage war klar: 'Sie lebt. Aber nicht mehr in eurer Realität.'"
   ],
   10: [
-    "Die Inselvilla ist stabilisiert!",
-    "Zahlenfolgen haben die Realität neu geordnet.",
-    "Du hast bewiesen, dass Mathematik das Fundament unserer Welt ist - und sie gerettet!"
+    "Die Inselvilla... war kein Ort. Sie war ein Endpunkt.",
+    "Du hast alle Primzahlen erkannt. Und die Gleichung, die euch verband: dich und Becky.",
+    "Dann, plötzlich: ihr Gesicht. Echtes Fleisch. Wahres Licht. Ein letzter Satz von ihr: 'Du hast mich gefunden, Bruder. Jetzt finde dich selbst.'",
+    "Der Kreis schließt sich – oder beginnt er gerade erst?"
   ]
 };
+
 
 const houseDialogue = {
   1: {
     intro: [
-      "Kreuzberg bei Nacht. Hinter diesem Traphouse verbirgt sich mehr als nur düstere Beats.",
-      "Die Plus-Aufgaben sind dein Schlüssel. Aber beeil dich – hier verschwindet man schneller, als man rechnen kann."
+      "Kreuzberg bei Nacht. Dieses Traphouse war einst ein Treffpunkt... bis Leute zu verschwinden begannen.",
+      "Zwischen Beats und Backstein warten Plus-Aufgaben – und ein eingeritzter Name: Becky."
     ],
     outro: [
-      "Du hast die Wahrheit aufgedeckt. Mathe war der Weg – jetzt bist du bereit für mehr.",
-      "Nicht jeder schafft es aus dem Traphouse. Aber du hast gerechnet... und überlebt."
+      "Du hast die erste Spur gefunden. Addition war dein Schlüssel.",
+      "Becky war hier. Und das war kein Zufall. Du bist ihr näher als du denkst."
     ]
   },
   2: {
     intro: [
-      "Dieser Garten hat seine Ruhe verloren. Seit Minus-Rechnungen in der Erde liegen, wächst nur noch Angst.",
-      "Die Gartenzwerge beobachten dich. Zieh deinen Taschenrechner... und grabe tief."
+      "Der Schrebergarten ist verwildert. Opa Günther verschwand, als er versuchte, 'etwas zu berechnen'.",
+      "Subtraktion liegt in der Luft. Und ein Gartenzwerg flüstert: 'Nicht alles darf bleiben.'"
     ],
     outro: [
-      "Opa Günther wäre stolz. Du hast den Schrebergarten von seinen dunklen Zahlen befreit.",
-      "Minus gemeistert. Nachbarn sicher. Zeit, weiterzuziehen."
+      "Du hast das Unnötige entfernt – und das Wesentliche erkannt.",
+      "In der Erde: ein Tagebuch. Deine Initialen. Und ein Foto von Becky – mit dir als Kind?"
     ]
   },
   3: {
     intro: [
-      "Ein Dachboden, kalt wie die Gleichungen darin.",
-      "Vervielfach oder frier. Diese Aufgaben sind keine Spielerei – sondern dein Heizsystem."
+      "Auf diesem Dachboden hat sich die Realität vervielfacht. Oder verzerrt.",
+      "Multiplikation hält die Schatten in Bewegung. Löse sie – oder friere für immer."
     ],
     outro: [
-      "Die Dunkelheit hat dich akzeptiert – oder besser: Deine Mathe-Skills.",
-      "Multiplikation bestanden. Das Licht geht wieder an."
+      "Du hast das Muster erkannt – und das Chaos gelöst.",
+      "Hinter der Tapete: Gleichungen in Beckys Handschrift. Sie war eine von ihnen – oder auf der Flucht?"
     ]
   },
   4: {
     intro: [
-      "Diese Wohnung hat keinen Platz für Fehler – oder für zwei.",
-      "Nur wer teilen kann, wird von den Schatten verschont. Division ist Überleben."
+      "In Neumünster teilen sich die Schatten Räume und Stimmen.",
+      "Division entscheidet: Wer überlebt – und wer verschwindet wie Becky damals?"
     ],
     outro: [
-      "Du hast geteilt – präzise und richtig. Die Dunkelheit zieht weiter.",
-      "In Neumünster bleibt nur Licht zurück. Gut geteilt."
+      "Du hast gerecht geteilt – wie sie es wollte.",
+      "Ein zerbrochener Spiegel zeigte kurz ihr Gesicht. Oder war es deins?"
     ]
   },
   5: {
     intro: [
-      "Ein Gemälde, das bei Vollmond spricht. Und du hast seine Sprache fast gelernt: Zahlen.",
-      "Rechne schnell – dieses Haus spielt nicht fair."
+      "Das Gemälde spricht. Nur bei bestimmten Prozentwerten.",
+      "Köln verbirgt mehr als Kunst – es verbirgt eine Formel, die Becky fast gelöst hatte."
     ],
     outro: [
-      "Das Flüstern verstummt. Du hast bewiesen, dass dein Verstand schärfer ist als alte Magie.",
-      "Das Gemälde schweigt. Und du gehst weiter."
+      "Du hast das Bild zum Schweigen gebracht. Die Rechnung stimmt.",
+      "Dahinter: ein versteckter QR-Code. Zugriff auf 'Zahlenmeister.org'. Beckys letzter Login – 13. März."
     ]
   },
   6: {
     intro: [
-      "Alexa spricht in Rätseln. Das WLAN spuckt Zahlen. Willkommen in Eimsbüttel.",
-      "Diese Wohnung denkt – also rechne schneller als sie."
+      "In Eimsbüttel denkt die Wohnung mit. Und Alexa stellt Rechenfragen, die keiner beantworten kann.",
+      "Einheiten sind instabil. Rechne – oder verschwinde wie der letzte Bewohner."
     ],
     outro: [
-      "Du hast der KI Paroli geboten. Mathematisch.",
-      "Das Netzwerk erkennt dich jetzt als Gefahr. Gut gemacht."
+      "Du hast die Dimensionen stabilisiert – für jetzt.",
+      "Die KI nannte deinen Namen. Sie weiß, dass du suchst. Becky war ihr erster Testfall."
     ]
   },
   7: {
     intro: [
-      "Jede Nacht ein neues Kind. Jeder Abend eine neue Zahl.",
-      "Bockenheim spielt mit Raum, Zeit – und deinem Mathewissen."
+      "Bockenheim flackert. Kinder erscheinen – und verschwinden – mit jeder neuen Potenz.",
+      "Du bist hier nicht zum Spielen. Du bist hier, um Realität zu reparieren."
     ],
     outro: [
-      "Du hast Ordnung ins Chaos gebracht. Fürs Erste.",
-      "Ob das Kind echt war? Egal. Du hast die Zahlen bezwungen."
+      "Die Wände hörten auf sich zu bewegen, als du gerechnet hast.",
+      "Das Kind sagte deinen Namen... rückwärts. Und dann: 'Der Kreis will dich zurück.'"
     ]
   },
   8: {
     intro: [
-      "Du wachst auf – mitten im Mathe-Koma.",
-      "Die Nacht hat Rätsel hinterlassen. Deine Erinnerung liegt in Zahlen versteckt."
+      "Du wachst auf – in einem Loft, das du nie betreten hast.",
+      "Die Algebra dieser Nacht ist dein einziges Gedächtnis. Löse sie, um dich zu erinnern."
     ],
     outro: [
-      "Die Uhren laufen wieder. Deine Rechenleistung hat die Zeit repariert.",
-      "Du weißt vielleicht nicht, was passiert ist – aber du hast es bestanden."
+      "Du hast dich selbst entschlüsselt – fast.",
+      "Ein Notizzettel blieb zurück: 'Becky = x. Finde x. Beweise es.'"
     ]
   },
   9: {
     intro: [
-      "Blankenese schweigt. Aber seine Zahlen sprechen laut.",
-      "Der KI-Milliardär hat eine letzte Prüfung hinterlassen. Zeit zu rechnen."
+      "Blankenese war einst Luxus. Jetzt ist es ein Testfeld.",
+      "Der KI-Milliardär rechnet mit Menschen. Und Becky war... Versuch Nummer 7."
     ],
     outro: [
-      "Luxus bezwungen. Logik besiegt den Wahnsinn.",
-      "Du bist durch die Zahlenwelt des Reichtums gegangen – und hast bestanden."
+      "Du hast seine Matrix durchschaut. Mit Fläche, nicht mit Gewalt.",
+      "Er hat dir einen Namen hinterlassen: 'Projekt ECHO – läuft noch.'"
     ]
   },
   10: {
     intro: [
-      "Diese Insel existiert nicht – aber ihre Mathematik ist real.",
-      "Jede Zahl ein Fragment. Füge sie zusammen, bevor du dich selbst verlierst."
+      "Diese Insel war nie auf der Karte. Aber sie kennt deine Träume.",
+      "Jede Zahlenfolge hier ist ein Gedächtnisfragment. Füge sie zusammen – oder verliere dich."
     ],
     outro: [
-      "Die Realität flackert – aber du hast sie stabilisiert. Mit Logik.",
-      "Die Welt ist wieder ganz. Dank deiner Rechenkunst."
+      "Die Realität hat gezittert – aber du hast sie geordnet.",
+      "Sie stand vor dir. Fleisch. Stimme. Licht. Becky. Und dann: 'Du hast mich gefunden, Bruder. Jetzt finde dich selbst.'"
     ]
   }
 };
+
 
 const houseFailureDialogues = {
   1: [

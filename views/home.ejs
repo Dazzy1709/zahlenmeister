@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Sansation:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/styles/style.css">
-  <audio id="backgroundMusic" loop>
+  <audio id="backgroundMusic" playsinline webkit-playsinline loop>
     <source src="/assets/audio/menu-music.mp3" type="audio/mpeg">
   </audio>
   <title>ZahlenMeister</title>
@@ -97,17 +97,7 @@
           </a>
           Einstellungen
         </li>
-        <li>
-         <button id="musicToggle" class="music-control-btn">
-            <svg class="sound-on" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M13.5 4.06c0-1.336-1.616-2.005-2.56-1.06l-4.5 4.5H4.508c-1.141 0-2.318.664-2.66 1.905A9.76 9.76 0 0 0 1.5 12c0 .898.121 1.768.35 2.595.341 1.24 1.518 1.905 2.659 1.905h1.93l4.5 4.5c.945.945 2.561.276 2.561-1.06V4.06ZM18.584 5.106a.75.75 0 0 1 1.06 0c3.808 3.807 3.808 9.98 0 13.788a.75.75 0 0 1-1.06-1.06 8.25 8.25 0 0 0 0-11.668.75.75 0 0 1 0-1.06Z" />
-              <path d="M15.932 7.757a.75.75 0 0 1 1.061 0 6 6 0 0 1 0 8.486.75.75 0 0 1-1.06-1.061 4.5 4.5 0 0 0 0-6.364.75.75 0 0 1 0-1.06Z" />
-            </svg>
-            <svg class="sound-off" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="display: none;">
-              <path d="M13.5 4.06c0-1.336-1.616-2.005-2.56-1.06l-4.5 4.5H4.508c-1.141 0-2.318.664-2.66 1.905A9.76 9.76 0 0 0 1.5 12c0 .898.121 1.768.35 2.595.341 1.24 1.518 1.905 2.659 1.905h1.93l4.5 4.5c.945.945 2.561.276 2.561-1.06V4.06ZM17.28 9.22a.75.75 0 1 0-1.06 1.06L18.44 12l-2.22 2.22a.75.75 0 1 0 1.06 1.06l2.22-2.22 2.22 2.22a.75.75 0 1 0 1.06-1.06L20.56 12l2.22-2.22a.75.75 0 0 0-1.06-1.06l-2.22 2.22-2.22-2.22Z" />
-            </svg>
-          </button>
-        </li>
+
       </ul>
     <% } else { %>
       <ul class="guest-nav">
@@ -117,18 +107,7 @@
         <li>
           <a class="login-btn" href="/signup">Registrieren</a>
         </li>
-        <li>
-          <button id="musicToggle" class="music-control-btn">
-            <svg class="sound-on" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M13.5 4.06c0-1.336-1.616-2.005-2.56-1.06l-4.5 4.5H4.508c-1.141 0-2.318.664-2.66 1.905A9.76 9.76 0 0 0 1.5 12c0 .898.121 1.768.35 2.595.341 1.24 1.518 1.905 2.659 1.905h1.93l4.5 4.5c.945.945 2.561.276 2.561-1.06V4.06ZM18.584 5.106a.75.75 0 0 1 1.06 0c3.808 3.807 3.808 9.98 0 13.788a.75.75 0 0 1-1.06-1.06 8.25 8.25 0 0 0 0-11.668.75.75 0 0 1 0-1.06Z" />
-              <path d="M15.932 7.757a.75.75 0 0 1 1.061 0 6 6 0 0 1 0 8.486.75.75 0 0 1-1.06-1.061 4.5 4.5 0 0 0 0-6.364.75.75 0 0 1 0-1.06Z" />
-            </svg>
-            <svg class="sound-off" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="display: none;">
-              <path d="M13.5 4.06c0-1.336-1.616-2.005-2.56-1.06l-4.5 4.5H4.508c-1.141 0-2.318.664-2.66 1.905A9.76 9.76 0 0 0 1.5 12c0 .898.121 1.768.35 2.595.341 1.24 1.518 1.905 2.659 1.905h1.93l4.5 4.5c.945.945 2.561.276 2.561-1.06V4.06ZM17.28 9.22a.75.75 0 1 0-1.06 1.06L18.44 12l-2.22 2.22a.75.75 0 1 0 1.06 1.06l2.22-2.22 2.22 2.22a.75.75 0 1 0 1.06-1.06L20.56 12l2.22-2.22a.75.75 0 0 0-1.06-1.06l-2.22 2.22-2.22-2.22Z" />
-            </svg>
-          </button>
-        </li>
-      </ul>
+      </ul>   
     <% } %>
   </nav>
   <main>  
@@ -183,23 +162,6 @@
     }) %>;
   }
   
-  
-  document.addEventListener('DOMContentLoaded', async () => {
-    await musicController.playMenuMusic().catch(() => {});
-    const musicToggle = document.getElementById('musicToggle');
-    if (musicToggle) {
-      musicToggle.addEventListener('click', () => {
-      const isNowUnmuted = musicController.toggleMute();
-      const soundOnIcon = musicToggle.querySelector('.sound-on');
-      const soundOffIcon = musicToggle.querySelector('.sound-off');
-      soundOnIcon.style.display = isNowUnmuted ? 'block' : 'none';
-      soundOffIcon.style.display = isNowUnmuted ? 'none' : 'block';
-      });
-      const soundOnIcon = musicToggle.querySelector('.sound-on');
-      const soundOffIcon = musicToggle.querySelector('.sound-off');
-      soundOnIcon.style.display = musicController.isMuted ? 'none' : 'block';
-      soundOffIcon.style.display = musicController.isMuted ? 'block' : 'none';
-    }
     initHouses(userProgress);
     setTimeout(() => showContextualDialogue(userProgress), 500);
   });
