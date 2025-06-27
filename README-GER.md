@@ -1,7 +1,7 @@
 
 # ZahlenMeister 🎲🧠
 
-Spiel spielen: -> zahlenmeister.onrender.com <-
+Spiel spielen:[zahlenmeister.onrender.com](https://zahlenmeister.onrender.com)
 
 ---
 
