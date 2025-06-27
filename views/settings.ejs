@@ -14,9 +14,7 @@
 
 </head>
 <body class="settings-page">
-  <!-- Notification element -->
   <div id="notification" class="notification"></div>
-
   <nav class="nav">
     <div class="logo-container">
       <img class="logo" src="/assets/img/logo.png" alt="">
@@ -32,15 +30,12 @@
       </li>
     </ul>
   </nav>
-
   <main>
     <header>
       <h1>Einstellungen</h1>
       <p>Angemeldet als: <strong><%= user ? user.name : 'Gast' %></strong></p>
     </header>
-
     <section class="settings-container">
-      <!-- Profile Picture Section -->
       <div class="settings-card">
         <h2>Profilbild</h2>
         <br>
@@ -50,7 +45,6 @@
             <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-8.4 8.4a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32l8.4-8.4Z" />
             <path d="M5.25 5.25a3 3 0 0 0-3 3v10.5a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3V13.5a.75.75 0 0 0-1.5 0v5.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5V8.25a1.5 1.5 0 0 1 1.5-1.5h5.25a.75.75 0 0 0 0-1.5H5.25Z" />
           </svg>
-          
           <div class="profile-edit-section" id="profile-edit-section">
             <form id="profile-picture-form" enctype="multipart/form-data">
               <input type="file" id="profile-picture-input" name="profilePicture" accept="image/*" style="display: none;">
@@ -63,8 +57,6 @@
           </div>
         </div>
       </div>
-
-      <!-- Change Name Section -->
       <div class="settings-card">
         <h2>Benutzername ändern</h2>
         <div class="username-display">
@@ -74,7 +66,6 @@
             <path d="M5.25 5.25a3 3 0 0 0-3 3v10.5a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3V13.5a.75.75 0 0 0-1.5 0v5.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5V8.25a1.5 1.5 0 0 1 1.5-1.5h5.25a.75.75 0 0 0 0-1.5H5.25Z" />
           </svg>
         </div>
-        
         <div class="username-edit-section" id="username-edit-section">
           <form id="change-name-form">
             <div class="form-group">
@@ -86,8 +77,6 @@
           </form>
         </div>
       </div>
-
-      <!-- Account Actions -->
       <div class="settings-card">
         <h2>Konto</h2>
         <div class="settings-actions">
@@ -115,15 +104,12 @@
     import musicController from '/js/musicController.js';
     
     document.addEventListener('DOMContentLoaded', () => {
-      // Initialize volume controls
       const volumeSlider = document.getElementById('musicVolume');
       const muteButton = document.getElementById('muteButton');
-      
-      // Set initial values
+
       volumeSlider.value = musicController.volume;
       muteButton.textContent = musicController.isMuted ? 'Unmute' : 'Mute';
       
-      // Add event listeners
       volumeSlider.addEventListener('input', (e) => {
         musicController.setVolume(parseFloat(e.target.value));
       });
@@ -131,20 +117,17 @@
       muteButton.addEventListener('click', () => {
         const isUnmuted = musicController.toggleMute();
         muteButton.textContent = isUnmuted ? 'Mute' : 'Unmute';
-        
-        // Update volume slider to reflect mute state
+
         if (isUnmuted) {
           volumeSlider.value = musicController.volume;
         }
       });
       
-      // Try to continue playing music if it was playing before
       if (musicController.isPlaying()) {
         musicController.getAudioElement().play().catch(e => {
           console.log('Playback error:', e);
         });
       } else {
-        // Or play menu music if nothing was playing
         musicController.playMenuMusic().catch(e => {
           console.log('Menu music playback error:', e);
         });

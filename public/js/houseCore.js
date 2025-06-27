@@ -41,36 +41,30 @@ class HouseCore {
   }
 
   updateLevelProgress(level) {
-    this.currentLevelIndex = level - 1; // Convert to 0-based index
-    
-    // If this is the last level, mark house as completed
+    this.currentLevelIndex = level - 1; 
     if (level >= this.levelLimit) {
         this.completeHouse();
     }
-}
+  }
 
-// In houseCore.js
-completeHouse() {
-  this.isCompleted = true;
-  this.currentLevelIndex = 0;
-  
-  // Dispatch a custom event when house is completed
-  const event = new CustomEvent('houseCompleted', {
+  completeHouse() {
+    this.isCompleted = true;
+    this.currentLevelIndex = 0;
+    const event = new CustomEvent('houseCompleted', {
     detail: { houseNumber: this.number }
-  });
-  document.dispatchEvent(event);
-  
-  return this.isCompleted;
-}
+    });
+    document.dispatchEvent(event);
+    return this.isCompleted;
+  }
 
   unlock() {
     this.isLocked = false;
   }
-
+  
   reset() {
     this.currentLevelIndex = 0;
     this.lives = 3;
   }
-}
+};
 
 export default HouseCore;
