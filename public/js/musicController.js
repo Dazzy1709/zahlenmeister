@@ -6,9 +6,6 @@ class MusicController {
     this._isMuted = false; // Initialize _isMuted
     this.readyToPlay = false;
     this.shouldPlayGameMusic = false; // Add this flag
-    this.audio.setAttribute('playsinline', '');
-    this.audio.setAttribute('webkit-playsinline', '');
-    this.audio.volume = this._isMuted ? 0 : this.volume;
     
     this.loadPreferences();
     this.setupInteractionListener();
