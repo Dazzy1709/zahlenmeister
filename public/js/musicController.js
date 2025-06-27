@@ -1,22 +1,20 @@
 class MusicController {
   constructor() {
-    this.audio = null; 
+    this.audio = null; // Initialize as null
     this.currentTrack = null;
     this.volume = 0.1;
-    this._isMuted = false;
+    this._isMuted = false; // Initialize _isMuted
     this.readyToPlay = false;
-    this.shouldPlayGameMusic = false; 
+    this.shouldPlayGameMusic = false; // Add this flag
     
     this.loadPreferences();
     this.setupInteractionListener();
   }
   
-
- getAudioElement() {
+  // Getter for audio element that lazy-loads it when needed
+  getAudioElement() {
     if (!this.audio) {
       this.audio = document.getElementById('backgroundMusic') || this.createAudioElement();
-      this.audio.setAttribute('playsinline', '');
-      this.audio.setAttribute('webkit-playsinline', '');
       this.audio.volume = this._isMuted ? 0 : this.volume;
     }
     return this.audio;
@@ -26,8 +24,6 @@ class MusicController {
     const audio = document.createElement('audio');
     audio.id = 'backgroundMusic';
     audio.loop = true;
-    audio.setAttribute('playsinline', '');
-    audio.setAttribute('webkit-playsinline', '');
     document.body.appendChild(audio);
     return audio;
   }
@@ -36,9 +32,11 @@ class MusicController {
     try {
       const savedVolume = localStorage.getItem('musicVolume');
       const savedMuted = localStorage.getItem('musicMuted');
+      
       if (savedVolume !== null) {
         this.volume = parseFloat(savedVolume);
       }
+      
       if (savedMuted !== null) {
         this._isMuted = savedMuted === 'true';
       }
@@ -62,10 +60,14 @@ class MusicController {
       document.removeEventListener('click', enablePlayback);
       document.removeEventListener('keydown', enablePlayback);
       document.removeEventListener('touchstart', enablePlayback);
+      
+      // Try playing if music was queued
       if (this.currentTrack) {
         this.getAudioElement().play().catch(e => console.log('Autoplay blocked:', e));
       }
     };
+  
+    // Listen for first user interaction
     document.addEventListener('click', enablePlayback, { once: true });
     document.addEventListener('keydown', enablePlayback, { once: true });
     document.addEventListener('touchstart', enablePlayback, { once: true });
@@ -74,18 +76,21 @@ class MusicController {
   playMenuMusic() {
     return new Promise((resolve, reject) => {
       if (this.currentTrack === 'menu') return resolve();
+
       this.currentTrack = 'menu';
       const audio = this.getAudioElement();
       audio.src = '/assets/audio/menu-music.mp3';
       audio.volume = this._isMuted ? 0 : this.volume;
+
       if (this.readyToPlay) {
         const playPromise = audio.play();
+        
         if (playPromise !== undefined) {
           playPromise
             .then(() => resolve())
             .catch(e => {
               console.error('Playback failed:', e);
-              this.readyToPlay = false; 
+              this.readyToPlay = false; // Reset for next attempt
               reject(e);
             });
         }
@@ -97,11 +102,13 @@ class MusicController {
   
   playGameMusic() {
     if (this.currentTrack === 'game') return Promise.resolve();
+
     this.currentTrack = 'game';
     this.shouldPlayGameMusic = true; // Set the flag
     const audio = this.getAudioElement();
     audio.src = '/assets/audio/rechnen-music.mp3';
     audio.volume = this._isMuted ? 0 : this.volume;
+
     if (this.readyToPlay) {
       return audio.play().catch(e => {
         console.log('Playback error:', e);
@@ -111,6 +118,7 @@ class MusicController {
     return Promise.reject(new Error('User interaction required'));
   }
 
+  // Add this method to resume playback if needed
   resumePlayback() {
     if (this.shouldPlayGameMusic && !this.isPlaying()) {
       this.playGameMusic().catch(e => console.log('Resume playback error:', e));
@@ -136,17 +144,10 @@ class MusicController {
     return this._isMuted;
   }
   
-   toggleMute() {
+  toggleMute() {
     this._isMuted = !this._isMuted;
-    const audio = this.getAudioElement();
-    if (this._isMuted) {
-      audio.volume = 0;
-      audio.pause();
-    } else {
-      audio.volume = this.volume;
-      if (this.currentTrack) {
-        audio.play().catch(e => console.log('Mobile unmute error:', e));
-      }
+    if (this.audio) {
+      this.audio.volume = this._isMuted ? 0 : this.volume;
     }
     this.savePreferences();
     return !this._isMuted;
