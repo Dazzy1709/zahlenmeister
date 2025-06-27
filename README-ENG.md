@@ -1,7 +1,3 @@
-Absolutely! Here's your updated **README.md** with a more relaxed, “chill guy” personality—without losing structure or professionalism. It keeps the energy fun and light, perfect for a game like ZahlenMeister:
-
----
-
 # ZahlenMeister 🎲🧠
 
 _The Math Adventure Game_
