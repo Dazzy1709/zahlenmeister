@@ -161,7 +161,8 @@
       completedHouses: []
     }) %>;
   }
-  
+
+  document.addEventListener('DOMContentLoaded', async () => {
     initHouses(userProgress);
     setTimeout(() => showContextualDialogue(userProgress), 500);
   });
