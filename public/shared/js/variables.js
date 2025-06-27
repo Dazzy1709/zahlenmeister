@@ -89,10 +89,10 @@ const questionGenerators = {
       answer: parseInt(a.toString(2), 10) 
     };
   },
-  "Durchschnitt berechnen": (a, b, c) => {
+  "Durchschnitt berechnen": (a, b,) => {
     return { 
-      question: `Durchschnitt von ${a}, ${b}, ${c}? (Ganzzahl)`, 
-      answer: Math.round((a + b + c) / 3) 
+      question: `Durchschnitt von ${a}, ${b} ? (Ganzzahl)`, 
+      answer: Math.round((a + b ) / 2) 
     };
   },
   "Gleichungen (x gesucht)": (a, b) => {
@@ -437,6 +437,7 @@ const houseDialogue = {
     ]
   }
 };
+
 
 const houseFailureDialogues = {
   1: [
