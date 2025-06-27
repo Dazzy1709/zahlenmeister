@@ -6,17 +6,13 @@ class HouseUI {
     this.popup = document.querySelector(".house-popup");
     this.closePopupBtn = document.querySelector(".close-popup");
     this.startBtn = document.getElementById("StartHouseBtn");
-    
-    // First, ensure basic visibility
     this.element.style.display = 'block';
     this.element.style.opacity = '1';
-    
     this.renderHouse();
     this.setupEventListeners();
   }
 
   renderHouse() {
-    // Simplified structure with fallbacks
     this.element.innerHTML = `
     <div class="house-content" >
     <img class="house-background-puzzel" src="assets/img/puzzle.png" alt="">
@@ -53,17 +49,12 @@ class HouseUI {
          <div class="lock-text">Beende Haus ${this.houseCore.number - 1} zum freischalten</div>
        </div>` : 
       ''
-    }
-  `;
-
-  this.updateHouseState();
+    }`;
+    this.updateHouseState();
   }
 
   updateHouseState() {
-    // Clear all state classes first
     this.element.classList.remove("locked", "completed");
-    
-    // Apply appropriate classes based on state
     if (this.houseCore.isLocked) {
       this.element.classList.add("locked");
     } else if (this.houseCore.isCompleted) {
@@ -72,14 +63,11 @@ class HouseUI {
   }
 
   setupEventListeners() {
-    // House click handler
     this.element.addEventListener("click", () => {
       if (!this.houseCore.isLocked) {
         this.showPopup();
       }
     });
-
-    // Close popup handler
     if (this.closePopupBtn) {
       this.closePopupBtn.addEventListener("click", () => this.hidePopup());
     }
@@ -87,19 +75,13 @@ class HouseUI {
 
   showPopup() {
     if (!this.popup) return;
-
-    // Update popup content
     this.popup.querySelector("h3").textContent = this.houseCore.name;
     this.popup.querySelector("span").textContent = this.houseCore.topic;
     this.popup.querySelector("p").textContent = this.houseCore.description;
     this.popup.querySelector(".popup-image").src = `${this.houseCore.image}`;
-    
-    // Update start button
     if (this.startBtn) {
       this.startBtn.href = `/rechnen/${this.houseCore.number}/1`;
     }
-
-    // Show the popup
     this.popup.style.display = "flex";
     document.getElementById("popupOverlay").style.display = "block";
   }

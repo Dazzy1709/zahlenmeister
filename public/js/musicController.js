@@ -60,14 +60,11 @@ class MusicController {
       document.removeEventListener('click', enablePlayback);
       document.removeEventListener('keydown', enablePlayback);
       document.removeEventListener('touchstart', enablePlayback);
-      
-      // Try playing if music was queued
       if (this.currentTrack) {
         this.getAudioElement().play().catch(e => console.log('Autoplay blocked:', e));
       }
     };
   
-    // Listen for first user interaction
     document.addEventListener('click', enablePlayback, { once: true });
     document.addEventListener('keydown', enablePlayback, { once: true });
     document.addEventListener('touchstart', enablePlayback, { once: true });
@@ -76,12 +73,10 @@ class MusicController {
   playMenuMusic() {
     return new Promise((resolve, reject) => {
       if (this.currentTrack === 'menu') return resolve();
-
       this.currentTrack = 'menu';
       const audio = this.getAudioElement();
       audio.src = '/assets/audio/menu-music.mp3';
       audio.volume = this._isMuted ? 0 : this.volume;
-
       if (this.readyToPlay) {
         const playPromise = audio.play();
         
@@ -102,13 +97,11 @@ class MusicController {
   
   playGameMusic() {
     if (this.currentTrack === 'game') return Promise.resolve();
-
     this.currentTrack = 'game';
     this.shouldPlayGameMusic = true; // Set the flag
     const audio = this.getAudioElement();
     audio.src = '/assets/audio/rechnen-music.mp3';
     audio.volume = this._isMuted ? 0 : this.volume;
-
     if (this.readyToPlay) {
       return audio.play().catch(e => {
         console.log('Playback error:', e);
@@ -118,7 +111,6 @@ class MusicController {
     return Promise.reject(new Error('User interaction required'));
   }
 
-  // Add this method to resume playback if needed
   resumePlayback() {
     if (this.shouldPlayGameMusic && !this.isPlaying()) {
       this.playGameMusic().catch(e => console.log('Resume playback error:', e));
@@ -143,7 +135,6 @@ class MusicController {
   get isMuted() {
     return this._isMuted;
   }
-  
   toggleMute() {
     this._isMuted = !this._isMuted;
     if (this.audio) {
@@ -152,15 +143,11 @@ class MusicController {
     this.savePreferences();
     return !this._isMuted;
   }
-  
   isPlaying() {
     return this.audio && !this.audio.paused && this.currentTrack !== null;
   }
 }
 
-// Singleton instance
 const musicController = new MusicController();
-
-// Export and also make available globally for easy access
 window.musicController = musicController;
 export default musicController;
